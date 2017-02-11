@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+           version="3.0">
+
+    <display-name>SecurityFilter Example Application</display-name>
+
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>org.securityfilter.filter.SecurityFilter</filter-class>
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/securityfilter-config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>validate</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <!-- map all requests to the SecurityFilter, control what it does with configuration settings -->
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>NoCacheFilter</filter-name>
+        <filter-class>filters.NoCacheFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>NoCacheFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>RedirectAdmin</servlet-name>
+        <servlet-class>servlets.RedirectServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RedirectAdmin</servlet-name>
+        <url-pattern>/jsps/secure/redirectadmin</url-pattern>
+    </servlet-mapping>
+
+    <!-- make the session time-out after one minute -->
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>/jsps/loginPage.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- SecurityFilter works with custom error pages -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error/403.jsp</location>
+    </error-page>
+
+</web-app>

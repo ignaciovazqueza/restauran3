@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE securityfilter-config PUBLIC
+    "-//SecurityFilter.org//DTD Security Filter Configuration 2.0//EN"
+    "http://www.securityfilter.org/dtd/securityfilter-config_2_0.dtd">
+
+<securityfilter-config>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Secure Page</web-resource-name>
+         <url-pattern>/jsps/secure/</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>securepage</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Admin Page</web-resource-name>
+         <url-pattern>/jsps/secure/admin/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>adminrole</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>User Page</web-resource-name>
+         <url-pattern>/jsps/secure/user/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>userrole</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>FORM</auth-method>
+      <form-login-config>
+         <form-login-page>/jsps/loginPage.jsp</form-login-page>
+         <form-error-page>/jsps/loginError.jsp</form-error-page>
+         <form-default-page>/jsps/secure/redirectadmin</form-default-page>
+      </form-login-config>
+   </login-config>
+
+   <realm className="securityfilter.TrivialSecurityRealm">
+   </realm>
+
+</securityfilter-config>

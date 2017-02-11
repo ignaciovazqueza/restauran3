@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+
+version = '1.0'
+
+idea{
+    project{
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
+    module {
+        excludeDirs += file('build')
+        excludeDirs += file('gradle')
+        downloadSources = true
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile 'org.jetbrains:annotations:13.0'
+    compile 'org.hibernate:hibernate-core:5.1.0.Final'
+    compile 'securityfilter:securityfilter:2.0'
+    compile 'javax.servlet:javax.servlet-api:3.0.1'
+    compile 'org.hsqldb:hsqldb:2.3.3'
+    compile 'org.json:json:20160212'
+    compile 'commons-configuration:commons-configuration:1.6'
+    compile 'com.nulab-inc:zxcvbn:1.2.2'
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.assertj:assertj-core:1.6.0'
+}

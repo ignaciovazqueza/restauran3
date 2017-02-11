@@ -1,0 +1,1 @@
+java -cp hsqldb.jar org.hsqldb.server.Server --database.0 file:db2 --dbname.0 db2
