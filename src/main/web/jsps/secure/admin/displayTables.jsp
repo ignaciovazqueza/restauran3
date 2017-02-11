@@ -36,6 +36,8 @@
                     }
                     else {
                         $('#tables tr:last').after('<tr><td>' + responseText.id + '</td><td><input type="text" name=' + responseText.token + ' value=' + responseText.token + '></td><td> <input type="radio" name="radio" id=' + responseText.id + ' value=' + responseText.id + '> </td> </tr>');
+                        $('#mesa').val("");
+                        $('#token').val("");
                     }
                 });
             });

@@ -41,7 +41,7 @@ public class AskAssistanceServlet extends HttpServlet {
                 tx.commit();
             }
 
-            response.sendRedirect("/restauran3/jsps/secure/user/userHome.jsp");
+            response.sendRedirect("/restauran3/orderitem");
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {

@@ -4,9 +4,9 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" value="a1f3bea4-f5d3-4afa-949c-51a87ad31000" />
+          <unit-entry name="hibernate.cfg.xml" value="03b79d83-3cf2-4973-824b-beb2d4e49713" />
           <unit-entry name="src:main:resources:hibernate.cfg.xml" />
-          <unit-entry name="src:main:web:WEB-INF:classes:hibernate.cfg.xml" value="a9521dd2-3a67-4bf9-a5b0-b4ac6b49f495" />
+          <unit-entry name="src:main:web:WEB-INF:classes:hibernate.cfg.xml" value="5d9e4dc4-18d3-4de1-aa00-5bb79fa06b5b" />
           <unit-entry name="test:hibernate.cfg.tld" />
         </datasource-map>
         <naming-strategy-map>
