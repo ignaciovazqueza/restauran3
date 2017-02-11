@@ -38,6 +38,12 @@
                     </tr>
                     </table>
                 <br>
+                <div align="center">
+                    <div class="btn-group" role="group" aria-label="..." align="center">
+                        <button type="submit" class="btn btn-default" name="user" id="user">Actualizar nombre de usuario</button>
+                    </div>
+                </div>
+                <br>
                 <table align="center">
                     <tr>
                         <td>
@@ -75,7 +81,7 @@
                 <br>
                 <div align="center">
                     <div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default" name="add" id="add">Actualizar</button>
+                        <button type="submit" class="btn btn-default" name="add" id="add">Actualizar password</button>
                         <%--<input align="center" type="submit" value="Agregar" name="add" class="button" id="add"/>--%>
                     </div>
                     <%--<input type="submit" value="Actualizar" name="add" class="button" id="add"/>--%>

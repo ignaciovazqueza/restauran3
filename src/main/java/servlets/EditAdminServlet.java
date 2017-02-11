@@ -15,8 +15,29 @@ import java.io.IOException;
  */
 @WebServlet(name = "EditAdminServlet" , urlPatterns = {"/editAdmin"})
 public class EditAdminServlet extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nombre = request.getParameter("nombre");
+        if (request.getParameter("add") != null) {
+            editPassword(request,response);
+        } else if (request.getParameter("user") != null) {
+            editUser(request,response);
+        }
+    }
+
+    private void editUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String user = request.getParameter("nombre");
+        AdminValues admin = new AdminValues();
+        if (user != "" && user != null){
+            try {
+                admin.setUser(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        response.sendRedirect("/restauran3/editAdmin");
+    }
+
+    private void editPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String actual = request.getParameter("passworda");
         String nueva = request.getParameter("password");
         String confirmada = request.getParameter("passwordc");
@@ -31,14 +52,11 @@ public class EditAdminServlet extends HttpServlet {
                     } else{
                         //mandar alert de password distintas
                     }
-                } else if (nombre != "" && nombre != null){
-                    admin.setUser(nombre);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         response.sendRedirect("/restauran3/editAdmin");
     }
 
