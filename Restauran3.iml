@@ -4,9 +4,9 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" value="973eef9e-b9c8-4b6d-a1f8-9dcc4846f772" />
+          <unit-entry name="hibernate.cfg.xml" value="de51acb0-9cef-42a0-9ec7-407b0788c757" />
           <unit-entry name="src:main:resources:hibernate.cfg.xml" />
-          <unit-entry name="src:main:web:WEB-INF:classes:hibernate.cfg.xml" value="847a617a-4c70-4ede-8c00-b1a349b60f0e" />
+          <unit-entry name="src:main:web:WEB-INF:classes:hibernate.cfg.xml" value="f5db29ab-59d8-4101-9a25-cb3800a27c0d" />
           <unit-entry name="test:hibernate.cfg.tld" />
         </datasource-map>
         <naming-strategy-map>
@@ -75,5 +75,6 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.assertj:assertj-core:1.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.nulab-inc:zxcvbn:1.2.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.jasypt:jasypt:1.9.2" level="project" />
   </component>
 </module>

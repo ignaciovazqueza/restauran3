@@ -1,9 +1,6 @@
 package tables;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by AlumnosFI on 15/06/2016.
@@ -12,22 +9,25 @@ import javax.persistence.Table;
 @Table(name= "Administrador")
 public class Administrador {
     @Id
+    @GeneratedValue
     @Column(name = "id")
-    private String id;
+    private Integer id;
+    @Column(name = "name")
+    private String name;
     @Column(name = "password")
     private String password;
 
 
-    public void setId(String id) {
-        this.id = id;
+    public void setName(String id) {
+        this.name = id;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
     public String getPassword() {

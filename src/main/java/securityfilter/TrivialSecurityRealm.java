@@ -56,6 +56,8 @@
 package securityfilter;
 
 import org.hibernate.Session;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.securityfilter.realm.SimpleSecurityRealmBase;
 import securityfilter.util.HibernateUtil;
 

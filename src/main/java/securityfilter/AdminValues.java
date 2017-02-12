@@ -4,6 +4,9 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.util.password.*;
+import org.jasypt.util.text.*;
 import securityfilter.util.HibernateUtil;
 import tables.Administrador;
 import tables.Categoria;
@@ -43,7 +46,7 @@ public class AdminValues {
                 }
                 user = prop.getProperty("username");
             }else{
-                user=  admin.getId();
+                user=  admin.getName();
             }
 
         } catch (Exception e) {
@@ -71,13 +74,22 @@ public class AdminValues {
                 }
                 password = prop.getProperty("password");
             }else{
-                password = admin.getPassword();
+                BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+                textEncryptor.setPassword("secret");
+                password = textEncryptor.decrypt(admin.getPassword());
             }
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         } finally {
             inputStream.close();
         }
+
+//        StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+//        decryptor.setPassword("mySecretPassword");
+//        String decryptedText = decryptor.decrypt(password);
+//        System.out.println("Decrypted text is: " + decryptedText);
+//        StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
+//        String plainText = textEncryptor.decrypt(password);
 
         return password;
     }
@@ -92,14 +104,14 @@ public class AdminValues {
         if (admin==null) {
             tx = session.beginTransaction();
             Administrador newAdmin = new Administrador();
-            newAdmin.setId(newUser);
+            newAdmin.setName(newUser);
             newAdmin.setPassword(getPassword());
             session.saveOrUpdate(newAdmin);
             tx.commit();
 
         }else{
             tx = session.beginTransaction();
-            admin.setId(newUser);
+            admin.setName(newUser);
             session.saveOrUpdate(admin);
             tx.commit();
         }
@@ -115,16 +127,28 @@ public class AdminValues {
         Session session = HibernateUtil.getInstance().getSession();
         Administrador admin = (Administrador) session.createQuery("from Administrador" ).uniqueResult();
 
+//        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+//        encryptor.setPassword("mySecretPassword");
+//        String encryptedPassword = encryptor.encrypt(pass);
+//        System.out.println("Encrypted text is: " + encryptedPassword);
+//        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+//        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+//        String encryptedPassword = textEncryptor.encrypt(pass);
+
+        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+        textEncryptor.setPassword("secret");
+        String encryptedPassword = textEncryptor.encrypt(pass);
+
         if (admin==null) {
             tx = session.beginTransaction();
             Administrador newAdmin = new Administrador();
-            newAdmin.setId(getUser());
-            newAdmin.setPassword(pass);
+            newAdmin.setName(getUser());
+            newAdmin.setPassword(encryptedPassword);
             session.saveOrUpdate(newAdmin);
             tx.commit();
         }else {
             tx = session.beginTransaction();
-            admin.setPassword(pass);
+            admin.setPassword(encryptedPassword);
             session.saveOrUpdate(admin);
             tx.commit();
         }
