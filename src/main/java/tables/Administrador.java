@@ -12,6 +12,11 @@ public class Administrador {
     @GeneratedValue
     @Column(name = "id")
     private Integer id;
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> d2887a8fd6fe0f6459be108528b7d4565bc3f91f
     @Column(name = "name")
     private String name;
     @Column(name = "password")
