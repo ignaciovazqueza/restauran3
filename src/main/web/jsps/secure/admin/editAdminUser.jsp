@@ -13,6 +13,19 @@
     <meta charset="UTF-8">
     <title><%=Constants.COMMON_TITLE_BASE%>Editar Admin</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+
+
+    <link rel="stylesheet" type="text/css" href="docs/css/bootstrap.css">
+
+    <script type="text/javascript" src="docs/js/jquery.js"></script>
+    <script type="text/javascript" src="docs/js/bootstrap.js"></script>
+    <script type="text/javascript" src="password-score/dist/js/password-score.js"></script>
+    <script type="text/javascript" src="password-score/dist/js/password-score-options.js"></script>
+    <script type="text/javascript" src="dist/js/bootstrap-strength-meter.js"></script>
+
+
+
 </head>
 
 <jsp:include page="adminHome.jsp"></jsp:include>
@@ -65,6 +78,15 @@
                                        aria-describedby="basic-addon1">
                             </div>
                         </td>
+                    <br>
+                    <td>
+                        <div class="form-group">
+                            <label class="form-label col-sm-2">Password Strength</label>
+                            <div class="col-sm-4" id="example-progress-bar-hierarchy-container">
+
+                            </div>
+                        </div>
+                    </td>
                 </table>
                 <br>
                 <table align="center">
@@ -82,6 +104,7 @@
                 <div align="center">
                     <div class="btn-group" role="group" aria-label="..." align="center">
                         <button type="submit" class="btn btn-default" name="add" id="add">Actualizar password</button>
+                        <%--<button onclick="submitPass(<%=request.getAttribute("pass")%>)" class="btn btn-default" name="add" id="add">Actualizar password</button>--%>
                         <%--<input align="center" type="submit" value="Agregar" name="add" class="button" id="add"/>--%>
                     </div>
                     <%--<input type="submit" value="Actualizar" name="add" class="button" id="add"/>--%>
@@ -92,10 +115,24 @@
     </div>
 </div>
 
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#example-progress-bar-hierarchy').strengthMeter('progressBar', {
+            container: $('#example-progress-bar-hierarchy-container'),
+            hierarchy: {
+                '0': 'progress-bar-danger',
+                '10': 'progress-bar-warning',
+                '15': 'progress-bar-success'
+            }
+        });
+    });
+</script>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="js/bootstrap.min.js"></script>
+<script src="../../../bootstrap/bootstrap.min.js"></script>
 </body>
 
 </html>

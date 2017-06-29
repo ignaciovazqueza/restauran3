@@ -83,14 +83,6 @@ public class AdminValues {
         } finally {
             inputStream.close();
         }
-
-//        StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
-//        decryptor.setPassword("mySecretPassword");
-//        String decryptedText = decryptor.decrypt(password);
-//        System.out.println("Decrypted text is: " + decryptedText);
-//        StrongTextEncryptor textEncryptor = new StrongTextEncryptor();
-//        String plainText = textEncryptor.decrypt(password);
-
         return password;
     }
 
@@ -126,14 +118,6 @@ public class AdminValues {
         Class.forName(driver).newInstance();
         Session session = HibernateUtil.getInstance().getSession();
         Administrador admin = (Administrador) session.createQuery("from Administrador" ).uniqueResult();
-
-//        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-//        encryptor.setPassword("mySecretPassword");
-//        String encryptedPassword = encryptor.encrypt(pass);
-//        System.out.println("Encrypted text is: " + encryptedPassword);
-//        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
-//        StrongPasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
-//        String encryptedPassword = textEncryptor.encrypt(pass);
 
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
         textEncryptor.setPassword("secret");
