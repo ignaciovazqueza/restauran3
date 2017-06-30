@@ -1,4 +1,4 @@
-.passworda-background {
+.password-background {
     position: relative;
     top: -34px;
     margin-bottom: -34px;
@@ -14,7 +14,7 @@
     transition: all .3s ease-in-out;
 }
 
-#passworda {
+#password {
     background: none;
 }
 

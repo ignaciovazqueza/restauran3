@@ -1,7 +1,5 @@
 package servlets;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.util.text.*;
 import securityfilter.AdminValues;
 
 import javax.servlet.RequestDispatcher;
@@ -10,12 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
 import java.io.IOException;
 
-/**
- * Created by AlumnosFI on 04/05/2016.
- */
 @WebServlet(name = "EditAdminServlet" , urlPatterns = {"/editAdmin"})
 public class EditAdminServlet extends HttpServlet {
 
@@ -49,7 +43,7 @@ public class EditAdminServlet extends HttpServlet {
             if (!actual.equals(admin.getPassword())) {
                 //show alert de password actual incorrecta
             } else {
-                if (nueva != "" && nueva != null) {
+                if (!nueva.equals("") && nueva != null) {
                     if (nueva.equals(confirmada)) {
                         admin.setPassword(nueva);
                     } else{

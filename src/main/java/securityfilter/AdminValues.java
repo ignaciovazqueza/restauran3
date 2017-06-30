@@ -1,15 +1,10 @@
 package securityfilter;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.util.password.*;
-import org.jasypt.util.text.*;
+import org.jasypt.util.text.BasicTextEncryptor;
 import securityfilter.util.HibernateUtil;
 import tables.Administrador;
-import tables.Categoria;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
