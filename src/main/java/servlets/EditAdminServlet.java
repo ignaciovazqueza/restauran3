@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "EditAdminServlet" , urlPatterns = {"/editAdmin"})
 public class EditAdminServlet extends HttpServlet {
@@ -22,16 +23,22 @@ public class EditAdminServlet extends HttpServlet {
     }
 
     private void editUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String user = request.getParameter("nombre");
+        String user = request.getParameter("name");
         AdminValues admin = new AdminValues();
+        String msg;
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
         if (user != "" && user != null){
             try {
                 admin.setUser(user);
+                msg = "ok";
+                String pass = "{ \"msg\": \"" + msg + "\"}";
+                out.print(pass);
+                out.flush();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        response.sendRedirect("/restauran3/editAdmin");
     }
 
     private void editPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,22 +46,34 @@ public class EditAdminServlet extends HttpServlet {
         String nueva = request.getParameter("password");
         String confirmada = request.getParameter("passwordc");
         AdminValues admin = new AdminValues();
+        String msg;
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
         try {
             if (!actual.equals(admin.getPassword())) {
-                //show alert de password actual incorrecta
+                msg = "different";
+                String pass = "{ \"msg\": \"" + msg + "\"}";
+                out.print(pass);
+                out.flush();
             } else {
                 if (!nueva.equals("") && nueva != null) {
                     if (nueva.equals(confirmada)) {
                         admin.setPassword(nueva);
-                    } else{
-                        //mandar alert de password distintas
+                        msg = "ok";
+                        String pass = "{ \"msg\": \"" + msg + "\"}";
+                        out.print(pass);
+                        out.flush();
                     }
+                } else {
+                    msg = "missing";
+                    String pass = "{ \"msg\": \"" + msg + "\"}";
+                    out.print(pass);
+                    out.flush();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        response.sendRedirect("/restauran3/editAdmin");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -4,9 +4,9 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" value="ba855858-60f0-4dc4-a5b3-b5be7b146660" />
+          <unit-entry name="hibernate.cfg.xml" value="06b24603-6df1-4b0f-83b2-12af3d5da6ac" />
           <unit-entry name="src:main:resources:hibernate.cfg.xml" />
-          <unit-entry name="src:main:web:WEB-INF:classes:hibernate.cfg.xml" value="22b6a0eb-b4e7-48e3-a2f7-67321ff05eba" />
+          <unit-entry name="src:main:web:WEB-INF:classes:hibernate.cfg.xml" value="ac2e51d1-b545-4f67-9ffa-0ad1adb325ee" />
           <unit-entry name="test:hibernate.cfg.tld" />
         </datasource-map>
         <naming-strategy-map>
@@ -76,7 +76,5 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.nulab-inc:zxcvbn:1.2.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.jasypt:jasypt:1.9.2" level="project" />
-    <orderEntry type="library" name="zxcvbn-async" level="application" />
-    <orderEntry type="library" name="jquery" level="application" />
   </component>
 </module>
