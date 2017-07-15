@@ -2,11 +2,10 @@ package servlets;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.securityfilter.realm.catalina.CatalinaRealmAdapter;
+import org.json.JSONArray;
 import securityfilter.util.HibernateUtil;
 import tables.Categoria;
 import tables.Menu;
-import tables.Mesa;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +29,22 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
         try {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
-            List<Menu> data = session.createQuery("from Menu").list();
+            List data = session.createQuery("from Menu").list();
+
+            JSONArray jsonArray = new JSONArray(data);
+            request.setAttribute("json", jsonArray);
             request.setAttribute("data",data);
-            List<Categoria> categorias = session.createQuery("from Categoria ").list();
+            List categorias = session.createQuery("from Categoria ").list();
+            for (Object c: categorias){
+                String categoria = ((Categoria) c).getNombre().toString();
+                JSONArray catJson = new JSONArray(session.createQuery("from Menu where categoria ='"+categoria+"'").list());
+               request.setAttribute(categoria,catJson);
+
+            }
+
+
             request.setAttribute("categorias",categorias);
-            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/displayMenu.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/jsGrid.jsp");
             rd.forward(request,response);
         }catch (Exception e){
             RequestDispatcher rd = request.getRequestDispatcher("/error.jsp");
@@ -71,46 +80,39 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 String selected = request.getParameter("selected");
                 if (selected!=null) {
                         Menu menu = (Menu) session.createQuery("from Menu where idArticulo= " + selected + " ").uniqueResult();
-                        String nombre = request.getParameter("newNombre");
-                        String precio = request.getParameter("newPrecio");
-
-                        if (nombre == "" || precio == ""){
-                            nombre = "campo vacio";
-                            String art = "{ \"id\": \"" + nombre + "\"}";
-                            response.setContentType("application/json");
-                            PrintWriter out = response.getWriter();
-                            out.print(art);
-                            out.flush();
-                        } else {
-                            menu.setNombre(nombre);
-                            menu.setPrecio(Integer.parseInt(precio));
-
-                            String art = "{ \"id\": \"" + nombre + "\", \"precio\": \"" + precio + "\" }";
+                        String nombre = request.getParameter("name");
+                        String precio = request.getParameter("price");
+                        String categoriaN = request.getParameter("category").toUpperCase();
+                       // Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre =" + categoriaN.toUpperCase()+ "");
+                        List categoria = session.createQuery("from Categoria where nombre ='"+categoriaN+"'").list();
+                        if (categoria.size()==0){
                             tx = session.beginTransaction();
-                            session.saveOrUpdate(menu);
+                            Categoria c = new Categoria();
+                            c.setNombre(categoriaN);
+                            session.saveOrUpdate(c);
                             tx.commit();
-
-                            response.setContentType("application/json");
-                            PrintWriter out = response.getWriter();
-                            out.print(art);
-                            out.flush();
                         }
 
-                } else {
-                    String nombre = "no selected";
-                    String art = "{ \"id\": \"" + nombre + "\"}";
-                    response.setContentType("application/json");
-                    PrintWriter out = response.getWriter();
-                    out.print(art);
-                    out.flush();
-                }
+                        menu.setNombre(nombre);
+                        menu.setPrecio(Integer.parseInt(precio));
+                        menu.setCategoria(categoriaN);
+                        tx = session.beginTransaction();
+                        session.saveOrUpdate(menu);
+                        tx.commit();
+
+                            //String art = "{ \"id\": \"" + nombre + "\", \"precio\": \"" + precio + "\" }";
+//                            response.setContentType("application/json");
+//                            PrintWriter out = response.getWriter();
+//                            out.print(art);
+//                            out.flush();
+                        }
+
+
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
                 e.printStackTrace();
             }
     }
@@ -123,45 +125,46 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
             try {
                 Class.forName(driver).newInstance();
                 Session session = HibernateUtil.getInstance().getSession();
-                String selected = request.getParameter("selected");
+                String id = request.getParameter("id");
                 String status = request.getParameter("status");
                 String categoriaT = "";
                 int precio = 0;
                 String nombre = "";
-                if (selected!=null && status.equals("true")) {
+                if (id!=null && status.equals("true")) {
 
-                    Menu menu = (Menu) session.createQuery("from Menu where idArticulo= " + selected + " ").uniqueResult();
+                    Menu menu = (Menu) session.createQuery("from Menu where idArticulo= " + id + " ").uniqueResult();
                     String cat = menu.getCategoria();
-                    if (selected != null ) {
+
                         tx = session.beginTransaction();
                         session.delete(menu);
                         tx.commit();
 
                         List<Menu> menus = (List<Menu>) session.createQuery("from Menu where categoria= '" + cat + "' ").list();
-                        System.out.println(menus.isEmpty());
+
                         if (menus.isEmpty()) {
                             Transaction tx2 = session.beginTransaction();
                             Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre= '" + cat + "' ").uniqueResult();
                             session.delete(categoria);
                             tx2.commit();
                         }
-                        nombre = menu.getNombre();
-                        categoriaT = menu.getCategoria();
-                        precio = menu.getPrecio();
-
-                        String newMenu = "{ \"id\": \"" + nombre + "\",\"categoria\": \"" + categoriaT + "\", \"precio\": \"" + precio + "\"}";
-                        response.setContentType("application/json");
-                        PrintWriter out = response.getWriter();
-                        out.print(newMenu);
-                        out.flush();
-                    }} else if (selected==null && status.equals("true")){
-                        nombre= "no selected";
-                        String newMenu = "{ \"id\": \"" + nombre + "\",\"categoria\": \"" + categoriaT + "\", \"precio\": \"" + precio + "\"}";
-                        response.setContentType("application/json");
-                        PrintWriter out = response.getWriter();
-                        out.print(newMenu);
-                        out.flush();
+//                        nombre = menu.getNombre();
+//                        categoriaT = menu.getCategoria();
+//                        precio = menu.getPrecio();
+//
+//                        String newMenu = "{ \"id\": \"" + nombre + "\",\"categoria\": \"" + categoriaT + "\", \"precio\": \"" + precio + "\"}";
+//                        response.setContentType("application/json");
+//                        PrintWriter out = response.getWriter();
+//                        out.print(newMenu);
+//                        out.flush();
                     }
+//                } else if (selected==null && status.equals("true")){
+//                        nombre= "no selected";
+//                        String newMenu = "{ \"id\": \"" + nombre + "\",\"categoria\": \"" + categoriaT + "\", \"precio\": \"" + precio + "\"}";
+//                        response.setContentType("application/json");
+//                        PrintWriter out = response.getWriter();
+//                        out.print(newMenu);
+//                        out.flush();
+//                    }
 
                 } catch (IllegalAccessException e1) {
                 e1.printStackTrace();
@@ -169,14 +172,9 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 e1.printStackTrace();
             } catch (ClassNotFoundException e1) {
                 e1.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
     }
-
-
-
 
     private void agregarMenu(HttpServletRequest request, HttpServletResponse response) {
 
@@ -185,10 +183,11 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
 
         try {
             Class.forName(driver).newInstance();
+
             Session session = HibernateUtil.getInstance().getSession();
-            String nombre = request.getParameter("nombre");
-            String pre = request.getParameter("precio");
-            String categoria = request.getParameter("categoria").toUpperCase();
+            String nombre = request.getParameter("name");
+            String pre = request.getParameter("price");
+            String categoria = request.getParameter("category").toUpperCase();
             if (nombre == null || nombre == "" || pre == null || pre == "" || categoria == null ||  categoria == ""){
                 nombre = "vacio";
                 String newMenu = "{ \"nombre\": \"" + nombre +"\"}";
@@ -227,11 +226,11 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                     nombre = "newCat";
                 }
 
-                String newMenu = "{ \"nombre\": \"" + nombre + "\",\"categoria\": \"" + categoriaT + "\", \"precio\": \"" + precio + "\",\"id\": \"" + id + "\"}";
-                response.setContentType("application/json");
-                PrintWriter out = response.getWriter();
-                out.print(newMenu);
-                out.flush();
+//                String newMenu = "{ \"nombre\": \"" + nombre + "\",\"categoria\": \"" + categoriaT + "\", \"precio\": \"" + precio + "\",\"id\": \"" + id + "\"}";
+//                response.setContentType("application/json");
+//                PrintWriter out = response.getWriter();
+//                out.print(newMenu);
+//                out.flush();
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();

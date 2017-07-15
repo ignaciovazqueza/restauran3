@@ -15,8 +15,8 @@ div#divimagen{
 }
 img#imagen{
 	border-radius: 50%;
-	height: 250px;
-	width: 250px;
+	height: 100px;
+	width: 100px;
 }
 
 /* Typography */
@@ -79,7 +79,7 @@ p.small {
 
 .login-box {
 	background-color: white;
-	max-width: 340px;
+	max-width: 250px;
 	margin: 0 auto;
 	position: relative;
 	top: 0px;

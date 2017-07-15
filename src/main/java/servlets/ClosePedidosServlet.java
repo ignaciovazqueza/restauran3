@@ -2,9 +2,9 @@ package servlets;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.json.JSONArray;
 import securityfilter.util.HibernateUtil;
 import tables.Menu;
-import tables.Orden;
 import tables.Pedido;
 
 import javax.servlet.RequestDispatcher;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -103,6 +102,12 @@ public class ClosePedidosServlet extends HttpServlet {
             request.setAttribute("pedidos",pedidos);
             request.setAttribute("alaespera",alaespera);
             request.setAttribute("entregados",entregados);
+            JSONArray jsonE = new JSONArray(entregados);
+            request.setAttribute("entregadosJson", jsonE);
+            JSONArray jsonP = new JSONArray(pedidos);
+            request.setAttribute("pedidosJson", jsonP);
+            JSONArray jsonA = new JSONArray(alaespera);
+            request.setAttribute("alaesperaJson", jsonA);
             RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/closePedidos.jsp");
             rd.forward(request,response);
 
