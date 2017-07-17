@@ -121,7 +121,6 @@
             if (!entregados.isEmpty()){
         %>
             <br>
-            <br>
             <div class="center-block panel panel-primary" style="width:50%;text-align: center">
                 <div class="panel-heading">
                     <h3 align="center">Pedidos ya entregados</h3>
