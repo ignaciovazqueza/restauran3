@@ -19,7 +19,7 @@ public class AdminValues {
     private String user = "";
     private String password = "";
 
-    public String getUser() throws IOException {
+    public String getAdminName() throws IOException {
 
         String driver = "org.hsqldb.jdbc.JDBCDriver";
         Transaction tx = null;
@@ -121,7 +121,7 @@ public class AdminValues {
         if (admin==null) {
             tx = session.beginTransaction();
             Administrador newAdmin = new Administrador();
-            newAdmin.setName(getUser());
+            newAdmin.setName(getAdminName());
             newAdmin.setPassword(encryptedPassword);
             session.saveOrUpdate(newAdmin);
             tx.commit();

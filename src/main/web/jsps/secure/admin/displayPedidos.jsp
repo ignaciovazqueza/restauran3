@@ -20,9 +20,24 @@
     <title><%=Constants.COMMON_TITLE_BASE%>Pedidos</title>
     <jsp:include page="adminHome.jsp"></jsp:include>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
 </head>
 
 <body>
+
+<script>
+
+    $(document).ready(function () {
+        $('#entregar').click(function (event) {
+            var name = $("#entregar").attr("name");
+            $.post('../restauran3/displaypedidos', {
+                id: name
+            });
+        });
+    });
+</script>
+
+
 <form id="reg-form" action="../restauran3/displaypedidos" method="post">
     <br>
     <div class="center-block panel panel-primary" style="width:50%;text-align: center">
@@ -81,7 +96,10 @@
                     </td>
                     <td><%=pedido.getEntregado()%>
                     </td>
-                    <td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>
+                    <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
+                    <td><div class="btn-group" role="group" aria-label="..." align="center">
+                        <button type="submit" class="btn btn-default" id="entregar" name=<%=id%> >Entregar</button>
+                    </div></td>
                 </tr>
 
 
@@ -99,11 +117,11 @@
 
         <%if (!pedidos.isEmpty()){%>
     <br>
-    <div align="center">
-        <div class="btn-group" role="group" aria-label="..." align="center">
-            <button type="submit" class="btn btn-default" name="entregar">Entregar</button>
-        </div>
-    </div>
+    <%--<div align="center">--%>
+        <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
+            <%--<button type="submit" class="btn btn-default" name="entregar">Entregar</button>--%>
+        <%--</div>--%>
+    <%--</div>--%>
             </div>
 
     <br>
@@ -114,6 +132,7 @@
         </div>
     </div>
         <%}%>
+
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

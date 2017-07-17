@@ -28,16 +28,15 @@ public class DisplayPedidosServlet extends HttpServlet {
             try {
 
                 Session session = HibernateUtil.getInstance().getSession();
-                String[] selected = request.getParameterValues("check");
-                if (selected!=null) {
-                    for (int i = 0; i < selected.length; i++) {
-                        Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + selected[i] + "").uniqueResult();
+                //String[] selected = request.getParameterValues("check");
+                String id = request.getParameter("id");
+                if (id!=null) {
+                        Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + id + "").uniqueResult();
                         pedido.setEntregado("Entregado");
 
                         tx = session.beginTransaction();
                         session.saveOrUpdate(pedido);
                         tx.commit();
-                    }
                 }
                 response.sendRedirect("/restauran3/displaypedidos");
             }catch (Exception e){

@@ -67,7 +67,7 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
       Session session = HibernateUtil.getInstance().getSession();
       AdminValues admin = new AdminValues();
       try {
-         if (admin.getUser().equals(username) && admin.getPassword().equals(password)) {
+         if (admin.getAdminName().equals(username) && admin.getPassword().equals(password)) {
             return true;
          }
          Object mesa = session.createQuery("from Mesa where mesa='" + username + "' and token='" + password + "'").uniqueResult();
@@ -89,7 +89,7 @@ public class TrivialSecurityRealm extends SimpleSecurityRealmBase {
       try {
          if (mesa != null && rolename.equals("userrole")) {
             return true;
-         } else if (admin.getUser().equals(username) && rolename.equals("adminrole")) {
+         } else if (admin.getAdminName().equals(username) && rolename.equals("adminrole")) {
             return true;
          }
       } catch (IOException e) {

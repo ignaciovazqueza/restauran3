@@ -2,12 +2,8 @@ package servlets;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.json.JSONObject;
 import securityfilter.util.HibernateUtil;
-import tables.Categoria;
-import tables.Menu;
 import tables.Mesa;
-import tables.Orden;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

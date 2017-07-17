@@ -31,7 +31,7 @@ public class RedirectServlet extends HttpServlet {
         AdminValues adminValues = new AdminValues();
         String name ="";
         try {
-            name = adminValues.getUser();
+            name = adminValues.getAdminName();
         } catch (IOException e) {
             e.printStackTrace();
         }

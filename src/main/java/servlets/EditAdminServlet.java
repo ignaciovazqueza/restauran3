@@ -60,7 +60,7 @@ public class EditAdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         AdminValues adminValues = new AdminValues();
-        request.setAttribute("username", adminValues.getUser());
+        request.setAttribute("username", adminValues.getAdminName());
         request.setAttribute("pass",adminValues.getPassword());
         RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/editAdminUser.jsp");
         rd.forward(request, response);
