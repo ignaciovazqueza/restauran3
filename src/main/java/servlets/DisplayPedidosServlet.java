@@ -70,7 +70,7 @@ public class DisplayPedidosServlet extends HttpServlet {
         Orden orden = null;
         try {
             Session session = HibernateUtil.getInstance().getSession();
-            orden = (Orden) session.createQuery("from Orden where estado='opened' and idMesa='"+ idMesa + "'").uniqueResult();
+            orden = (Orden) session.createQuery("from Orden where idMesa='"+ idMesa + "'").uniqueResult();
         }catch (Exception e){
         }
         finally {
@@ -82,7 +82,7 @@ public class DisplayPedidosServlet extends HttpServlet {
         List<Pedido> pedidos = new ArrayList<>();
         try {
             Session session = HibernateUtil.getInstance().getSession();
-            pedidos = session.createQuery("from Pedido where idOrden="+ idOrden + " and entregado != 'Pidiendo...'").list();
+            pedidos = session.createQuery("from Pedido where idOrden="+ idOrden + " and entregado = 'A la espera'").list();
         }catch (Exception e){
         }
         finally {

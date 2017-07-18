@@ -45,22 +45,9 @@ public class CloseTableServlet extends HttpServlet {
                 tx2.commit();
             }
 
-            List<Pedido> alaespera = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='A la espera'").list();
-            for(Pedido pedido: alaespera){
-                tx3= session.beginTransaction();
-                pedido.setEntregado("Entregado");
-                session.saveOrUpdate(pedido);
-                tx3.commit();
-            }
-
-            Mesa mesa = (Mesa) session.createQuery("from Mesa where mesa='" + idMesa + "'").uniqueResult();
-
-
             tx= session.beginTransaction();
             orden.setEstado("closed");
-            mesa.setAsistencia("No pide asistencia");
             session.saveOrUpdate(orden);
-            session.saveOrUpdate(mesa);
             tx.commit();
 
             response.sendRedirect("/restauran3/logout");
