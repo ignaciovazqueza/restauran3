@@ -31,6 +31,7 @@ dependencies {
     compile 'commons-configuration:commons-configuration:1.6'
     compile 'com.nulab-inc:zxcvbn:1.2.2'
     compile 'org.jasypt:jasypt:1.9.2'
+    compile  'javax.websocket:javax.websocket-api:1.1'
 
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.6.0'
