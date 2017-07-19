@@ -13,6 +13,68 @@
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Pedidos</title>
+
+    <script type="text/javascript">
+
+        var webSocket;
+        // var messages = document.getElementById("messages");
+
+        function openSocket() {
+            // Ensures only one connection is open at a time
+            if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
+                writeResponse("WebSocket is already opened.");
+                return;
+            }
+            // Create a new instance of the websocket
+            webSocket = new WebSocket("ws://localhost:8080/restauran3/websocket");
+
+            /**
+             * Binds functions to the listeners for the websocket.
+             */
+            webSocket.onopen = function (event) {
+                // For reasons I can't determine, onopen gets called twice
+                // and the first time event.data is undefined.
+                // Leave a comment if you know the answer.
+                if (event.data === undefined)
+                    return;
+
+                writeResponse(event.data);
+            };
+
+            webSocket.onmessage = function (event) {
+                writeResponse(event.data);
+            };
+
+            webSocket.onclose = function (event) {
+                writeResponse("Connection closed");
+            };
+        }
+
+        /**
+         * Sends the value of the text input to the server
+         */
+        function send() {
+            //  var text = document.getElementById("messageinput").value;
+            var text = "pedido";
+            webSocket.send(text);
+        }
+
+        function closeSocket() {
+            webSocket.close();
+        }
+
+        function writeResponse(text) {
+            //  messages.innerHTML += "<br/>" + text;
+            console.log(text);
+            location.reload();
+            //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
+        }
+
+        function window_onload() {
+            openSocket();
+        }
+
+    </script>
 </head>
 
 <jsp:include page="userHome.jsp"></jsp:include>
@@ -20,36 +82,40 @@
 
 <body>
 <form id="reg-form" action="../restauran3/closepedidos" method="post">
-        <%  List<Pedido> pedidos = (List<Pedido>) request.getAttribute("pedidos");
-            if (!pedidos.isEmpty()){
-        %>
+    <% List<Pedido> pedidos = (List<Pedido>) request.getAttribute("pedidos");
+        if (!pedidos.isEmpty()) {
+    %>
     <br>
     <br>
     <div class="center-block panel panel-primary" style="width:50%;text-align: center">
         <div class="panel-heading">
             <h3 align="center">Pedidos Actuales</h3>
         </div>
-        <table align ="center" class="table" width="60%">
+        <table align="center" class="table" width="60%">
             <tr>
                 <td>Articulo</td>
                 <td>Cantidad</td>
                 <td>Precio</td>
                 <td>Total Parcial</td>
             </tr>
-            <% for (Pedido pedido : pedidos){
+            <% for (Pedido pedido : pedidos) {
                 int id = pedido.getIdPedido();
                 Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
-                String estado =articulo.getNombre();
+                String estado = articulo.getNombre();
                 int cantidad = Integer.parseInt(pedido.getCantidad());
                 int precio = articulo.getPrecio();
-                int total= cantidad*precio;
+                int total = cantidad * precio;
             %>
 
             <tr>
-                <td><%=estado%></td>
-                <td><%=cantidad%></td>
-                <td>$<%=precio%></td>
-                <td>$<%=total%></td>
+                <td><%=estado%>
+                </td>
+                <td><%=cantidad%>
+                </td>
+                <td>$<%=precio%>
+                </td>
+                <td>$<%=total%>
+                </td>
                 <td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>
             </tr>
 
@@ -73,67 +139,71 @@
                 </td>
             </table>
         </div>
-        </form>
+</form>
 <br>
 
-            <%}%>
+<%}%>
 
-            <%  List<Pedido> alaespera = (List<Pedido>) request.getAttribute("alaespera");
-            if (!alaespera.isEmpty()){
+<% List<Pedido> alaespera = (List<Pedido>) request.getAttribute("alaespera");
+    if (!alaespera.isEmpty()) {
+%>
+<br>
+
+</div>
+<div class="center-block panel panel-primary" style="width:50%;text-align: center">
+    <div class="panel-heading">
+        <h3 align="center">Pedidos a la espera de ser entregados</h3>
+    </div>
+
+    <table align="center" class="table" width="60%">
+        <tr>
+            <td>Articulo</td>
+            <td>Cantidad</td>
+            <td>Precio</td>
+            <td>Total Parcial</td>
+        </tr>
+        <% for (Pedido pedido : alaespera) {
+            Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
+            String estado = articulo.getNombre();
+            int cantidad = Integer.parseInt(pedido.getCantidad());
+            int precio = articulo.getPrecio();
+            int total = cantidad * precio;
         %>
-        <br>
 
-        </div>
-        <div class="center-block panel panel-primary" style="width:50%;text-align: center">
-            <div class="panel-heading">
-                <h3 align="center">Pedidos a la espera de ser entregados</h3>
-            </div>
+        <tr>
+            <td><%=estado%>
+            </td>
+            <td><%=cantidad%>
+            </td>
+            <td>$<%=precio%>
+            </td>
+            <td>$<%=total%>
+            </td>
+        </tr>
 
-            <table align ="center" class="table" width="60%">
-                <tr>
-                    <td>Articulo</td>
-                    <td>Cantidad</td>
-                    <td>Precio</td>
-                    <td>Total Parcial</td>
-                </tr>
-                <% for (Pedido pedido : alaespera){
-                    Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
-                    String estado =articulo.getNombre();
-                    int cantidad = Integer.parseInt(pedido.getCantidad());
-                    int precio = articulo.getPrecio();
-                    int total= cantidad*precio;
-                %>
-
-                <tr>
-                    <td><%=estado%></td>
-                    <td><%=cantidad%></td>
-                    <td>$<%=precio%></td>
-                    <td>$<%=total%></td>
-                </tr>
-
-                <%}%>
+        <%}%>
 
 
-            </table>
-                <%}%>
-            </div>
-                <%  List<Pedido> entregados = (List<Pedido>) request.getAttribute("entregados");
-            if (!entregados.isEmpty()){
-        %>
-            <br>
-            <div class="center-block panel panel-primary" style="width:50%;text-align: center">
-                <div class="panel-heading">
-                    <h3 align="center">Pedidos ya entregados</h3>
-                </div>
+    </table>
+    <%}%>
+</div>
+<% List<Pedido> entregados = (List<Pedido>) request.getAttribute("entregados");
+    if (!entregados.isEmpty()) {
+%>
+<br>
+<div class="center-block panel panel-primary" style="width:50%;text-align: center">
+    <div class="panel-heading">
+        <h3 align="center">Pedidos ya entregados</h3>
+    </div>
 
-                <table align ="center" class="table" width="60%">
-                    <tr>
-                        <td>Articulo</td>
-                        <td>Cantidad</td>
-                        <td>Precio</td>
-                        <td>Total Parcial</td>
-                    </tr>
-                    <% for (Pedido pedido : entregados){
+    <table align="center" class="table" width="60%">
+        <tr>
+            <td>Articulo</td>
+            <td>Cantidad</td>
+            <td>Precio</td>
+            <td>Total Parcial</td>
+        </tr>
+            <% for (Pedido pedido : entregados){
                         Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
                         String estado =articulo.getNombre();
                         int cantidad = Integer.parseInt(pedido.getCantidad());
@@ -141,26 +211,30 @@
                         int total= cantidad*precio;
                     %>
 
-                    <tr>
-                        <td><%=estado%></td>
-                        <td><%=cantidad%></td>
-                        <td>$<%=precio%></td>
-                        <td>$<%=total%></td>
-                    </tr>
+        <tr>
+            <td><%=estado%>
+            </td>
+            <td><%=cantidad%>
+            </td>
+            <td>$<%=precio%>
+            </td>
+            <td>$<%=total%>
+            </td>
+        </tr>
 
-                    <%}%>
+            <%}%>
 
-                </div>
-                </table>
-                    <%}%>
+</div>
+</table>
+<%}%>
 
-                    <% if((pedidos.isEmpty() && alaespera.isEmpty()) && entregados.isEmpty()){%>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
-                </div>
-            </div>
-                    <%}%>
+<% if ((pedidos.isEmpty() && alaespera.isEmpty()) && entregados.isEmpty()) {%>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
+    </div>
+</div>
+<%}%>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
