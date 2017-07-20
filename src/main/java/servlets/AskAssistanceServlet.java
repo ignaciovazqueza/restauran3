@@ -4,8 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import securityfilter.util.HibernateUtil;
 import tables.Mesa;
-import tables.Orden;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,15 +23,41 @@ public class AskAssistanceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         String driver = "org.hsqldb.jdbc.JDBCDriver";
-        Transaction tx = null;
 
-        try{
+        try {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
             Principal userPrincipal = request.getUserPrincipal();
             String idMesa = userPrincipal.getName();
+            Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + idMesa + "'").uniqueResult();
+            String estado = mesa.getAsistencia();
+            request.setAttribute("estado",estado);
+            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/asistencia.jsp");
+            rd.forward(request,response);
 
-            Mesa mesa = (Mesa) session.createQuery("from Mesa where id='"+idMesa+ "'").uniqueResult();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
+        String driver = "org.hsqldb.jdbc.JDBCDriver";
+        Transaction tx = null;
+
+        try {
+            Class.forName(driver).newInstance();
+            Session session = HibernateUtil.getInstance().getSession();
+            Principal userPrincipal = req.getUserPrincipal();
+            String idMesa = userPrincipal.getName();
+
+            Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + idMesa + "'").uniqueResult();
 
             String asistir = "Asistir mesa";
             if (!mesa.getAsistencia().equals(asistir)) {
@@ -41,7 +67,8 @@ public class AskAssistanceServlet extends HttpServlet {
                 tx.commit();
             }
 
-            response.sendRedirect("/restauran3/orderitem");
+            resp.sendRedirect("/restauran3/askassistance");
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -49,6 +76,6 @@ public class AskAssistanceServlet extends HttpServlet {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
 
+    }
 }

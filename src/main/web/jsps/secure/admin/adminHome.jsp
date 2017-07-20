@@ -9,9 +9,9 @@
 <body>
 
 <nav id="nav-1">
-    <a class="link-1" href="${pageContext.request.contextPath}/displaypedidos">Ver Pedidos</a>
+    <a class="link-1" href="${pageContext.request.contextPath}/displaypedidos" name="pedidos" id="pedidos">Ver Pedidos</a>
 
-    <a class="link-1" href="${pageContext.request.contextPath}/displayassistances">Ver Pedidos de Asistencia</a>
+    <a class="link-1" href="${pageContext.request.contextPath}/displayassistances" name="asistencia" id="asistencia">Ver Pedidos de Asistencia</a>
 
     <a class="link-1" href="${pageContext.request.contextPath}/displaymenu">Ver Menu</a>
 

@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@ServerEndpoint("/websocket")
-public class MiWebSocket {
+@ServerEndpoint("/orden")
+public class OrdenWebSocket {
 
     private static Set<Session> clients =
             Collections.synchronizedSet(new HashSet<Session>());

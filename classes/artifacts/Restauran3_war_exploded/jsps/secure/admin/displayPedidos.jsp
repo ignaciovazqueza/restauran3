@@ -21,15 +21,85 @@
     <jsp:include page="adminHome.jsp"></jsp:include>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
+
+    <script type="text/javascript">
+
+        var webSocketO;
+        // var messages = document.getElementById("messages");
+
+        function openSocketO() {
+            // Ensures only one connection is open at a time
+            if (webSocketO !== undefined && webSocketO.readyState !== WebSocket.CLOSED) {
+                writeResponse("WebSocket is already opened.");
+                return;
+            }
+            // Create a new instance of the websocket
+            webSocketO = new WebSocket("ws://192.168.0.104:8080/restauran3/orden");
+
+            /**
+             * Binds functions to the listeners for the websocket.
+             */
+            webSocketO.onopen = function (event) {
+                // For reasons I can't determine, onopen gets called twice
+                // and the first time event.data is undefined.
+                // Leave a comment if you know the answer.
+                if (event.data === undefined)
+                    return;
+
+                writeResponse(event.data);
+            };
+
+            webSocketO.onmessage = function (event) {
+                if (event.data=="orden"){
+                    writeOrdenResponse(event.data);
+                }
+
+            };
+
+            webSocketO.onclose = function (event) {
+                writeResponse("Connection closed");
+            };
+        }
+
+        /**
+         * Sends the value of the text input to the server
+         */
+        function sendOrden() {
+            //  var text = document.getElementById("messageinput").value;
+//            var text = "pedido";
+//            webSocket.send(text);
+      //      var text = "orden";
+  //          webSocket.send();
+        }
+
+        function closeSocket() {
+            webSocketO.close();
+        }
+
+        function writeResponse(text) {
+            //  messages.innerHTML += "<br/>" + text;
+                console.log(text);
+                location.reload();
+            //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
+        }
+        function writeOrdenResponse(text){
+            location.reload()
+        }
+
+        function window_onload() {
+            openSocketO();
+        }
+
+    </script>
 </head>
 
-<body>
+<body onload="window_onload();">
 
 <script>
 
     $(document).ready(function () {
-        $('#entregar').click(function (event) {
-            var name = $("#entregar").attr("name");
+        $("button").click(function (event){
+            var name = $(this).attr('id')
             $.post('../restauran3/displaypedidos', {
                 id: name
             });
@@ -98,7 +168,7 @@
                     </td>
                     <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
                     <td><div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default" id="entregar" name=<%=id%> >Entregar</button>
+                        <button type="submit" class="btn btn-default" id=<%=id%> name="entregar" >Entregar</button>
                     </div></td>
                 </tr>
 

@@ -23,7 +23,7 @@
     <script type="text/javascript">
 
         var webSocket;
-        var messages = document.getElementById("messages");
+     //   var messages = document.getElementById("messages");
 
         function openSocket() {
             // Ensures only one connection is open at a time
@@ -32,7 +32,7 @@
                 return;
             }
             // Create a new instance of the websocket
-            webSocket = new WebSocket("ws://localhost:8080/restauran3/websocket");
+            webSocket = new WebSocket("ws://192.168.0.104:8080/restauran3/pedido");
 
             /**
              * Binds functions to the listeners for the websocket.
@@ -61,8 +61,13 @@
          */
         function send() {
             //  var text = document.getElementById("messageinput").value;
-            var username = <%=username%>;
-            var text = "pedido " + username;
+            var text = "pedido ";
+            webSocket.send(text);
+        }
+        function sendPedido(){
+            var user = "";
+            user = $('#user').val();
+            var text = "pedido";
             webSocket.send(text);
         }
 
@@ -71,7 +76,7 @@
         }
 
         function writeResponse(text) {
-            messages.innerHTML += "<br/>" + text;
+         //   messages.innerHTML += "<br/>" + text;
         }
 
         function window_onload() {
@@ -85,7 +90,7 @@
 <jsp:include page="userHome.jsp"></jsp:include>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-<body>
+<body onload="window_onload();">
 <br>
 <br>
 <div class="center-block panel panel-primary" style="width:50%;text-align: center">
@@ -160,7 +165,7 @@
         <br>
         <div align="center">
             <div class="btn-group" role="group" aria-label="..." align="center">
-                <button type="submit" class="btn btn-default" id="order-item" name="entregar" onclick="send();">Ordenar!</button>
+                <button type="submit" class="btn btn-default" id="order-item" name="entregar" onclick="sendPedido();">Ordenar!</button>
             </div>
         </div>
         <br>
@@ -168,7 +173,7 @@
 
         <%--<input type="submit" value="Ordenar!" id="order-item" class="button"/>--%>
     </form>
-
+</div>
 </body>
 </html>
 

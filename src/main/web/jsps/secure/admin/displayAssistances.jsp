@@ -17,23 +17,23 @@
 
     <script type="text/javascript">
 
-        var webSocket;
+        var webSocketA;
        // var messages = document.getElementById("messages");
 
 
-        function openSocket(){
+        function openSocketA(){
             // Ensures only one connection is open at a time
-            if(webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED){
+            if(webSocketA !== undefined && webSocketA.readyState !== WebSocket.CLOSED){
                 writeResponse("WebSocket is already opened.");
                 return;
             }
             // Create a new instance of the websocket
-            webSocket = new WebSocket("ws://192.168.0.104:8080/restauran3/websocket");
+            webSocketA = new WebSocket("ws://192.168.0.104:8080/restauran3/asistencia");
 
             /**
              * Binds functions to the listeners for the websocket.
              */
-            webSocket.onopen = function(event){
+            webSocketA.onopen = function(event){
                 // For reasons I can't determine, onopen gets called twice
                 // and the first time event.data is undefined.
                 // Leave a comment if you know the answer.
@@ -43,11 +43,14 @@
                 writeResponse(event.data);
             };
 
-            webSocket.onmessage = function(event){
-                writeResponse(event.data);
+            webSocketA.onmessage = function(event){
+                if (event.data=="asistencia") {
+
+                    writeAsistenciaResponse(event.data);
+                }
             };
 
-            webSocket.onclose = function(event){
+            webSocketA.onclose = function(event){
                 writeResponse("Connection closed");
             };
         }
@@ -57,23 +60,24 @@
          */
         function send(){
             //  var text = document.getElementById("messageinput").value;
-            var text = "asistencia";
-            webSocket.send(text);
+         //   var text = "asistencia";
+        //    webSocket.send(text);
         }
 
         function closeSocket(){
-            webSocket.close();
+            webSocketA.close();
         }
 
-        function writeResponse(text){
-          //  messages.innerHTML += "<br/>" + text;
-            console.log(text);
-            location.reload();
-        //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
+        function writeAsistenciaResponse(text) {
+                var parts = text.split(" ");
+                var action = parts[0];
+                var user = parts[1];
+                console.log(text);
+                location.reload();
+                //$('#' + user + ' tr:last').after('<tr><td><input type=text value="' + user + '"id="' + user + '"></td><td><input type=text value="' + "Asistir mesa" + '"id="' + user + '"></td><td><input type=radio name="radio"  value=' + user + ' ></td></tr>');
         }
-
         function window_onload(){
-            openSocket();
+            openSocketA();
         }
 
     </script>
@@ -112,7 +116,7 @@
 
         <div class="panel-body">
             <h3 align="center"><span class="label label-primary"><%=mesa.getMesa().toUpperCase()%></span></h3>
-            <table class="table" align="center" width="60%" id="tabla">
+            <table class="table" align="center" width="60%" id=<%=mesa.getMesa()%> name=<%=mesa.getMesa()%>>
 
                 <tr>
                     <td>ID</td>
