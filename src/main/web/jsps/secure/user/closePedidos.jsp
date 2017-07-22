@@ -26,7 +26,7 @@
                 return;
             }
             // Create a new instance of the websocket
-            webSocket = new WebSocket("ws://192.168.0.104:8080/restauran3/pedido");
+            webSocket = new WebSocket("ws://192.168.0.106:8080/restauran3/pedido");
 
             /**
              * Binds functions to the listeners for the websocket.
@@ -77,6 +77,13 @@
             openSocket();
         }
 
+        function sendPedido(){
+            var user = "";
+            user = $('#user').val();
+            var text = "pedido";
+            webSocket.send(text);
+        }
+
     </script>
 
     <script type="text/javascript">
@@ -91,7 +98,7 @@
                 return;
             }
             // Create a new instance of the websocket
-            webSocketO = new WebSocket("ws://192.168.0.104:8080/restauran3/orden");
+            webSocketO = new WebSocket("ws://192.168.0.106:8080/restauran3/orden");
 
             /**
              * Binds functions to the listeners for the websocket.
@@ -210,7 +217,7 @@
                 </td>
                 <td>
                     <div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default" name="eliminar" id="eliminar" onclick="changeWS()">Eliminar</button>
+                        <button type="submit" class="btn btn-default" name="eliminar" id="eliminar" onclick="sendPedido()">Eliminar</button>
                     </div>
                 </td>
             </table>

@@ -11,30 +11,24 @@
     <title><%=Constants.COMMON_TITLE_BASE%>Asistencia</title>
     <% String username = request.getUserPrincipal().getName();%>
     <input type="hidden" value="<%=username%>" id="user">
+
     <script type="text/javascript">
 
         var webSocketA;
-        // var messages = document.getElementById("messages");
+        var ip = "10.10.10.8";
 
         function openSocketA() {
-            // Ensures only one connection is open at a time
+
             if (webSocketA !== undefined && webSocketA.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
                 return;
             }
-            // Create a new instance of the websocket
-            webSocketA = new WebSocket("ws://192.168.0.104:8080/restauran3/asistencia");
 
-            /**
-             * Binds functions to the listeners for the websocket.
-             */
+            webSocketA = new WebSocket("ws://" + ip + ":8080/restauran3/asistencia");
+
             webSocketA.onopen = function (event) {
-                // For reasons I can't determine, onopen gets called twice
-                // and the first time event.data is undefined.
-                // Leave a comment if you know the answer.
                 if (event.data === undefined)
                     return;
-
                 writeResponse(event.data);
             };
 
@@ -42,7 +36,6 @@
                 if (event.data=="asistencia"){
                     writeAsistenciaResponse(event.data);
                 }
-
             };
 
             webSocketA.onclose = function (event) {
@@ -50,12 +43,10 @@
             };
         }
 
-        /**
-         * Sends the value of the text input to the server
-         */
         function sendAsistencia() {
-            var user = "";
-            user = <%=username%>;
+        //    var user = "";
+         //   user = $('#user').value;
+            var user = document.getElementById('user').value;
             var text = "asistencia " + user;
             webSocketA.send(text);
         }
@@ -65,12 +56,11 @@
         }
 
         function writeResponse(text) {
-            //  messages.innerHTML += "<br/>" + text;
             console.log(text);
-            //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
         }
+
         function writeAsistenciaResponse(text){
-            location.reload()
+            location.reload();
         }
 
         function window_onload() {
@@ -86,8 +76,6 @@
 
 <body onload="window_onload();">
 
-
-
 <% String estado = (String) request.getAttribute("estado");%>
 <br>
 <div class="center-block panel panel-primary" style="width:50%;text-align: center">
@@ -95,28 +83,28 @@
         <h3 align="center">Asistencia</h3>
     </div>
     <form id="reg-form" action="../restauran3/askassistance" method="post">
-    <table align="center">
-        <tr>
-            <td>
-                <br>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Estado </span>
-                    <input type="text" class="form-control" id="nombre" name="nombre"
-                           value="<%=estado%>" spellcheck="false"
-                           aria-describedby="basic-addon1" readonly>
-                </div>
-                <br>
-            </td>
-        </tr>
-        <tr>
+        <table align="center">
+            <tr>
+                <td>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Estado </span>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                               value="<%=estado%>" spellcheck="false"
+                               aria-describedby="basic-addon1" readonly>
+                    </div>
+                    <br>
+                </td>
+            </tr>
+            <tr>
                 <br>
                 <div class="btn-group" role="group" aria-label="..." align="center">
                     <button type="submit" class="btn btn-default" name="asistencia" id="asistencia" onclick="sendAsistencia();">Pedir Asistencia</button>
                 </div>
                 <br>
-        </tr>
-    </table>
+            </tr>
+        </table>
     </form>
-    </div>
+</div>
 </body>
 </html>

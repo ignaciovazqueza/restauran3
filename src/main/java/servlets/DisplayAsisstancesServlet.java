@@ -1,11 +1,9 @@
 package servlets;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import securityfilter.util.HibernateUtil;
 import tables.Mesa;
-import tables.Orden;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,31 +18,31 @@ import java.util.List;
 /**
  * Created by AlumnosFI on 01/06/2016.
  */
-@WebServlet(name = "DisplayAsisstancesServlet", urlPatterns ={"/displayassistances"})
+@WebServlet(name = "DisplayAsisstancesServlet", urlPatterns = {"/displayassistances"})
 public class DisplayAsisstancesServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Transaction tx =null;
+        Transaction tx = null;
         try {
             String asistido = "No pide asistencia";
             Session session = HibernateUtil.getInstance().getSession();
-            String[] selected = request.getParameterValues("check");
-            if (selected!=null) {
-                for (int i = 0; i < selected.length; i++) {
-                    List<Mesa> mesas = (List<Mesa>) session.createQuery("from Mesa where id= '" + selected[i] + "'").list();
-                    for (Mesa mesa: mesas){
-                        if (!mesa.getAsistencia().equals(asistido)) {
-                            mesa.setAsistencia(asistido);
-                            tx = session.beginTransaction();
-                            session.saveOrUpdate(mesa);
-                            tx.commit();
-                        }
-                    }
-                }
+            String selected = request.getParameter("name");
+            if (selected != null) {
+                Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + selected + "'");
+                mesa.setAsistencia(asistido);
+                tx = session.beginTransaction();
+                session.saveOrUpdate(mesa);
+                tx.commit();
             }
-            response.sendRedirect("/restauran3/displayassistances");
-        } catch (Exception e){
+
+            String id = "{ \"name\": \"" + selected + "\"}";
+            response.setContentType("application/json");
+              PrintWriter out = response.getWriter();
+              out.print(id);
+              out.flush();
+        } catch (Exception e) {
             e.printStackTrace();
+
         }
     }
 
@@ -56,14 +54,13 @@ public class DisplayAsisstancesServlet extends HttpServlet {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
             List<Mesa> mesas = session.createQuery("from Mesa where asistencia='Asistir mesa'").list();
-            request.setAttribute("mesas",mesas);
+            request.setAttribute("mesas", mesas);
             RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/displayAssistances.jsp");
-            rd.forward(request,response);
-        }catch (Exception e){
+            rd.forward(request, response);
+        } catch (Exception e) {
             RequestDispatcher rd = request.getRequestDispatcher("/error.jsp");
-            rd.forward(request,response);
-        }
-        finally {
+            rd.forward(request, response);
+        } finally {
             out.close();
         }
     }

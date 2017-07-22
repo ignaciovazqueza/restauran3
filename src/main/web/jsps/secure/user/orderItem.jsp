@@ -32,7 +32,7 @@
                 return;
             }
             // Create a new instance of the websocket
-            webSocket = new WebSocket("ws://192.168.0.104:8080/restauran3/pedido");
+            webSocket = new WebSocket("ws://192.168.0.106:8080/restauran3/pedido");
 
             /**
              * Binds functions to the listeners for the websocket.

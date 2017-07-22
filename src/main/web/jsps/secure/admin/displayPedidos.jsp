@@ -83,12 +83,13 @@
             //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
         }
         function writeOrdenResponse(text){
-            location.reload()
+            location.reload();
         }
 
         function window_onload() {
             openSocketO();
         }
+
 
     </script>
 </head>
