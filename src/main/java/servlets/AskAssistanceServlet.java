@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Principal;
 
 /**
@@ -66,8 +67,6 @@ public class AskAssistanceServlet extends HttpServlet {
                 session.saveOrUpdate(mesa);
                 tx.commit();
             }
-
-            resp.sendRedirect("/restauran3/askassistance");
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();

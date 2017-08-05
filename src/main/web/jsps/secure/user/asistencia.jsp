@@ -67,6 +67,15 @@
             openSocketA();
         }
 
+        $(document).ready(function () {
+            $('button').click(function (event) {
+                event.preventDefault();
+                $.post('../restauran3/askassistance', {}, function (responseText) {
+                    $('#nombre').val('Asistir mesa');
+                })
+            });
+        });
+
     </script>
 
 </head>
@@ -99,7 +108,9 @@
             <tr>
                 <br>
                 <div class="btn-group" role="group" aria-label="..." align="center">
-                    <button type="submit" class="btn btn-default" name="asistencia" id="asistencia" onclick="sendAsistencia();">Pedir Asistencia</button>
+                    <button type="submit" class="btn btn-default" name="asistencia" id="asistencia"
+                            onclick="sendAsistencia();">Pedir Asistencia
+                    </button>
                 </div>
                 <br>
             </tr>
