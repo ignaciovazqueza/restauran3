@@ -9,19 +9,24 @@
 </head>
 <body>
 
+<input type="hidden" name="user" id="user" >
+
 <nav id="nav-1">
 
     <a class="link-1" href="${pageContext.request.contextPath}/orderitem">Hacer pedido</a>
 
     <a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a>
 
-    <a class="link-1" href="${pageContext.request.contextPath}/askassistance" onclick="alert('Asistencia pedida')">Pedir asistencia</a>
+    <a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a>
 
     <a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a>
 
     <a class="link-1" href="${pageContext.request.contextPath}/logout"
        onclick="return confirm('Realmente desea salir del sistema?')">Salir</a>
 </nav>
+
+
+
 
 </body>
 </html>
