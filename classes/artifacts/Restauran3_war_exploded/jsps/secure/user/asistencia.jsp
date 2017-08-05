@@ -9,6 +9,8 @@
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Asistencia</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <% String username = request.getUserPrincipal().getName();%>
     <input type="hidden" value="<%=username%>" id="user">
 
@@ -67,6 +69,15 @@
             openSocketA();
         }
 
+        $(document).ready(function () {
+            $("button[name='asistencia']").click(function (event) {
+                event.preventDefault();
+                $.post('../restauran3/askassistance', {}, function (responseText) {
+                    $('#nombre').val('Asistir mesa');
+                })
+            });
+        });
+
     </script>
 
 </head>
@@ -99,7 +110,9 @@
             <tr>
                 <br>
                 <div class="btn-group" role="group" aria-label="..." align="center">
-                    <button type="submit" class="btn btn-default" name="asistencia" id="asistencia" onclick="sendAsistencia();">Pedir Asistencia</button>
+                    <button type="submit" class="btn btn-default" name="asistencia" id="asistencia"
+                            onclick="sendAsistencia();">Pedir Asistencia
+                    </button>
                 </div>
                 <br>
             </tr>
