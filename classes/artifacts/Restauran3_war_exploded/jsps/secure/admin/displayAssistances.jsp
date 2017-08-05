@@ -53,31 +53,22 @@
             var user = parts[1];
             var table = document.getElementById(user);
             if (table == null) {
+                $('#assistanceRow').remove();
                 createIDTable(user);
             }
-            document.getElementById("tag").innerHTML = user.toUpperCase();
-            $('#' + user + '').after('<tr><td><input type=text value="' + user + '"id="' + user + '"></td><td><input type=text value="' + "Asistir mesa" + '"id="' + user + '"></td><td><input type=radio name="radio"  value=' + user + ' ></td></tr>');
-
         }
 
         function createIDTable(data) {
-            var x = document.createElement("TABLE");
-            x.setAttribute("id", data);
-            x.setAttribute("class", "table");
-            document.getElementsByClassName('panel-body')[0].append(x);
-
-            var y = document.createElement("TR");
-            y.setAttribute("id", "tr");
-            document.getElementById(data).appendChild(y);
-
-            var z = document.createElement("ID");
-            var t = document.createTextNode("ID");
-            z.appendChild(t);
-            var a = document.createElement("Estado");
-            var b = document.createTextNode("Estado");
-            a.appendChild(b);
-            document.getElementById("tr").appendChild(z);
-            document.getElementById("tr").appendChild(a);
+            $('#tbody').append(' ' +
+                    '<tr id="' + data + '"> ' +
+                    '<td align="center">' + data + '</td> ' +
+                    '<td align="center">Asistir mesa</td> ' +
+                    '<td align="center"> ' +
+                    '<div class="btn-group" role="group" aria-label="..." align="center"> ' +
+                    '<button type="submit" class="btn btn-default" name="entregar" id="' + data + '" value="' + data + '"> Asistir </button> ' +
+                    '</div> ' +
+                    '</td> ' +
+                    '</tr>');
         }
 
         function window_onload() {
@@ -89,16 +80,25 @@
         }
 
         $(document).ready(function () {
-            $("button").click(function (event) {
+            $("div.btn-group button[name='entregar']").click(function (event) {
+                event.preventDefault();
                 var nameVar = $(this).attr('id');
                 $.post('../restauran3/displayassistances', {
-                            name: nameVar
-                        },
-                        function (responseText) {
-                            var id = responseText.name;
-                            var row = document.getElementById(id);
-                            row.parentNode.removeChild(row);
-                        });
+                    name: nameVar
+                }, function () {
+                    var row = document.getElementById(nameVar);
+                    var table = row.parentNode;
+                    table.removeChild(row);
+                    if (table.children.length == 0) {
+                        $('#tbody').append(' ' +
+                                '<tr id="assistanceRow">' +
+                                '<td colspan="2" align="center"> ' +
+                                '<h3 align="center">' +
+                                '<span class="label label-primary">No hay pedidos de asistencia.</span></h3> ' +
+                                '</td>' +
+                                '</tr>');
+                    }
+                });
             });
         });
 
@@ -108,7 +108,7 @@
 <jsp:include page="adminHome.jsp"/>
 
 <body onload="window_onload();">
-<form id="reg-form" action="../restauran3/displayassistances" method="post">
+<form id="reg-form">
     <br>
 
     <div class="center-block panel panel-primary" style="width:50%;text-align: center">
@@ -124,20 +124,22 @@
                         <td align="center">Estado</td>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody">
 
                     <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
                         if (mesas == null) {%>
                     <tr>
                         <td colspan="2">
-                            <h3 align="center"><span class="label label-primary">No hay pedidos de asistencia.</span></h3>
+                            <h3 align="center"><span class="label label-primary">No hay pedidos de asistencia.</span>
+                            </h3>
                         </td>
                     </tr>
 
                     <%} else if (mesas != null && mesas.isEmpty()) {%>
-                    <tr>
+                    <tr id="assistanceRow">
                         <td colspan="2">
-                            <h3 align="center"><span class="label label-primary">No hay pedidos de asistencia.</span></h3>
+                            <h3 align="center"><span class="label label-primary" id="span" name="span">No hay pedidos de asistencia.</span>
+                            </h3>
                         </td>
                     </tr>
 

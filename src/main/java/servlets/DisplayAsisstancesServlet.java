@@ -28,18 +28,13 @@ public class DisplayAsisstancesServlet extends HttpServlet {
             Session session = HibernateUtil.getInstance().getSession();
             String selected = request.getParameter("name");
             if (selected != null) {
-                Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + selected + "'");
+                Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + selected + "'").uniqueResult();
                 mesa.setAsistencia(asistido);
                 tx = session.beginTransaction();
                 session.saveOrUpdate(mesa);
                 tx.commit();
             }
 
-            String id = "{ \"name\": \"" + selected + "\"}";
-            response.setContentType("application/json");
-              PrintWriter out = response.getWriter();
-              out.print(id);
-              out.flush();
         } catch (Exception e) {
             e.printStackTrace();
 
