@@ -50,7 +50,7 @@ public class CloseTableServlet extends HttpServlet {
             session.saveOrUpdate(orden);
             tx.commit();
 
-            response.sendRedirect("/restauran3/logout");
+            response.sendRedirect("/restauran3/jsps/outroPage.jsp");
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
