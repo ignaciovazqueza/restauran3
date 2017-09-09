@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
     <link rel="stylesheet" href="/restauran3/css/jquery-ui.css">
-    <script src="/restauran3/js/util/jquery-1.12.3.js"></script>
+    <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
     <script src="/restauran3/js/util/jquery-ui.js"></script>
     <title><%=Constants.COMMON_TITLE_BASE%>Ordenar</title>
 
@@ -23,7 +23,7 @@
     <script type="text/javascript">
 
         var webSocket;
-     //   var messages = document.getElementById("messages");
+        //   var messages = document.getElementById("messages");
 
         function openSocket() {
             // Ensures only one connection is open at a time
@@ -64,7 +64,7 @@
             var text = "pedido ";
             webSocket.send(text);
         }
-        function sendPedido(){
+        function sendPedido() {
             var user = "";
             user = $('#user').val();
             var text = "pedido";
@@ -76,7 +76,7 @@
         }
 
         function writeResponse(text) {
-         //   messages.innerHTML += "<br/>" + text;
+            //   messages.innerHTML += "<br/>" + text;
         }
 
         function window_onload() {
@@ -85,10 +85,12 @@
 
     </script>
 
+    <script type="text/javascript" src="/restauran3/materialize/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="/restauran3/materialize/css/materialize.min.css">
 </head>
 
 <jsp:include page="userHome.jsp"></jsp:include>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<%--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"--%>
 
 <body onload="window_onload();">
 <br>
@@ -98,19 +100,20 @@
         <h3 align="center">Elija la cantidad que desea de cada artículo:</h3>
     </div>
     <form id="reg-form" action="../../restauran3/orderitem" method="post">
+        <ul class="collapsible" data-collapsible="accordion">
         <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
             for (Categoria categoria : categorias) {
         %>
         <script>
             $(document).ready(function () {
-                $("#panel<%=categoria.getNombre()%>").hide();
-                $("#<%=categoria.getNombre()%>").click(function () {
-                    $("#panel<%=categoria.getNombre()%>").slideToggle("slow");
-                });
+                <%--$("#panel<%=categoria.getNombre()%>").hide();--%>
+                <%--$("#<%=categoria.getNombre()%>").click(function () {--%>
+                <%--$("#panel<%=categoria.getNombre()%>").slideToggle("slow");--%>
+                <%--});--%>
             });
         </script>
 
-        <style>
+        <%--style>
             #
             <%=categoria.getNombre()%>
             ,
@@ -122,53 +125,59 @@
                 color: white;
             }
 
-        </style>
+        </style--%>
 
-        <div id=<%=categoria.getNombre()%>><%=categoria.getNombre()%>
-        </div>
-        <div id="panel<%=categoria.getNombre()%>">
-            <table align="center" class="table" width="60%">
-                <tr>
+            <li>
+                <div class="collapsible-header active center-align" id=<%=categoria.getNombre()%>>
+                    <%=categoria.getNombre()%>
+                </div>
+                <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>">
+                    <table align="center" class="table" width="60%">
+                        <tr>
 
-                    <td><%= "Nombre"%>
-                    </td>
-                    <td><%= "Precio"%>
-                    </td>
-                    <td><%= "Cantidad"%>
-                    </td>
-                </tr>
-                <% List<Menu> data = (List<Menu>) request.getAttribute("data");
-                    for (Menu menu : data) {
-                        if (menu.getCategoria().equals(categoria.getNombre())) {
-                            int id = menu.getIdArticulo();
-                %>
-                <tr class="tabla">
+                            <td><%= "Nombre"%>
+                            </td>
+                            <td><%= "Precio"%>
+                            </td>
+                            <td><%= "Cantidad"%>
+                            </td>
+                        </tr>
+                        <% List<Menu> data = (List<Menu>) request.getAttribute("data");
+                            for (Menu menu : data) {
+                                if (menu.getCategoria().equals(categoria.getNombre())) {
+                                    int id = menu.getIdArticulo();
+                        %>
+                        <tr class="tabla">
 
-                    <td><%=menu.getNombre()%>
-                    </td>
-                    <td><%=menu.getPrecio()%>
-                    </td>
-                    <td>
+                            <td><%=menu.getNombre()%>
+                            </td>
+                            <td><%=menu.getPrecio()%>
+                            </td>
+                            <td>
 
-                        <div>
-                            <label for=<%=id%>></label>
-                            <input type="number" min="1" id=<%=id%> name="<%=id%>" spellcheck="false"/>
-                        </div>
-                    </td>
-                </tr>
-                <%}%>
-                <%}%>
-            </table>
-        </div>
+                                <div>
+                                    <label for=<%=id%>></label>
+                                    <input type="number" min="1" id=<%=id%> name="<%=id%>" spellcheck="false"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <%}%>
+                        <%}%>
+                    </table>
+                </div>
+            </li>
 
-        <%}%>
-        <br>
-        <div align="center">
-            <div class="btn-group" role="group" aria-label="..." align="center">
-                <button type="submit" class="btn btn-default" id="order-item" name="entregar" onclick="sendPedido();">Ordenar!</button>
+            <%}%>
+            <br>
+            <div align="center">
+                <div class="btn-group" role="group" aria-label="..." align="center">
+                    <button type="submit" class="btn btn-default" id="order-item" name="entregar"
+                            onclick="sendPedido();">Ordenar!
+                    </button>
+                </div>
             </div>
-        </div>
-        <br>
+            <br>
+        </ul>
 
 
         <%--<input type="submit" value="Ordenar!" id="order-item" class="button"/>--%>

@@ -2,6 +2,7 @@ package servlets;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.json.JSONArray;
 import securityfilter.util.HibernateUtil;
 import tables.Mesa;
 
@@ -30,6 +31,9 @@ public class DisplayTablesServlet extends HttpServlet {
             Session session = HibernateUtil.getInstance().getSession();
             List<Mesa> data = session.createQuery("from Mesa").list();
             request.setAttribute("data", data);
+
+            JSONArray jsonArray = new JSONArray(data);
+            request.setAttribute("json", jsonArray);
             RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/displayTables.jsp");
             rd.forward(request, response);
         } catch (Exception e) {
@@ -64,7 +68,7 @@ public class DisplayTablesServlet extends HttpServlet {
         try {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
-            String selected = request.getParameter("selected");
+            String selected = request.getParameter("id");
             String status = request.getParameter("status");
             String idMesa;
             String token="";
@@ -106,8 +110,8 @@ public class DisplayTablesServlet extends HttpServlet {
         Transaction tx = null;
 
         try {
-            String idMesa = request.getParameter("mesa");
-            String token = request.getParameter("token");
+            String idMesa = request.getParameter("name");
+            String token = request.getParameter("pass");
 
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
@@ -161,10 +165,10 @@ public class DisplayTablesServlet extends HttpServlet {
         try {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
-            String selected = request.getParameter("selected");
+            String selected = request.getParameter("name");
             if (selected!=null) {
                 Mesa mesa = (Mesa) session.createQuery("from Mesa where mesa= '" + selected + "' ").uniqueResult();
-                String token = request.getParameter("newToken");
+                String token = request.getParameter("pass");
                 String idMesa = mesa.getMesa();
                 if (token != "" && !token.equals(null)) {
                     mesa.setToken(token);
@@ -178,6 +182,7 @@ public class DisplayTablesServlet extends HttpServlet {
                 PrintWriter out = response.getWriter();
                 out.print(table);
                 out.flush();
+
             } else {
                 String idMesa = "no selected";
                 String table = "{ \"id\": \"" + idMesa + "\"}";

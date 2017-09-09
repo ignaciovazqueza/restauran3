@@ -11,7 +11,7 @@
     <script type="text/javascript">
 
         var webSocketAA;
-        var ip = "10.10.10.8";
+        var ip = "10.10.10.7";
 
         function openSocketAA() {
             if (webSocketAA !== undefined && webSocketAA.readyState !== WebSocket.CLOSED) {

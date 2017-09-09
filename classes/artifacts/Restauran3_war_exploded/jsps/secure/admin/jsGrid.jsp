@@ -35,6 +35,47 @@
         JSONArray jsonArray = new JSONArray(categories);
     %>
 
+    <style>
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+
     <script>
         $(function () {
             var autoCategorias = <%=jsonArray%>;
@@ -91,6 +132,10 @@
                 });
             });
 
+            $("select[title='Delete']").onclick(function(event){
+
+            })
+
 
             $('#edit').click(function (event) {
                 event.preventDefault();
@@ -128,46 +173,48 @@
 
 <form id="reg-form" action="../restauran3/displaymenu" method="post">
 
-    <h3 align="center"><span class="label label-primary">Agregar Articulo</span></h3>
+    <%--<h3 align="center"><span class="label label-primary">Agregar Articulo</span></h3>--%>
 
-    <br>
-    <table align="center">
-        <tr>
-            <td>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Nombre</span>
-                    <input type="text"class="form-control" id="nombre" name="nombre"
-                           spellcheck="false"
-                           aria-describedby="basic-addon1">
-                </div>
-            </td>
-            <td>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon2">Precio</span>
-                    <input type="number" min="1" class="form-control" id="precio" name="precio"
-                           spellcheck="false"
-                           aria-describedby="basic-addon1">
-                </div>
-            </td>
-            <td>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon3">Categoria</span>
-                    <input type="text" class="form-control" id="categoria" name="categoria"
-                           spellcheck="false"
-                           aria-describedby="basic-addon1">
-                    <input type="hidden" value="<%=jsonArray%>" id="jsonArray">
-                </div>
-            </td>
-        </tr>
+    <%--<br>--%>
+    <%--<table align="center">--%>
+        <%--<tr>--%>
+            <%--<td>--%>
+                <%--<div class="input-group">--%>
+                    <%--<span class="input-group-addon" id="basic-addon1">Nombre</span>--%>
+                    <%--<input type="text"class="form-control" id="nombre" name="nombre"--%>
+                           <%--spellcheck="false"--%>
+                           <%--aria-describedby="basic-addon1">--%>
+                <%--</div>--%>
+            <%--</td>--%>
+            <%--<td>--%>
+                <%--<div class="input-group">--%>
+                    <%--<span class="input-group-addon" id="basic-addon2">Precio</span>--%>
+                    <%--<input type="number" min="1" class="form-control" id="precio" name="precio"--%>
+                           <%--spellcheck="false"--%>
+                           <%--aria-describedby="basic-addon1">--%>
+                <%--</div>--%>
+            <%--</td>--%>
+            <%--<td>--%>
+                <%--<div class="input-group">--%>
+                    <%--<span class="input-group-addon" id="basic-addon3">Categoria</span>--%>
+                    <%--<input type="text" class="form-control" id="categoria" name="categoria"--%>
+                           <%--spellcheck="false"--%>
+                           <%--aria-describedby="basic-addon1">--%>
+                    <%--<input type="hidden" value="<%=jsonArray%>" id="jsonArray">--%>
+                <%--</div>--%>
+            <%--</td>--%>
+        <%--</tr>--%>
 
 
-    </table>
-    <br>
-    <div align="center">
-        <div class="btn-group" role="group" aria-label="..." align="center">
-            <button type="submit" class="btn btn-default" name="add" id="add">Agregar</button>
-        </div>
-    </div>
+    <%--</table>--%>
+    <%--<br>--%>
+    <%--<div align="center">--%>
+        <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
+            <%--<button type="submit" class="btn btn-default" name="add" id="add">Agregar</button>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+        <br>
+        <br>
 
     <%
         JSONArray json = (JSONArray) request.getAttribute("json");
@@ -179,8 +226,8 @@
         $(function() {
 
             $("#jsGrid").jsGrid({
-                height: "90%",
-                width: "100%",
+                width: "90%",
+                align: "center",
 
                 inserting: true,
                 filtering: false,
@@ -193,7 +240,8 @@
                 pageButtonCount: 2,
 
                 deleteConfirm: function(item) {
-                    return "The client \"" + item.nombre + "\" will be removed. Are you sure?";
+                    var modal = document.getElementById('myModal');
+                    return "¿Estas seguro que desea borrar el producto \"" + item.nombre + "\" del menu?";
                 },
 
                 controller: {
@@ -241,34 +289,49 @@
 
                         });
                     }
+
                 },
 
                 data: <%=json%>,
 
+
+
                 fields: [
-                    { name: "nombre", type: "text", width: 50 },
+                    { name: "nombre", type: "text", width: 50, align: "center"},
                     { name: "precio", type: "number", width: 20},
                     { name: "categoria", type: "text", width: 50},
                     { type: "control" }
                 ]
+
             });
 
         });
-    </script>
-
-    <script>
-
-
 
     </script>
+
+        <style>
+            .center {
+                margin: auto;
+                width: 100%;
+            }
+        </style>
 
     <%    for (int i = 0; i <categoriasAuto.size() ; i++) {
 
     %>
-    <div id="jsGrid"></div>
+    <div id="jsGrid" align="center" class="center"></div>
     <%
         }
     %>
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Some text in the Modal..</p>
+            </div>
+
+        </div>
 
 
 

@@ -1,7 +1,7 @@
-<%@ page import="tables.Mesa" %>
-<%@ page import="java.util.List" %>
+<%@ page import="org.json.JSONArray" %>
 <%@ page import="securityfilter.Constants" %>
-<%@ page import="tables.Orden" %><%--
+<%@ page import="tables.Mesa" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Tomas
   Date: 4/20/2016
@@ -12,8 +12,12 @@
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Ver Mesas</title>
-    <script src="/restauran3/js/util/jquery-1.12.3.js"></script>
     <script src="/restauran3/js/util/jquery-ui.js"></script>
+    <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 
 
     <script>
@@ -80,6 +84,94 @@
             });
         });
     </script>
+    <%
+        JSONArray json = (JSONArray) request.getAttribute("json");
+    %>
+    <script>
+
+        $(function() {
+
+            $("#jsGrid").jsGrid({
+
+                width: "60%",
+                align: "center",
+
+                inserting: true,
+                filtering: false,
+                editing: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+
+                pageSize: 10,
+                pageButtonCount: 2,
+
+                deleteConfirm: function(item) {
+                    return "¿Estas seguro que desea borrar la mesa:  \"" + item.mesa + "\" ?";
+                },
+
+                controller: {
+                    loadData: function (filter) {
+                    },
+                    insertItem: function (item) {
+                        if (item.mesa != "" && item.token != "" ){
+                            return $.post("../restauran3/displaytables", {
+                                name: item.mesa,
+                                pass: item.token,
+                                action: "add",
+                                status: true
+
+                            })
+                        }else {
+                           // $("#jsGrid").jsGrid("refresh");
+                            alert("campo vacio no se agrego la mesa");
+                            location.reload();
+
+                        };
+                    },
+                    updateItem: function (item) {
+                        if (item.mesa != "" && item.token!= ""){
+                            return $.post("../restauran3/displaytables", {
+                                name: item.mesa,
+                                pass: item.token,
+                                action: "edit",
+                                selected: item.mesa
+
+                            })
+                            location.reload();
+                        }else{
+                            $("#jsGrid").jsGrid("cancelEdit");
+                            alert("campo vacio no se realizaron los cambios");
+                            location.reload();
+
+                        }
+                    },
+                    deleteItem: function (item) {
+                        return $.post("../restauran3/displaytables",{
+                            id: item.mesa,
+                            action: "delete",
+                            status: true
+
+                        });
+                    }
+
+                },
+
+                data: <%=json%>,
+
+
+
+                fields: [
+                    { name: "mesa", width: 50 , align: "center", readOnly: true, valueField: "mesa"},
+                    { name: "token", type: "text", width: 20, align: "center"},
+                    { type: "control" , align: "center", width: 20}
+                ]
+
+            });
+
+        });
+
+    </script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
@@ -91,104 +183,19 @@
 
 <form id="reg-form" action="../restauran3/displaytables" method="post">
 
-    <h3 align="center"><span class="label label-primary">Agregar Mesas</span></h3>
-    <br>
-    <table align="center">
-        <tr data-id="agregar">
-            <div>
+    <h3 align="center"><span class="label label-primary">Mesas</span></h3>
 
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">ID</span>
-                        <input type="text" class="form-control" id="mesa" name="mesa" spellcheck="false"
-                               aria-describedby="basic-addon1">
-                    </div>
-                </td>
-
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon2">Token</span>
-                        <input type="text" class="form-control" id="token" name="token" spellcheck="false"
-                               aria-describedby="basic-addon1">
-                    </div>
-                </td>
-
-            </div>
-        </tr>
-    </table>
-    <br>
-    <div align="center">
-        <div class="btn-group" role="group" aria-label="..." align="center">
-            <button type="submit" class="btn btn-default" name="add" id="add">Agregar</button>
-            <%--<input align="center" type="submit" value="Agregar" name="add" class="button" id="add"/>--%>
-        </div>
-    </div>
-    <br>
 </form>
 
-<%--<div class="col-md-12">--%>
-    <%--<div class="panel panel-default">--%>
-        <%--<div class="panel-heading">--%>
-            <%--<h4 class="text-center">Bootstrap Editable jQuery Grid <span class="fa fa-edit pull-right bigicon"></span></h4>--%>
-        <%--</div>--%>
-        <%--<div class="panel-body text-center">--%>
-            <%--<div id="grid"></div>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>
-
-
-
-<div class="center-block panel panel-primary" style="width:50%;text-align: center">
-    <div class="panel-heading">
-
-        <h3 align="center">Mesas</h3>
-    </div>
-    <div class="panel-body">
-        <table class="table" align="center" width="60%" id="tables">
-            <tr>
-                <td>Id</td>
-                <td>Token</td>
-                <td>Select</td>
-            </tr>
-            <% List<Mesa> data = (List<Mesa>) request.getAttribute("data");
-                for (Mesa mesa : data) {
-                    String id = mesa.getMesa();
-                    String token = mesa.getToken();
-            %>
-            <tr data-id=<%=id%>>
-                <td><%=id%>
-                </td>
-                </td>
-                <td><input type="text" name=<%=token%> value=<%=token%>></td>
-                <td><input type=radio name="radio" value=<%=id%>></td>
-            </tr>
-            <%}%>
-        </table>
-    </div>
-
-    <div align="center">
-        <table>
-            <td>
-                <div class="btn-group" role="group" aria-label="..." align="center">
-                    <button type="submit" class="btn btn-default" name="edit" id="edit">Editar</button>
-                </div>
-            </td>
-            <td>
-                <div class="btn-group" role="group" aria-label="..." align="center">
-                    <button type="submit" class="btn btn-default" name="delete" id="delete">Borrar</button>
-                </div>
-            </td>
-        </table>
-    </div>
-<br>
-
-</div>
-
-
+<style>
+    .center {
+        margin: auto;
+        width: 100%;
+    }
+</style>
+<div id="jsGrid" align="center" class="center"></div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
 
