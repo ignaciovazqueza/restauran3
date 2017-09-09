@@ -20,7 +20,7 @@
     <script type="text/javascript">
 
         var webSocketP;
-        var ip = "192.168.1.110";
+        var ip = "10.10.10.6";
 
         function openSocketP() {
 
