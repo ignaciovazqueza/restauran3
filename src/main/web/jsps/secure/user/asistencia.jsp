@@ -54,7 +54,7 @@
         }
 
         function closeSocketA() {
-            webSocketO.close();
+            webSocketA.close();
         }
 
         function writeResponse(text) {

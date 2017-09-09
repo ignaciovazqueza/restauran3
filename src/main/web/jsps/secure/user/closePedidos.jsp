@@ -13,150 +13,71 @@
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Pedidos</title>
+    <% String username = request.getUserPrincipal().getName();%>
+    <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
+    <input type="hidden" value="<%=username%>" id="user">
 
     <script type="text/javascript">
 
-        var webSocket;
-        // var messages = document.getElementById("messages");
+        var webSocketP;
+        var ip = "192.168.1.110";
 
-        function openSocket() {
-            // Ensures only one connection is open at a time
-            if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
+        function openSocketP() {
+
+            if (webSocketP !== undefined && webSocketP.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
                 return;
             }
-            // Create a new instance of the websocket
-            webSocket = new WebSocket("ws://192.168.0.106:8080/restauran3/pedido");
 
-            /**
-             * Binds functions to the listeners for the websocket.
-             */
-            webSocket.onopen = function (event) {
-                // For reasons I can't determine, onopen gets called twice
-                // and the first time event.data is undefined.
-                // Leave a comment if you know the answer.
+            webSocketP = new WebSocket("ws://" + ip + ":8080/restauran3/pedido");
+
+            webSocketP.onopen = function (event) {
                 if (event.data === undefined)
                     return;
-
                 writeResponse(event.data);
             };
 
-            webSocket.onmessage = function (event) {
-                if (event.data==("pedido")){
+            webSocketP.onmessage = function (event) {
+                if (event.data=="pedido"){
                     writePedidoResponse(event.data);
                 }
-
             };
 
-            webSocket.onclose = function (event) {
+            webSocketP.onclose = function (event) {
                 writeResponse("Connection closed");
             };
         }
 
-        /**
-         * Sends the value of the text input to the server
-         */
+        function sendPedido() {
+            var user = document.getElementById('user').value;
+            var text = "pedido " + user;
+            webSocketP.send(text);
+        }
 
-        function closeSocket() {
-            webSocket.close();
+        function closeSocketP() {
+            webSocketP.close();
         }
 
         function writeResponse(text) {
-            //  messages.innerHTML += "<br/>" + text;
-            if (text=="pedido"){
-                console.log(text);
-                location.reload();
-            }
-            //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
+            console.log(text);
         }
+
         function writePedidoResponse(text){
-            location.reload()
+            location.reload();
         }
 
         function window_onload() {
-            openSocket();
+            openSocketP();
         }
 
-        function sendPedido(){
-            var user = "";
-            user = $('#user').val();
-            var text = "pedido";
-            webSocket.send(text);
-        }
+        //$(document).ready(function () {
+          //  $("button[name='eliminar']").click(function (event) {
+            //    location.reload();
+            //});
+        //});
 
     </script>
 
-    <script type="text/javascript">
-
-        var webSocketO;
-        // var messages = document.getElementById("messages");
-
-        function openSocketO() {
-            // Ensures only one connection is open at a time
-            if (webSocketO !== undefined && webSocketO.readyState !== WebSocket.CLOSED) {
-                writeResponse("WebSocket is already opened.");
-                return;
-            }
-            // Create a new instance of the websocket
-            webSocketO = new WebSocket("ws://192.168.0.106:8080/restauran3/orden");
-
-            /**
-             * Binds functions to the listeners for the websocket.
-             */
-            webSocketO.onopen = function (event) {
-                // For reasons I can't determine, onopen gets called twice
-                // and the first time event.data is undefined.
-                // Leave a comment if you know the answer.
-                if (event.data === undefined)
-                    return;
-
-                writeResponse(event.data);
-            };
-
-            webSocketO.onmessage = function (event) {
-                if (event.data==("pedido")){
-                    writePedidoResponse(event.data);
-                }
-
-            };
-
-            webSocketO.onclose = function (event) {
-                writeResponse("Connection closed");
-            };
-        }
-
-        /**
-         * Sends the value of the text input to the server
-         */
-
-        function closeSocketO() {
-            webSocketO.close();
-        }
-
-        function writeResponse(text) {
-            //  messages.innerHTML += "<br/>" + text;
-            if (text=="pedido"){
-                console.log(text);
-                location.reload();
-            }
-            //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
-        }
-        function writePedidoResponse(text){
-            location.reload()
-        }
-        function changeWS(){
-            //closeSocket();
-            openSocketO();
-            sendOrden();
-        }
-
-        function sendOrden(){
-            var text = "orden";
-            webSocketO.send(text);
-
-        }
-
-    </script>
 </head>
 
 <jsp:include page="userHome.jsp"></jsp:include>
@@ -212,12 +133,12 @@
             <table>
                 <td>
                     <div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default" name="cerrar" id="cerrar" onclick="changeWS()">Cerrar Pedido</button>
+                        <button type="submit" class="btn btn-default" name="cerrar" id="cerrar" onclick="sendPedido()">Cerrar Pedido</button>
                     </div>
                 </td>
                 <td>
                     <div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default" name="eliminar" id="eliminar" onclick="sendPedido()">Eliminar</button>
+                        <button type="submit" class="btn btn-default" name="eliminar" id="eliminar">Eliminar</button>
                     </div>
                 </td>
             </table>

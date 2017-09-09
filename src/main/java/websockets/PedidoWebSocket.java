@@ -1,4 +1,4 @@
-package servlets;
+package websockets;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@ServerEndpoint("/orden")
-public class OrdenWebSocket {
+@ServerEndpoint("/pedido")
+public class PedidoWebSocket {
 
     private static Set<Session> clients =
             Collections.synchronizedSet(new HashSet<Session>());
@@ -20,9 +20,6 @@ public class OrdenWebSocket {
             throws IOException {
 
         synchronized(clients){
-            // Iterate over the connected sessions
-            // and broadcast the received message
-
             for(Session client : clients){
                 if (!client.equals(session)){
                     client.getBasicRemote().sendText(message);
