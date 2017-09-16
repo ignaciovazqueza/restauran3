@@ -21,7 +21,7 @@
 
     <a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a>
 
-    <a class="link-1" href="jsps/outroPage.jsp" onclick="return confirm('Realmente desea salir del sistema?')">Salir</a>
+    <a class="link-1" href="/restauran3/jsps/outroPage.jsp" onclick="return confirm('Realmente desea salir del sistema?')">Salir</a>
 </nav>
 
 

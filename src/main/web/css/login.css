@@ -7,6 +7,9 @@ body {
 	font-weight: 300;
 	margin: 0;
 	color: #FFF;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 div#divimagen{
@@ -39,7 +42,6 @@ h1#title span span {
 }
 
 h2 {
-	text-transform: uppercase;
 	color: white;
 	font-weight: 400;
 	letter-spacing: 1px;
@@ -84,7 +86,6 @@ p.small {
 	position: relative;
 	top: 0px;
 	padding-bottom: 30px;
-	border-radius: 5px;
 	box-shadow: 0 5px 50px rgba(0,0,0,0.4);
 	text-align: center;
 }
@@ -92,7 +93,6 @@ p.small {
 .login-box .box-header {
 	background-color: #808B9B;
 	margin-top: 0;
-	border-radius: 5px 5px 0 0;
 }
 
 .login-box label {
@@ -100,7 +100,6 @@ p.small {
 	font-size: .8em;
 	color: #888;
 	letter-spacing: 1px;
-	text-transform: uppercase;
 	line-height: 2em;
 }
 
@@ -108,7 +107,6 @@ p.small {
 	margin-bottom: 20px;
 	padding: 8px;
 	border: 1px solid #ccc;
-	border-radius: 2px;
 	font-size: .9em;
 	color: #7a7a7a;
 }
@@ -123,7 +121,6 @@ p.small {
 .login-box button {
 	margin-top: 0px;
 	border: 0;
-	border-radius: 2px;
 	color: white;
 	padding: 10px;
 	text-transform: uppercase;
@@ -159,4 +156,27 @@ h1#logo {
 .login-box {
   -webkit-animation-duration: 1s;
   -webkit-animation-delay: 1s;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.input-field input[type=date]:focus + label,
+.input-field input[type=text]:focus + label,
+.input-field input[type=email]:focus + label,
+.input-field input[type=password]:focus + label {
+	color: #e91e63;
+}
+
+.input-field input[type=date]:focus,
+.input-field input[type=text]:focus,
+.input-field input[type=email]:focus,
+.input-field input[type=password]:focus {
+	border-bottom: 2px solid #e91e63;
+	box-shadow: none;
+}
+
+.row {
+    margin-bottom: 10px;
 }
