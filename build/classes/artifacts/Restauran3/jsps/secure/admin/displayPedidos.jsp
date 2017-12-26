@@ -24,90 +24,96 @@
 
     <script type="text/javascript">
 
-        var webSocketO;
-        // var messages = document.getElementById("messages");
+        var webSocketPP;
+        var ip = "192.168.56.1";
 
-        function openSocketO() {
-            // Ensures only one connection is open at a time
-            if (webSocketO !== undefined && webSocketO.readyState !== WebSocket.CLOSED) {
+        function openSocketPP() {
+            if (webSocketPP !== undefined && webSocketPP.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
                 return;
             }
-            // Create a new instance of the websocket
-            webSocketO = new WebSocket("ws://192.168.0.104:8080/restauran3/orden");
+            webSocketPP = new WebSocket("ws://" + ip + ":8080/restauran3/pedido");
 
-            /**
-             * Binds functions to the listeners for the websocket.
-             */
-            webSocketO.onopen = function (event) {
-                // For reasons I can't determine, onopen gets called twice
-                // and the first time event.data is undefined.
-                // Leave a comment if you know the answer.
+            webSocketPP.onopen = function (event) {
                 if (event.data === undefined)
                     return;
-
                 writeResponse(event.data);
             };
 
-            webSocketO.onmessage = function (event) {
-                if (event.data=="orden"){
-                    writeOrdenResponse(event.data);
+            webSocketPP.onmessage = function (event) {
+                var parts = event.data.split(" ");
+                var action = parts[0];
+                var user = parts[1];
+                if (action == "pedido") {
+                    setTimeout(writeAsistenciaResponsePP(event.data),1000);
                 }
-
             };
 
-            webSocketO.onclose = function (event) {
+            webSocketPP.onclose = function (event) {
                 writeResponse("Connection closed");
             };
         }
 
-        /**
-         * Sends the value of the text input to the server
-         */
-        function sendOrden() {
-            //  var text = document.getElementById("messageinput").value;
-//            var text = "pedido";
-//            webSocket.send(text);
-      //      var text = "orden";
-  //          webSocket.send();
+        function send() {
         }
 
-        function closeSocket() {
-            webSocketO.close();
+        function closeSocketPP() {
+            webSocketPP.close();
+        }
+
+        function writeAsistenciaResponsePP(text) {
+            location.reload();
+//            var parts = text.split(" ");
+//            var action = parts[0];
+//                var user = parts[1];
+//                var table = document.getElementById(user);
+//                if (table == null) {
+//                    $('#assistanceRow').remove();
+//                    createIDTable(user);
+//                } else {
+//                }
+        }
+
+        //function createIDTable(data) {
+        //            $('#tbody').append(' ' +
+        //          '<tr> ' +
+        //          '<td> <-id>' +
+        //          '</td>' +
+        //          '<td><-%=estado%>' +
+        //          '</td> ' +
+        //          '<td><-%=cantidad%>' +
+        //          '</td>' +
+        //          '<td><-%=pedido.getEntregado()%>' +
+        //          '</td>' +
+        //          '<td>' +
+        //          '<div class="btn-group" role="group" aria-label="..." align="center">' +
+        //          '<button type="submit" class="btn btn-default" id=<-%=id%> name="entregar">Entregar</button>'   +
+        //          '</div>' +
+        //          '</td>' +
+        //          '</tr>');
+        //}
+
+        function window_onload() {
+            openSocketPP();
         }
 
         function writeResponse(text) {
-            //  messages.innerHTML += "<br/>" + text;
-                console.log(text);
-                location.reload();
-            //    $('#tabla tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
-        }
-        function writeOrdenResponse(text){
-            location.reload();
+            console.log(text);
         }
 
-        function window_onload() {
-            openSocketO();
-        }
-
+        $(document).ready(function () {
+            $("button").click(function (event) {
+                var name = $(this).attr('id');
+                $.post('../restauran3/displaypedidos', {
+                    id: name
+                });
+            });
+        });
 
     </script>
 </head>
 
 <body onload="window_onload();">
-
-<script>
-
-    $(document).ready(function () {
-        $("button").click(function (event){
-            var name = $(this).attr('id')
-            $.post('../restauran3/displaypedidos', {
-                id: name
-            });
-        });
-    });
-</script>
-
 
 <form id="reg-form" action="../restauran3/displaypedidos" method="post">
     <br>
@@ -115,16 +121,16 @@
         <div class="panel-heading">
             <h3 align="center">Mesas</h3>
         </div>
-        <%  List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
-    Orden orden = null;
-    List<Pedido> pedidos = new ArrayList<>();
-    if(mesas.isEmpty()) {%>
+        <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
+            Orden orden = null;
+            List<Pedido> pedidos = new ArrayList<>();
+            if (mesas.isEmpty()) {%>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
+            </div>
         </div>
-    </div>
 
         <%}%>
 
@@ -139,7 +145,7 @@
                 if (!pedidos.isEmpty()) {
         %>
 
-            <br>
+        <br>
 
         <div class="panel-body">
             <h3 align="center"><span class="label label-primary"><%=mesa.getMesa().toUpperCase()%></span></h3>
@@ -168,9 +174,11 @@
                     <td><%=pedido.getEntregado()%>
                     </td>
                     <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
-                    <td><div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default" id=<%=id%> name="entregar" >Entregar</button>
-                    </div></td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="..." align="center">
+                            <button type="submit" class="btn btn-default" id=<%=id%> name="entregar">Entregar</button>
+                        </div>
+                    </td>
                 </tr>
 
 
@@ -186,14 +194,14 @@
 
         <%}%>
 
-        <%if (!pedidos.isEmpty()){%>
-    <br>
-    <%--<div align="center">--%>
+        <%if (!pedidos.isEmpty()) {%>
+        <br>
+        <%--<div align="center">--%>
         <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
-            <%--<button type="submit" class="btn btn-default" name="entregar">Entregar</button>--%>
+        <%--<button type="submit" class="btn btn-default" name="entregar">Entregar</button>--%>
         <%--</div>--%>
-    <%--</div>--%>
-            </div>
+        <%--</div>--%>
+    </div>
 
     <br>
         <%} else {%>
@@ -203,7 +211,6 @@
         </div>
     </div>
         <%}%>
-
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
