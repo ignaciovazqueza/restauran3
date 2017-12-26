@@ -1,4 +1,5 @@
-<%@ page import="securityfilter.Constants" %>
+<%@ page import="securityfilter.Constants"%>
+<%@ page import="tables.Orden" %>
 
 <html>
 <head>
@@ -27,36 +28,23 @@
     });
 </script>
 
-<div class="col s12">
-    <nav>
-        <div class="nav-wrapper">
-            <a href="#!" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-            <ul class="right hide-on-med-and-down">
-                <li><a class="link-1" href="${pageContext.request.contextPath}/orderitem">Hacer pedido</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a></li>
-                <li><a class="link-1" href="/restauran3/jsps/outroPage.jsp" onclick="return confirm('Realmente desea salir del sistema?')">Salir</a></li>
-            </ul>
-            <ul id="slide-out" class="side-nav">
-                <li>
-                    <div class="user-view">
-                        <div class="background nav-wrapper"></div>
-                        <div>
-                            <img class="circle" alt="" src="/restauran3/images/Restauran3-logo.png">
-                        </div>
-                        <span class="white-text name" style="font-size: 2em; display: inline-block">Restauran3</span>
-                    </div>
-                </li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/orderitem">Hacer pedido</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a></li>
-                <li><a class="link-1" href="/restauran3/jsps/outroPage.jsp" onclick="return confirm('Realmente desea salir del sistema?')">Salir</a></li>
-            </ul>
-        </div>
-    </nav>
-</div>
+<input type="hidden" name="user" id="user" >
+
+<nav id="nav-1">
+
+    <a class="link-1" href="${pageContext.request.contextPath}/orderitem">Hacer pedido</a>
+
+    <a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a>
+
+    <a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a>
+
+    <a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a>
+
+    <a class="link-1" href="jsps/outroPage.jsp" onclick="return confirm('Realmente desea salir del sistema?')">Salir</a>
+</nav>
+
+
+
 
 </body>
 </html>
