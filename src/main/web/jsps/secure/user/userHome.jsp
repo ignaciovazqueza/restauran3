@@ -31,6 +31,9 @@
     <nav>
         <div class="nav-wrapper">
             <a href="#!" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="left hide-on-med-and-down">
+                <li><img class="circle" alt="" src="/restauran3/images/Restauran3-logo.png" style="width: 50px; height: 50px; margin-top: 8px; margin-left: 10px"></li>
+            </ul>
             <ul class="right hide-on-med-and-down">
                 <li><a class="link-1" href="${pageContext.request.contextPath}/orderitem">Hacer pedido</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a></li>

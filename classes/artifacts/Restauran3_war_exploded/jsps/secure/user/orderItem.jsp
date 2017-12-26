@@ -1,21 +1,11 @@
 <%@ page import="tables.Categoria" %>
 <%@ page import="java.util.List" %>
 <%@ page import="tables.Menu" %>
-<%@ page import="securityfilter.Constants" %><%--
-  Created by IntelliJ IDEA.
-  User: Tomas
-  Date: 5/10/2016
-  Time: 3:35 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="securityfilter.Constants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
-    <link rel="stylesheet" href="/restauran3/css/jquery-ui.css">
-    <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
-    <script src="/restauran3/js/util/jquery-ui.js"></script>
     <title><%=Constants.COMMON_TITLE_BASE%>Ordenar</title>
 
     <% String username = request.getUserPrincipal().getName();%>
@@ -23,24 +13,15 @@
     <script type="text/javascript">
 
         var webSocket;
-        //   var messages = document.getElementById("messages");
 
         function openSocket() {
-            // Ensures only one connection is open at a time
             if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
                 return;
             }
-            // Create a new instance of the websocket
             webSocket = new WebSocket("ws://192.168.0.106:8080/restauran3/pedido");
 
-            /**
-             * Binds functions to the listeners for the websocket.
-             */
             webSocket.onopen = function (event) {
-                // For reasons I can't determine, onopen gets called twice
-                // and the first time event.data is undefined.
-                // Leave a comment if you know the answer.
                 if (event.data === undefined)
                     return;
 
@@ -56,9 +37,6 @@
             };
         }
 
-        /**
-         * Sends the value of the text input to the server
-         */
         function send() {
             //  var text = document.getElementById("messageinput").value;
             var text = "pedido ";
@@ -81,107 +59,101 @@
 
         function window_onload() {
             openSocket();
+            $(document).ready(function () {
+                var a = $('.link-1')[0];
+                a.parentElement.className = 'active';
+            });
         }
 
     </script>
 
-    <script type="text/javascript" src="/restauran3/materialize/js/materialize.min.js"></script>
-    <link rel="stylesheet" href="/restauran3/materialize/css/materialize.min.css">
 </head>
 
 <jsp:include page="userHome.jsp"></jsp:include>
-<%--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"--%>
 
 <body onload="window_onload();">
-<br>
-<br>
-<div class="center-block panel panel-primary" style="width:50%;text-align: center">
-    <div class="panel-heading">
-        <h3 align="center">Elija la cantidad que desea de cada artículo:</h3>
-    </div>
-    <form id="reg-form" action="../../restauran3/orderitem" method="post">
-        <ul class="collapsible" data-collapsible="accordion">
-        <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
-            for (Categoria categoria : categorias) {
-        %>
-        <script>
-            $(document).ready(function () {
-                <%--$("#panel<%=categoria.getNombre()%>").hide();--%>
-                <%--$("#<%=categoria.getNombre()%>").click(function () {--%>
-                <%--$("#panel<%=categoria.getNombre()%>").slideToggle("slow");--%>
-                <%--});--%>
-            });
-        </script>
 
-        <%--style>
-            #
-            <%=categoria.getNombre()%>
-            ,
-            #flip {
-                padding: 5px;
-                text-align: center;
-                background-color: #337ab7;
-                border: solid 1px #c3c3c3;
-                color: white;
-            }
+<div class="row">
+    <div class="col s12">
 
-        </style--%>
+        <div class="center-block panel panel-primary" style="width:80%;text-align: center">
 
-            <li>
-                <div class="collapsible-header active center-align" id=<%=categoria.getNombre()%>>
-                    <%=categoria.getNombre()%>
-                </div>
-                <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>">
-                    <table align="center" class="table" width="60%">
-                        <tr>
-
-                            <td><%= "Nombre"%>
-                            </td>
-                            <td><%= "Precio"%>
-                            </td>
-                            <td><%= "Cantidad"%>
-                            </td>
-                        </tr>
-                        <% List<Menu> data = (List<Menu>) request.getAttribute("data");
-                            for (Menu menu : data) {
-                                if (menu.getCategoria().equals(categoria.getNombre())) {
-                                    int id = menu.getIdArticulo();
-                        %>
-                        <tr class="tabla">
-
-                            <td><%=menu.getNombre()%>
-                            </td>
-                            <td><%=menu.getPrecio()%>
-                            </td>
-                            <td>
-
-                                <div>
-                                    <label for=<%=id%>></label>
-                                    <input type="number" min="1" id=<%=id%> name="<%=id%>" spellcheck="false"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <%}%>
-                        <%}%>
-                    </table>
-                </div>
-            </li>
-
-            <%}%>
-            <br>
-            <div align="center">
-                <div class="btn-group" role="group" aria-label="..." align="center">
-                    <button type="submit" class="btn btn-default" id="order-item" name="entregar"
-                            onclick="sendPedido();">Ordenar!
-                    </button>
+            <div class="panel-heading">
+                <div class="card-panel white">
+                    <div class="card-content black-text">
+                        <span class="card-title" style="font-size: 1.5em;">Elija la cantidad de cada artículo</span>
+                    </div>
                 </div>
             </div>
-            <br>
-        </ul>
 
+            <form id="reg-form" action="../../restauran3/orderitem" method="post">
+                <ul class="collapsible" data-collapsible="accordion">
+                    <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+                        for (Categoria categoria : categorias) {
+                    %>
 
-        <%--<input type="submit" value="Ordenar!" id="order-item" class="button"/>--%>
-    </form>
+                    <style>
+                        #
+                        <%=categoria.getNombre()%>
+                        ,
+                        #table {
+                            padding: 5px;
+                            text-align: center;
+                            background-color: #337ab7;
+                            border: solid 1px #c3c3c3;
+                            color: white;
+                            width: 10%;
+                        }
+                    </style>
+
+                    <li>
+                        <div class="collapsible-header active center-align" style="background-color: #313d4f; color: white;" id=<%=categoria.getNombre()%>>
+                            <%=categoria.getNombre()%>
+                        </div>
+                        <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>" style="padding: 0rem;">
+                            <table align="center" class="striped" width="300" style="overflow-x:auto; text-align: center;" id="table" bgcolor="white">
+                                <tr>
+
+                                    <th> Nombre</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                                <% List<Menu> data = (List<Menu>) request.getAttribute("data");
+                                    for (Menu menu : data) {
+                                        if (menu.getCategoria().equals(categoria.getNombre())) {
+                                            int id = menu.getIdArticulo();
+                                %>
+                                <tr class="tabla">
+
+                                    <td style="padding-bottom: 0px; padding-top: 0px;"><%=menu.getNombre()%></td>
+                                    <td style="padding-bottom: 0px; padding-top: 0px;"><%=menu.getPrecio()%></td>
+                                    <td style="padding-bottom: 0px; padding-top: 0px;">
+                                        <div>
+                                            <label for=<%=id%>></label>
+                                            <input type="number" min="1" id=<%=id%> name="<%=id%>" spellcheck="false"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <%}%>
+                                <%}%>
+                            </table>
+                        </div>
+                    </li>
+
+                    <%}%>
+                </ul>
+                <div align="center">
+                    <div class="btn-group" role="group" aria-label="..." align="center">
+                        <button type="submit" class="btn btn-default" id="order-item" name="entregar"
+                                onclick="sendPedido();">Ordenar!
+                        </button>
+                    </div>
+                </div>
+                <br>
+
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>
