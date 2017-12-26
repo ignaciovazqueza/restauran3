@@ -1,7 +1,7 @@
 *.class
 .idea/
 db/
-build/
+build/*
 .gradle/
 .DS_Store
 Restauran3.iml
@@ -16,17 +16,9 @@ Restauran3.iml
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-build/classes/artifacts/Restauran3/WEB-INF/classes/filters/
-build/classes/artifacts/Restauran3/WEB-INF/classes/securityfilter/
-build/classes/artifacts/Restauran3/WEB-INF/classes/servlets/
-build/classes/artifacts/Restauran3/WEB-INF/classes/tables/
-build/classes/artifacts/Restauran3/WEB-INF/lib/
-build/classes/artifacts/Restauran3_war_exploded/WEB-INF/classes/filters/
-build/classes/artifacts/Restauran3_war_exploded/WEB-INF/classes/securityfilter/
-build/classes/artifacts/Restauran3_war_exploded/WEB-INF/classes/servlets/
-build/classes/artifacts/Restauran3_war_exploded/WEB-INF/classes/tables/
-build/classes/artifacts/Restauran3_war_exploded/WEB-INF/lib/
-build/classes/main/
-build/classes/test/
-build/resources/main/
-db/db2.tmp/
+build/classes/artifacts/*
+classes/artifacts/*
+build/classes/main/*
+build/classes/test/*
+build/resources/main/*
+db/db2.tmp/*
