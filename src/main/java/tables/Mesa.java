@@ -13,11 +13,11 @@ import javax.persistence.Table;
 public class Mesa {
 
     @Id
-    @Column(name = "mesa")
+    @Column(name = "Mesa")
     private String mesa;
-    @Column(name = "token")
+    @Column(name = "Token")
     private String token;
-    @Column(name = "asistencia")
+    @Column(name = "Asistencia")
     private String asistencia;
 
     public void setMesa(String mesa) {

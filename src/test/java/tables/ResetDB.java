@@ -30,7 +30,7 @@ public class ResetDB {
         try {
 
 
-            String categoria = (String) session.createQuery("select nombre from Categoria where nombre='"+ cat.toUpperCase() +"'").uniqueResult();
+            String categoria = (String) session.createQuery("select Nombre from Categoria where Nombre='"+ cat.toUpperCase() +"'").uniqueResult();
             if(categoria == null){
                 tx = session.beginTransaction();
                 Categoria c = new Categoria();

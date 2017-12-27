@@ -33,6 +33,7 @@
             categories.add(categoriasAuto.get(i).getNombre());
         }
         JSONArray jsonArray = new JSONArray(categories);
+        JSONArray jsonCategorias = new JSONArray(categoriasAuto);
     %>
 
     <style>
@@ -132,7 +133,7 @@
                 });
             });
 
-            $("select[title='Delete']").onclick(function(event){
+            $("select[title='Delete']").click(function(event){
 
             })
 
@@ -173,59 +174,23 @@
 
 <form id="reg-form" action="../restauran3/displaymenu" method="post">
 
-    <%--<h3 align="center"><span class="label label-primary">Agregar Articulo</span></h3>--%>
-
-    <%--<br>--%>
-    <%--<table align="center">--%>
-        <%--<tr>--%>
-            <%--<td>--%>
-                <%--<div class="input-group">--%>
-                    <%--<span class="input-group-addon" id="basic-addon1">Nombre</span>--%>
-                    <%--<input type="text"class="form-control" id="nombre" name="nombre"--%>
-                           <%--spellcheck="false"--%>
-                           <%--aria-describedby="basic-addon1">--%>
-                <%--</div>--%>
-            <%--</td>--%>
-            <%--<td>--%>
-                <%--<div class="input-group">--%>
-                    <%--<span class="input-group-addon" id="basic-addon2">Precio</span>--%>
-                    <%--<input type="number" min="1" class="form-control" id="precio" name="precio"--%>
-                           <%--spellcheck="false"--%>
-                           <%--aria-describedby="basic-addon1">--%>
-                <%--</div>--%>
-            <%--</td>--%>
-            <%--<td>--%>
-                <%--<div class="input-group">--%>
-                    <%--<span class="input-group-addon" id="basic-addon3">Categoria</span>--%>
-                    <%--<input type="text" class="form-control" id="categoria" name="categoria"--%>
-                           <%--spellcheck="false"--%>
-                           <%--aria-describedby="basic-addon1">--%>
-                    <%--<input type="hidden" value="<%=jsonArray%>" id="jsonArray">--%>
-                <%--</div>--%>
-            <%--</td>--%>
-        <%--</tr>--%>
-
-
-    <%--</table>--%>
-    <%--<br>--%>
-    <%--<div align="center">--%>
-        <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
-            <%--<button type="submit" class="btn btn-default" name="add" id="add">Agregar</button>--%>
-        <%--</div>--%>
-    <%--</div>--%>
         <br>
         <br>
 
     <%
         JSONArray json = (JSONArray) request.getAttribute("json");
+
     %>
 
 
     <script>
 
-        $(function() {
+        var catJSON = <%=jsonCategorias%>
+        var i = 0
+                $.each([0,1], function(index, value) {
 
-            $("#jsGrid").jsGrid({
+                    var grid = "#jsGrid"+index
+            $(grid).jsGrid({
                 width: "90%",
                 align: "center",
 
@@ -304,8 +269,8 @@
                 ]
 
             });
-
-        });
+        i++
+        });;
 
     </script>
 
@@ -317,9 +282,10 @@
         </style>
 
     <%    for (int i = 0; i <categoriasAuto.size() ; i++) {
+                String name = "jsGrid"+i;
 
     %>
-    <div id="jsGrid" align="center" class="center"></div>
+    <div id="<%=name%>" align="center" class="center"></div>
     <%
         }
     %>
@@ -337,7 +303,7 @@
 
 </form>
 
-<script src="js/bootstrap.min.js"></script>
+
 
 </body>
 </html>

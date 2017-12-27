@@ -15,14 +15,17 @@ public class Menu {
     @Column(name = "idArticulo")
     private Integer idArticulo;
 
-    @Column(name = "precio")
-    private int precio;
+    @Column(name = "Precio")
+    private int Precio;
 
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "Nombre")
+    private String Nombre;
 
-    @Column(name = "categoria")
-    private String categoria;
+    @Column(name = "Categoria")
+    private String Categoria;
+
+    @Column(name = "Index")
+    private int Index;
 
     public int getIdArticulo() {
         return idArticulo;
@@ -33,28 +36,35 @@ public class Menu {
     }
 
     public String getCategoria() {
-        return categoria;
+        return Categoria;
     }
 
     public void setCategoria(String categoria) {
-        this.categoria = categoria;
+        this.Categoria = categoria;
     }
 
     public String getNombre() {
-        return nombre;
+        return Nombre;
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.Nombre = nombre;
     }
 
     public int getPrecio() {
-        return precio;
+        return Precio;
     }
 
     public void setPrecio(int precio) {
-        this.precio = precio;
+        this.Precio = precio;
     }
 
+    public int getIndex() {
+        return Index;
+    }
+
+    public void setIndex(int index) {
+        this.Index = index;
+    }
 
 }

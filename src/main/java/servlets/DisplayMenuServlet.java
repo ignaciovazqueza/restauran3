@@ -37,7 +37,7 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
             List categorias = session.createQuery("from Categoria ").list();
             for (Object c: categorias){
                 String categoria = ((Categoria) c).getNombre().toString();
-                JSONArray catJson = new JSONArray(session.createQuery("from Menu where categoria ='"+categoria+"'").list());
+                JSONArray catJson = new JSONArray(session.createQuery("from Menu where Categoria ='"+categoria+"'").list());
                request.setAttribute(categoria,catJson);
 
             }
@@ -84,7 +84,7 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                         String precio = request.getParameter("price");
                         String categoriaN = request.getParameter("category").toUpperCase();
                        // Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre =" + categoriaN.toUpperCase()+ "");
-                        List categoria = session.createQuery("from Categoria where nombre ='"+categoriaN+"'").list();
+                        List categoria = session.createQuery("from Categoria where Nombre ='"+categoriaN+"'").list();
                         if (categoria.size()==0){
                             tx = session.beginTransaction();
                             Categoria c = new Categoria();
@@ -139,11 +139,11 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                         session.delete(menu);
                         tx.commit();
 
-                        List<Menu> menus = (List<Menu>) session.createQuery("from Menu where categoria= '" + cat + "' ").list();
+                        List<Menu> menus = (List<Menu>) session.createQuery("from Menu where Categoria= '" + cat + "' ").list();
 
                         if (menus.isEmpty()) {
                             Transaction tx2 = session.beginTransaction();
-                            Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre= '" + cat + "' ").uniqueResult();
+                            Categoria categoria = (Categoria) session.createQuery("from Categoria where Nombre= '" + cat + "' ").uniqueResult();
                             session.delete(categoria);
                             tx2.commit();
                         }
@@ -202,7 +202,7 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 boolean newCat = false;
 
 
-                String categoriaT = (String) session.createQuery("select nombre from Categoria where nombre='" + categoria + "'").uniqueResult();
+                String categoriaT = (String) session.createQuery("select Nombre from Categoria where Nombre='" + categoria + "'").uniqueResult();
                 if (categoriaT == null) {
                     tx = session.beginTransaction();
                     Categoria c = new Categoria();

@@ -14,14 +14,18 @@ import javax.persistence.Table;
 public class Categoria {
 
     @Id
-    @Column(name = "nombre")
-    private String nombre;
+    @Column(name = "Nombre")
+    private String Nombre;
+    @Column(name = "Index")
+    private int Index;
 
     public String getNombre() {
-        return nombre;
+        return Nombre;
     }
+    public int getIndex() { return Index;}
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.Nombre = nombre;
     }
+    public void setIndex (int index) { this.Index = index; }
 }
