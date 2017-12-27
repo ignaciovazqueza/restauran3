@@ -86,9 +86,7 @@
             <% List<Pedido> pedidos = (List<Pedido>) request.getAttribute("pedidos");
                 if (!pedidos.isEmpty()) {
             %>
-            <br>
-            <br>
-            <div class="center-block panel panel-primary" style="width:80%;text-align: center">
+            <div class="center-block panel panel-primary" style="width:85%;text-align: center">
                 <div class="panel-heading">
                     <div class="card-panel white">
                         <div class="card-content black-text">
@@ -129,19 +127,18 @@
 
                 </table>
 
-                <br>
                 <div align="center">
                     <table>
                         <td>
                             <div class="btn-group" role="group" aria-label="..." align="center">
-                                <button type="submit" class="btn btn-default" name="cerrar" id="cerrar"
+                                <button type="submit" class="btn btn-default light-blue darken-3" name="cerrar" id="cerrar"
                                         onclick="sendPedido()">Cerrar Pedido
                                 </button>
                             </div>
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="..." align="center">
-                                <button type="submit" class="btn btn-default" name="eliminar" id="eliminar">Eliminar
+                                <button type="submit" class="btn btn-default light-blue darken-3" name="eliminar" id="eliminar">Eliminar
                                 </button>
                             </div>
                         </td>
@@ -149,16 +146,14 @@
                 </div>
             </div>
         </form>
-        <br>
 
         <%}%>
 
         <% List<Pedido> alaespera = (List<Pedido>) request.getAttribute("alaespera");
             if (!alaespera.isEmpty()) {
         %>
-        <br>
 
-        <div class="center-block panel panel-primary" style="width:80%;text-align: center">
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
             <div class="panel-heading">
                 <div class="card-panel white">
                     <div class="card-content black-text">
@@ -203,7 +198,7 @@
             if (!entregados.isEmpty()) {
         %>
         <br>
-        <div class="center-block panel panel-primary" style="width:80%;text-align: center">
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
 
             <div class="panel-heading">
                 <div class="card-panel white">
@@ -214,7 +209,7 @@
             </div>
 
             <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white">
-                <tr>
+                <tr style="font-weight: bold;">
                     <td>Articulo</td>
                     <td>Cantidad</td>
                     <td>Precio</td>

@@ -1,10 +1,4 @@
-<%@ page import="securityfilter.Constants" %><%--
-  Created by IntelliJ IDEA.
-  User: tomasvazquez
-  Date: 20/7/17
-  Time: 00:20
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="securityfilter.Constants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -33,7 +27,7 @@
             };
 
             webSocketA.onmessage = function (event) {
-                if (event.data=="asistencia"){
+                if (event.data == "asistencia") {
                     writeAsistenciaResponse(event.data);
                 }
             };
@@ -44,8 +38,8 @@
         }
 
         function sendAsistencia() {
-        //    var user = "";
-         //   user = $('#user').value;
+            //    var user = "";
+            //   user = $('#user').value;
             var user = document.getElementById('user').value;
             var text = "asistencia " + user;
             webSocketA.send(text);
@@ -59,12 +53,16 @@
             console.log(text);
         }
 
-        function writeAsistenciaResponse(text){
+        function writeAsistenciaResponse(text) {
             location.reload();
         }
 
         function window_onload() {
             openSocketA();
+            $(document).ready(function () {
+                var a = $('.link-1')[2];
+                a.parentElement.className = 'active';
+            });
         }
 
         $(document).ready(function () {
@@ -85,38 +83,43 @@
 <body onload="window_onload();">
 
 <% String estado = (String) request.getAttribute("estado");%>
-<br>
-<div class="center-block panel panel-primary" style="width:50%;text-align: center">
-    <div class="panel-heading">
-        <div class="card-panel white">
-            <div class="card-content black-text">
-                <span class="card-title" style="font-size: 1.5em;">Asistencia</span>
-            </div>
-        </div>
-    </div>
-    <form id="reg-form" action="../restauran3/askassistance" method="post">
 
-        <div class="col s12 m7">
-            <div class="card horizontal">
-                <div class="card-stacked">
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">Estado </span>
-                        <input type="text" class="form-control" id="nombre" name="nombre"
-                               value="<%=estado%>" spellcheck="false"
-                               aria-describedby="basic-addon1" readonly>
-                    </div>
-                    <div class="card-action">
-                        <div class="btn-group" role="group" aria-label="..." align="center">
-                            <button type="submit" class="btn btn-default" name="asistencia" id="asistencia"
-                                    onclick="sendAsistencia();">Pedir Asistencia
-                            </button>
-                        </div>
+<div class="row">
+    <div class="col s12">
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
+            <div class="panel-heading">
+                <div class="card-panel white">
+                    <div class="card-content black-text">
+                        <span class="card-title" style="font-size: 1.5em;">Estado</span>
                     </div>
                 </div>
             </div>
+
+            <form id="reg-form" action="../restauran3/askassistance" method="post">
+                <div class="card horizontal">
+                    <div class="card-stacked">
+                        <div class="input-group">
+                            <div type="text" class="form-control" style="padding-bottom: 10px; padding-top: 10px"
+                                 id="nombre" name="nombre" spellcheck="false"
+                                 aria-describedby="basic-addon1" readonly>
+                                <%=estado%>
+                            </div>
+                        </div>
+                        <div class="card-action">
+                            <div class="btn-group" role="group" aria-label="..." align="center">
+                                <button type="submit" class="btn btn-default light-blue darken-3" name="asistencia"
+                                        id="asistencia"
+                                        onclick="sendAsistencia();">Pedir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
-        
-    </form>
+
+    </div>
 </div>
 </body>
 </html>

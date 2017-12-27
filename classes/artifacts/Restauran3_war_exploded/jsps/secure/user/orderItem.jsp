@@ -42,6 +42,7 @@
             var text = "pedido ";
             webSocket.send(text);
         }
+
         function sendPedido() {
             var user = "";
             user = $('#user').val();
@@ -76,7 +77,7 @@
 <div class="row">
     <div class="col s12">
 
-        <div class="center-block panel panel-primary" style="width:80%;text-align: center">
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
 
             <div class="panel-heading">
                 <div class="card-panel white">
@@ -99,7 +100,7 @@
                         #table {
                             padding: 5px;
                             text-align: center;
-                            background-color: #337ab7;
+                            background-color: #1b6595;
                             border: solid 1px #c3c3c3;
                             color: white;
                             width: 10%;
@@ -107,11 +108,14 @@
                     </style>
 
                     <li>
-                        <div class="collapsible-header active center-align light-blue darken-4" style="background-color: #313d4f; color: white;" id=<%=categoria.getNombre()%>>
+                        <div class="collapsible-header active center-align"
+                             style="background-color: #1b6595; color: white;" id=<%=categoria.getNombre()%>>
                             <%=categoria.getNombre()%>
                         </div>
-                        <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>" style="padding: 0rem;">
-                            <table align="center" class="striped" width="300" style="overflow-x:auto; text-align: center;" id="table" bgcolor="white">
+                        <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>"
+                             style="padding: 0rem;">
+                            <table align="center" class="striped" width="300"
+                                   style="overflow-x:auto; text-align: center;" id="table" bgcolor="white">
                                 <tr>
 
                                     <th> Nombre</th>
@@ -125,12 +129,15 @@
                                 %>
                                 <tr class="tabla">
 
-                                    <td style="padding-bottom: 0px; padding-top: 0px;"><%=menu.getNombre()%></td>
-                                    <td style="padding-bottom: 0px; padding-top: 0px;"><%=menu.getPrecio()%></td>
+                                    <td style="padding-bottom: 0px; padding-top: 0px;"><%=menu.getNombre()%>
+                                    </td>
+                                    <td style="padding-bottom: 0px; padding-top: 0px;"><%=menu.getPrecio()%>
+                                    </td>
                                     <td style="padding-bottom: 0px; padding-top: 0px;">
                                         <div>
                                             <label for=<%=id%>></label>
-                                            <input type="number" min="1" pattern="[0-9]*" inputmode="numeric" id=<%=id%> name="<%=id%>" spellcheck="false"/>
+                                            <input type="number" min="1" pattern="[0-9]*" inputmode="numeric"
+                                                   id=<%=id%> name="<%=id%>" spellcheck="false"/>
                                         </div>
                                     </td>
                                 </tr>
@@ -144,7 +151,8 @@
                 </ul>
                 <div align="center">
                     <div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default light-blue darken-3" id="order-item" name="entregar"
+                        <button type="submit" class="btn btn-default light-blue darken-3" id="order-item"
+                                name="entregar"
                                 onclick="sendPedido();">Ordenar!
                         </button>
                     </div>
