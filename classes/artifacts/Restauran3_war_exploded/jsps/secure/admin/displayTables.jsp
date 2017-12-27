@@ -162,7 +162,7 @@
 
 
                 fields: [
-                    { name: "mesa", width: 50 , align: "center", readOnly: true, valueField: "mesa"},
+                    { name: "Mesa", width: 50 , align: "center", readOnly: true, valueField: "mesa"},
                     { name: "token", type: "text", width: 20, align: "center"},
                     { type: "control" , align: "center", width: 20}
                 ]
