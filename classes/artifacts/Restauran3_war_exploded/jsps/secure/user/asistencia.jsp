@@ -9,15 +9,13 @@
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Asistencia</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <% String username = request.getUserPrincipal().getName();%>
     <input type="hidden" value="<%=username%>" id="user">
 
     <script type="text/javascript">
 
         var webSocketA;
-        var ip = "10.10.10.7";
+        var ip = "10.10.10.9";
 
         function openSocketA() {
 
@@ -83,7 +81,6 @@
 </head>
 
 <jsp:include page="userHome.jsp"></jsp:include>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <body onload="window_onload();">
 
@@ -91,32 +88,34 @@
 <br>
 <div class="center-block panel panel-primary" style="width:50%;text-align: center">
     <div class="panel-heading">
-        <h3 align="center">Asistencia</h3>
+        <div class="card-panel white">
+            <div class="card-content black-text">
+                <span class="card-title" style="font-size: 1.5em;">Asistencia</span>
+            </div>
+        </div>
     </div>
     <form id="reg-form" action="../restauran3/askassistance" method="post">
-        <table align="center">
-            <tr>
-                <td>
-                    <br>
+
+        <div class="col s12 m7">
+            <div class="card horizontal">
+                <div class="card-stacked">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Estado </span>
                         <input type="text" class="form-control" id="nombre" name="nombre"
                                value="<%=estado%>" spellcheck="false"
                                aria-describedby="basic-addon1" readonly>
                     </div>
-                    <br>
-                </td>
-            </tr>
-            <tr>
-                <br>
-                <div class="btn-group" role="group" aria-label="..." align="center">
-                    <button type="submit" class="btn btn-default" name="asistencia" id="asistencia"
-                            onclick="sendAsistencia();">Pedir Asistencia
-                    </button>
+                    <div class="card-action">
+                        <div class="btn-group" role="group" aria-label="..." align="center">
+                            <button type="submit" class="btn btn-default" name="asistencia" id="asistencia"
+                                    onclick="sendAsistencia();">Pedir Asistencia
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <br>
-            </tr>
-        </table>
+            </div>
+        </div>
+        
     </form>
 </div>
 </body>

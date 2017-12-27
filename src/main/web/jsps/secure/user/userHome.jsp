@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/restauran3/css/jquery-ui.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/restauran3/materialize/css/materialize.min.css">
+    <link rel="shortcut icon" href="/restauran3/images/Restauran3-logo.png" />
 
     <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
     <script src="/restauran3/js/util/jquery-ui.js"></script>
@@ -29,10 +30,10 @@
 
 <div class="col s12">
     <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper light-blue darken-3">
             <a href="#!" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="left hide-on-med-and-down">
-                <li><img class="circle" alt="" src="/restauran3/images/Restauran3-logo.png" style="width: 50px; height: 50px; margin-top: 8px; margin-left: 10px"></li>
+                <li><img class="circle" href="/orderitem" alt="" src="/restauran3/images/Restauran3-logo.png" style="width: 50px; height: 50px; margin-top: 8px; margin-left: 10px"></li>
             </ul>
             <ul class="right hide-on-med-and-down">
                 <li><a class="link-1" href="${pageContext.request.contextPath}/orderitem">Hacer pedido</a></li>

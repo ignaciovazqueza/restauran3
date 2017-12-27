@@ -107,7 +107,7 @@
                     </style>
 
                     <li>
-                        <div class="collapsible-header active center-align" style="background-color: #313d4f; color: white;" id=<%=categoria.getNombre()%>>
+                        <div class="collapsible-header active center-align light-blue darken-4" style="background-color: #313d4f; color: white;" id=<%=categoria.getNombre()%>>
                             <%=categoria.getNombre()%>
                         </div>
                         <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>" style="padding: 0rem;">
@@ -130,7 +130,7 @@
                                     <td style="padding-bottom: 0px; padding-top: 0px;">
                                         <div>
                                             <label for=<%=id%>></label>
-                                            <input type="number" min="1" id=<%=id%> name="<%=id%>" spellcheck="false"/>
+                                            <input type="number" min="1" pattern="[0-9]*" inputmode="numeric" id=<%=id%> name="<%=id%>" spellcheck="false"/>
                                         </div>
                                     </td>
                                 </tr>
@@ -144,7 +144,7 @@
                 </ul>
                 <div align="center">
                     <div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default" id="order-item" name="entregar"
+                        <button type="submit" class="btn btn-default light-blue darken-3" id="order-item" name="entregar"
                                 onclick="sendPedido();">Ordenar!
                         </button>
                     </div>

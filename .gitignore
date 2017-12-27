@@ -5,6 +5,7 @@ build/
 .gradle/
 .DS_Store
 Restauran3.iml
+/out/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

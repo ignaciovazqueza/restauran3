@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/restauran3/css/animate.css">
     <link rel="stylesheet" href="/restauran3/css/login.css">
     <link rel="stylesheet" href="/restauran3/css/jquery-ui.css">
+    <link rel="shortcut icon" href="/restauran3/images/Restauran3-logo.png" />
+
     <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
     <script src="/restauran3/js/util/jquery-ui.js"></script>
     <script type="text/javascript" src="/restauran3/materialize/js/materialize.min.js"></script>
@@ -43,10 +45,10 @@
 
                     <center>
                         <div class='row'>
-                            <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Ingresar</button>
+                            <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect light-blue darken-3'>Ingresar</button>
                         </div>
                         <div class='row'>
-                            <button type="Reset" name='btn_reset' class='col s12 btn btn-large waves-effect indigo' value="Borrar todo">Borrar</button>
+                            <button type="Reset" name='btn_reset' class='col s12 btn btn-large waves-effect light-blue darken-3' value="Borrar todo">Borrar</button>
                         </div>
                     </center>
             </div>

@@ -16,7 +16,6 @@
 </head>
 
 <jsp:include page="userHome.jsp"></jsp:include>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <body>
 <form id="reg-form" action="../restauran3/closetable" method="post">
@@ -104,9 +103,6 @@
     </div>
 </div>
 <%}%>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
 
 </body>
 </html>
