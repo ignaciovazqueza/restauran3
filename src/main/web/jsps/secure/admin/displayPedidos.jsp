@@ -7,20 +7,10 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="tables.Menu" %>
 <%@ page import="servlets.ClosePedidosServlet" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Tomas
-  Date: 5/10/2016
-  Time: 5:29 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Pedidos</title>
-    <jsp:include page="adminHome.jsp"></jsp:include>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
 
     <script type="text/javascript">
 
@@ -45,7 +35,7 @@
                 var action = parts[0];
                 var user = parts[1];
                 if (action == "pedido") {
-                    setTimeout(writeAsistenciaResponsePP(event.data),1000);
+                    setTimeout(writeAsistenciaResponsePP(event.data), 1000);
                 }
             };
 
@@ -95,68 +85,74 @@
 
         function window_onload() {
             openSocketPP();
+            $(document).ready(function () {
+                var a = $('.link-1')[0];
+                a.parentElement.className = 'active';
+                $("button").click(function (event) {
+                    var name = $(this).attr('id');
+                    $.post('../restauran3/displaypedidos', {
+                        id: name
+                    });
+                });
+            });
         }
 
         function writeResponse(text) {
             console.log(text);
         }
 
-        $(document).ready(function () {
-            $("button").click(function (event) {
-                var name = $(this).attr('id');
-                $.post('../restauran3/displaypedidos', {
-                    id: name
-                });
-            });
-        });
-
     </script>
 </head>
-
+<jsp:include page="adminHome.jsp"></jsp:include>
 <body onload="window_onload();">
 
-<form id="reg-form" action="../restauran3/displaypedidos" method="post">
-    <br>
-    <div class="center-block panel panel-primary" style="width:50%;text-align: center">
-        <div class="panel-heading">
-            <h3 align="center">Mesas</h3>
-        </div>
-        <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
-            Orden orden = null;
-            List<Pedido> pedidos = new ArrayList<>();
-            if (mesas.isEmpty()) {%>
+<div class="row">
+    <div class="col s12">
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
+            <div class="panel-heading">
+                <div class="card-panel white">
+                    <div class="card-content black-text">
+                        <span class="card-title" style="font-size: 1.5em;">Mesas</span>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <%}%>
+            <form id="reg-form" action="../restauran3/displaypedidos" method="post">
 
+                <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
+                    Orden orden = null;
+                    List<Pedido> pedidos = new ArrayList<>();
+                    if (mesas.isEmpty()) {%>
 
-        <%
-            for (Mesa mesa : mesas) {
-        %>
+                <div class="panel panel-default">
+                    <div class="card-panel white">
+                        <div class="card-content black-text">
+                            <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
+                        </div>
+                    </div>
+                </div>
 
-        <% orden = DisplayPedidosServlet.getOrden(mesa.getMesa());
-            if (orden != null) {
-                pedidos = DisplayPedidosServlet.getPedidos(orden.getIdorden());
-                if (!pedidos.isEmpty()) {
-        %>
+                <%
+                    }
+                    for (Mesa mesa : mesas) {
+                        orden = DisplayPedidosServlet.getOrden(mesa.getMesa());
+                        if (orden != null) {
+                            pedidos = DisplayPedidosServlet.getPedidos(orden.getIdorden());
+                            if (!pedidos.isEmpty()) {
+                %>
 
-        <br>
-
-        <div class="panel-body">
-            <h3 align="center"><span class="label label-primary"><%=mesa.getMesa().toUpperCase()%></span></h3>
-            <table class="table" align="center" width="60%">
-                <tr>
-                    <td>Pedido</td>
-                    <td>Articulo</td>
-                    <td>Cantidad</td>
-                    <td>Estado</td>
-                </tr>
-                    <% for (Pedido pedido : pedidos) {
+                <div class="panel-body">
+                    <h3 align="center"><span class="label label-primary"><%=mesa.getMesa().toUpperCase()%></span>
+                    </h3>
+                    <table class="table" align="center" width="85%">
+                        <tr>
+                            <td>Pedido</td>
+                            <td>Articulo</td>
+                            <td>Cantidad</td>
+                            <td>Estado</td>
+                        </tr>
+                            <% for (Pedido pedido : pedidos) {
             int id = pedido.getIdPedido();
             Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
             String estado = articulo.getNombre();
@@ -164,59 +160,55 @@
         %>
 
 
-                <tr>
-                    <td><%=id%>
-                    </td>
-                    <td><%=estado%>
-                    </td>
-                    <td><%=cantidad%>
-                    </td>
-                    <td><%=pedido.getEntregado()%>
-                    </td>
-                    <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="..." align="center">
-                            <button type="submit" class="btn btn-default" id=<%=id%> name="entregar">Entregar</button>
+                        <tr>
+                            <td><%=id%>
+                            </td>
+                            <td><%=estado%>
+                            </td>
+                            <td><%=cantidad%>
+                            </td>
+                            <td><%=pedido.getEntregado()%>
+                            </td>
+                            <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="..." align="center">
+                                    <button type="submit" class="btn btn-default light-blue darken-3"
+                                            id=<%=id%> name="entregar">Entregar
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                            <%}%>
+                </div>
+                <%
+                            }
+                        }
+                    }
+                    if (!pedidos.isEmpty()) {%>
+                <%--<div align="center">--%>
+                <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
+                <%--<button type="submit" class="btn btn-default" name="entregar">Entregar</button>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+
+                <%} else {%>
+                <div class="panel panel-default">
+                    <div class="card-panel white">
+                        <div class="card-content black-text">
+                            <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
                         </div>
-                    </td>
-                </tr>
-
-
-                    <%}%>
+                    </div>
+                </div>
+                <%}%>
+            </form>
         </div>
-        <%
-                }
-            }
-        %>
 
-        </table>
-
-
-        <%}%>
-
-        <%if (!pedidos.isEmpty()) {%>
-        <br>
-        <%--<div align="center">--%>
-        <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
-        <%--<button type="submit" class="btn btn-default" name="entregar">Entregar</button>--%>
-        <%--</div>--%>
-        <%--</div>--%>
     </div>
+</div>
+</div>
 
-    <br>
-        <%} else {%>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
-        </div>
-    </div>
-        <%}%>
-
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
 </body>
 
 </html>

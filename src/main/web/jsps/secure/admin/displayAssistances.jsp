@@ -5,8 +5,6 @@
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Asistencia</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <script type="text/javascript">
 
@@ -60,47 +58,48 @@
 
         function createIDTable(data) {
             $('#tbody').append(' ' +
-                    '<tr id="' + data + '"> ' +
-                    '<td align="center">' + data + '</td> ' +
-                    '<td align="center">Asistir mesa</td> ' +
-                    '<td align="center"> ' +
-                    '<div class="btn-group" role="group" aria-label="..." align="center"> ' +
-                    '<button type="submit" class="btn btn-default" name="entregar" id="' + data + '" value="' + data + '"> Asistir </button> ' +
-                    '</div> ' +
-                    '</td> ' +
-                    '</tr>');
+                '<tr id="' + data + '"> ' +
+                '<td align="center">' + data + '</td> ' +
+                '<td align="center">Asistir mesa</td> ' +
+                '<td align="center"> ' +
+                '<div class="btn-group" role="group" aria-label="..." align="center"> ' +
+                '<button type="submit" class="btn btn-default light-blue darken-3" name="entregar" id="' + data + '" value="' + data + '"> Asistir </button> ' +
+                '</div> ' +
+                '</td> ' +
+                '</tr>');
         }
 
         function window_onload() {
             openSocketAA();
-        }
-
-        function writeResponse(text) {
-            console.log(text);
-        }
-
-        $(document).ready(function () {
-            $("div.btn-group button[name='entregar']").click(function (event) {
-                event.preventDefault();
-                var nameVar = $(this).attr('id');
-                $.post('../restauran3/displayassistances', {
-                    name: nameVar
-                }, function () {
-                    var row = document.getElementById(nameVar);
-                    var table = row.parentNode;
-                    table.removeChild(row);
-                    if (table.children.length == 0) {
-                        $('#tbody').append(' ' +
+            $(document).ready(function () {
+                var a = $('.link-1')[1];
+                a.parentElement.className = 'active';
+                $("div.btn-group button[name='entregar']").click(function (event) {
+                    event.preventDefault();
+                    var nameVar = $(this).attr('id');
+                    $.post('../restauran3/displayassistances', {
+                        name: nameVar
+                    }, function () {
+                        var row = document.getElementById(nameVar);
+                        var table = row.parentNode;
+                        table.removeChild(row);
+                        if (table.children.length == 0) {
+                            $('#tbody').append(' ' +
                                 '<tr id="assistanceRow">' +
                                 '<td colspan="2" align="center"> ' +
                                 '<h3 align="center">' +
                                 '<span class="label label-primary">No hay pedidos de asistencia.</span></h3> ' +
                                 '</td>' +
                                 '</tr>');
-                    }
+                        }
+                    });
                 });
             });
-        });
+        }
+
+        function writeResponse(text) {
+            console.log(text);
+        }
 
     </script>
 </head>
@@ -108,68 +107,77 @@
 <jsp:include page="adminHome.jsp"/>
 
 <body onload="window_onload();">
-<form id="reg-form">
-    <br>
 
-    <div class="center-block panel panel-primary" style="width:50%;text-align: center">
-        <div class="panel-heading">
-            <h3 align="center">Pedidos de asistencia</h3>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <table class="table" align="center" width="60%" id="fields" name="fields">
-                    <thead>
-                    <tr>
-                        <td align="center">ID</td>
-                        <td align="center">Estado</td>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
+<div class="row">
+    <div class="col s12">
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
 
-                    <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
-                        if (mesas == null) {%>
-                    <tr>
-                        <td colspan="2">
-                            <h3 align="center"><span class="label label-primary">No hay pedidos de asistencia.</span>
-                            </h3>
-                        </td>
-                    </tr>
-
-                    <%} else if (mesas != null && mesas.isEmpty()) {%>
-                    <tr id="assistanceRow">
-                        <td colspan="2">
-                            <h3 align="center"><span class="label label-primary" id="span" name="span">No hay pedidos de asistencia.</span>
-                            </h3>
-                        </td>
-                    </tr>
-
-                    <%
-                    } else if (mesas != null && !mesas.isEmpty()) {
-                        for (Mesa mesa : mesas) {
-                            String id = mesa.getMesa();
-                            String estado = mesa.getAsistencia();
-                    %>
-                    <tr id=<%=id%>>
-                        <td align="center"><%=id%>
-                        </td>
-                        <td align="center"><%=estado%>
-                        </td>
-                        <td align="center">
-                            <div class="btn-group" role="group" aria-label="..." align="center">
-                                <button type="submit" class="btn btn-default" name="entregar" id=<%=id%> value=<%=id%>>
-                                    Asistir
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <%}%>
-                    </tbody>
-                </table>
+            <div class="panel-heading">
+                <div class="card-panel white">
+                    <div class="card-content black-text">
+                        <span class="card-title" style="font-size: 1.5em;">Pedidos de asistencia</span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <br>
-            <%}%>
 
+            <form id="reg-form">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="striped" align="center" width="85%" id="fields" name="fields">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody">
+
+                            <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
+                                if (mesas == null) {%>
+                            <tr>
+                                <td colspan="2">
+                                    <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
+                                </td>
+                            </tr>
+
+                            <%} else if (mesas != null && mesas.isEmpty()) {%>
+                            <tr id="assistanceRow">
+                                <td colspan="2">
+                                    <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
+                                </td>
+                            </tr>
+
+                            <%
+                            } else if (mesas != null && !mesas.isEmpty()) {
+                                for (Mesa mesa : mesas) {
+                                    String id = mesa.getMesa();
+                                    String estado = mesa.getAsistencia();
+                            %>
+                            <tr id=<%=id%>>
+                                <td align="center"><%=id%>
+                                </td>
+                                <td align="center"><%=estado%>
+                                </td>
+                                <td align="center">
+                                    <div class="btn-group" role="group" aria-label="..." align="center">
+                                        <button type="submit" class="btn btn-default light-blue darken-3"
+                                                name="entregar" id=<%=id%> value=<%=id%>>
+                                            Asistir
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <%}%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <%}%>
+            </form>
+
+        </div>
+    </div>
+</div>
 
 </body>
 

@@ -163,8 +163,6 @@
 
     </script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
 </head>
 
 <jsp:include page="adminHome.jsp"></jsp:include>
@@ -336,8 +334,5 @@
 
 
 </form>
-
-<script src="js/bootstrap.min.js"></script>
-
 </body>
 </html>
