@@ -62,17 +62,17 @@
             $(document).ready(function () {
                 var a = $('.link-1')[2];
                 a.parentElement.className = 'active';
+
+                $("button[name='asistencia']").click(function (event) {
+                    event.preventDefault();
+                    $.post('../restauran3/askassistance', {}, function (responseText) {
+                        $('#nombre').html('Asistir mesa');
+                    })
+                });
+
             });
         }
 
-        $(document).ready(function () {
-            $("button[name='asistencia']").click(function (event) {
-                event.preventDefault();
-                $.post('../restauran3/askassistance', {}, function (responseText) {
-                    $('#nombre').val('Asistir mesa');
-                })
-            });
-        });
 
     </script>
 
