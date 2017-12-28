@@ -101,6 +101,7 @@
                         <td>Cantidad</td>
                         <td>Precio</td>
                         <td>Total Parcial</td>
+                        <td></td>
                     </tr>
                     <% for (Pedido pedido : pedidos) {
                         int id = pedido.getIdPedido();
@@ -120,7 +121,12 @@
                         </td>
                         <td>$<%=total%>
                         </td>
-                        <td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="..." align="center">
+                                <button type="submit" class="btn btn-default light-blue darken-3" name="eliminar" value=<%=id%> id="eliminar">Eliminar
+                                </button>
+                            </div>
+                        </td>
                     </tr>
 
                     <%}%>
@@ -136,12 +142,7 @@
                                 </button>
                             </div>
                         </td>
-                        <td>
-                            <div class="btn-group" role="group" aria-label="..." align="center">
-                                <button type="submit" class="btn btn-default light-blue darken-3" name="eliminar" id="eliminar">Eliminar
-                                </button>
-                            </div>
-                        </td>
+
                     </table>
                 </div>
             </div>

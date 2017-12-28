@@ -36,20 +36,15 @@ public class ClosePedidosServlet extends HttpServlet {
                 Session session = HibernateUtil.getInstance().getSession();
                 Principal userPrincipal = request.getUserPrincipal();
                 String idMesa = userPrincipal.getName();
-                String[] selected = request.getParameterValues("check");
                 Integer idorden = (Integer) session.createQuery("select idorden from Orden where idMesa='" + idMesa + "' and estado='opened'").uniqueResult();
 
-                if (selected!=null) {
-                    for (int i = 0; i < selected.length; i++) {
-                        List<Pedido> pedidos = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Pidiendo...' and idPedido=" + selected[i] + "").list();
-                        tx = session.beginTransaction();
-                        for (Pedido pedido : pedidos){
-                            pedido.setEntregado("A la espera");
-                            session.saveOrUpdate(pedido);
-                            tx.commit();
+                List<Pedido> pedidos = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Pidiendo...' ").list();
+                    tx = session.beginTransaction();
+                    for (Pedido pedido : pedidos){
+                        pedido.setEntregado("A la espera");
+                        session.saveOrUpdate(pedido);
+                        tx.commit();
                         }
-                    }
-                }
 
                 response.sendRedirect("/restauran3/closepedidos");
             } catch (IllegalAccessException e) {
@@ -63,14 +58,12 @@ public class ClosePedidosServlet extends HttpServlet {
 
             try{
                 Session session = HibernateUtil.getInstance().getSession();
-                String[] selected = request.getParameterValues("check");
-                if (selected !=null) {
-                    for (int i = 0; i < selected.length; i++) {
-                        Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + selected[i] + "").uniqueResult();
+                String idPedido = request.getParameter("eliminar");
+                if (idPedido !=null) {
+                        Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + idPedido + "").uniqueResult();
                         tx = session.beginTransaction();
                         session.delete(pedido);
                         tx.commit();
-                    }
                     response.sendRedirect("/restauran3/closepedidos");
                 }else{
                     out.println("<script type=\"text/javascript\">");
