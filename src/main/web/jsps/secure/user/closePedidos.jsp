@@ -139,7 +139,7 @@
                         <th>Articulo</th>
                         <th>Cantidad</th>
                         <th>Precio</th>
-                        <th>Total Parcial</th>
+                        <th>Parcial</th>
                         <th></th>
                     </tr>
                     <% for (Pedido pedido : pedidos) {
@@ -162,7 +162,7 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="..." align="center">
-                                <button type="submit" class="btn btn-default light-blue darken-3" name="eliminar" value=<%=id%> id="eliminar">Eliminar
+                                <button type="submit" class="btn btn-floating small light-blue darken-3" name="eliminar" value=<%=id%> id="eliminar"><i class="material-icons">delete</i>
                                 </button>
                             </div>
                         </td>
