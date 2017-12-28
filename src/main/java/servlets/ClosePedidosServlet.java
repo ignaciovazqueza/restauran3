@@ -29,7 +29,7 @@ public class ClosePedidosServlet extends HttpServlet {
         String driver = "org.hsqldb.jdbc.JDBCDriver";
         Transaction tx = null;
         PrintWriter out = response.getWriter();
-        if (request.getParameter("cerrar")!=null){
+        if (request.getParameter("action").equals("cerrar")){
 
             try{
                 Class.forName(driver).newInstance();
@@ -54,17 +54,17 @@ public class ClosePedidosServlet extends HttpServlet {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        } else if (request.getParameter("eliminar")!=null){
+        } else if (request.getParameter("action").equals("eliminar")){
 
             try{
                 Session session = HibernateUtil.getInstance().getSession();
-                String idPedido = request.getParameter("eliminar");
+                String idPedido = request.getParameter("id");
                 if (idPedido !=null) {
                         Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + idPedido + "").uniqueResult();
                         tx = session.beginTransaction();
                         session.delete(pedido);
                         tx.commit();
-                    response.sendRedirect("/restauran3/closepedidos");
+             //       response.sendRedirect("/restauran3/closepedidos");
                 }else{
                     out.println("<script type=\"text/javascript\">");
                     out.println("alert('Debe selecionar lo que quiere borrar');");

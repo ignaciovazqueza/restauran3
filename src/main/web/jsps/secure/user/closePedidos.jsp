@@ -64,7 +64,46 @@
             $(document).ready(function () {
                 var a = $('.link-1')[1];
                 a.parentElement.className = 'active';
+
+                $("button[name='eliminar']").click(function (event) {
+                    event.preventDefault();
+                    var idVar = $('#eliminar').prop("value");
+                    var actionVar = "eliminar";
+                    $.post('../restauran3/closepedidos', {id: idVar, action: actionVar}, function (responseText) {
+                        var rowCount = $('#pedidos >tbody >tr').length;
+                        if (rowCount == 2){
+                            $('#pedidos').remove();
+                            $('#cerrarButton').remove();
+                            $('#pedidosActuales').remove();
+                        }else{
+                            var id = $('#eliminar').prop("value");
+                            $('#'+id).remove();
+                        }
+                    })
+                });
+
+                $("button[name='cerrar']").click(function (event) {
+                    event.preventDefault();
+                    var actionVar = "cerrar";
+                    $.post('../restauran3/closepedidos', {action: actionVar}, function (responseText) {
+                        $('#pedidos tr').each(function() {
+                            var articulo = $(this).find("td").eq(0).html();
+                            var cantidad = $(this).find("td").eq(1).html();
+                            var precio = $(this).find("td").eq(2).html();
+                            var total = $(this).find("td").eq(3).html();
+                            if (articulo!= null) {
+                                $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
+                            }
+                            });
+
+                        $('#pedidos').remove();
+                        $('#cerrarButton').remove();
+                        $('#pedidosActuales').remove();
+
+                    })
+                });
             });
+
         }
 
         //$(document).ready(function () {
@@ -87,7 +126,7 @@
                 if (!pedidos.isEmpty()) {
             %>
             <div class="center-block panel panel-primary" style="width:85%;text-align: center">
-                <div class="panel-heading">
+                <div class="panel-heading" id="pedidosActuales">
                     <div class="card-panel white">
                         <div class="card-content black-text">
                             <span class="card-title" style="font-size: 1.5em;">Pedidos actuales</span>
@@ -95,13 +134,13 @@
                     </div>
                 </div>
 
-                <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white">
+                <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white" id="pedidos">
                     <tr>
-                        <td>Articulo</td>
-                        <td>Cantidad</td>
-                        <td>Precio</td>
-                        <td>Total Parcial</td>
-                        <td></td>
+                        <th>Articulo</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total Parcial</th>
+                        <th></th>
                     </tr>
                     <% for (Pedido pedido : pedidos) {
                         int id = pedido.getIdPedido();
@@ -112,7 +151,7 @@
                         int total = cantidad * precio;
                     %>
 
-                    <tr>
+                    <tr id=<%=id%>>
                         <td><%=estado%>
                         </td>
                         <td><%=cantidad%>
@@ -136,7 +175,7 @@
                 <div align="center">
                     <table>
                         <td>
-                            <div class="btn-group" role="group" aria-label="..." align="center">
+                            <div class="btn-group" role="group" aria-label="..." align="center" id="cerrarButton">
                                 <button type="submit" class="btn btn-default light-blue darken-3" name="cerrar" id="cerrar"
                                         onclick="sendPedido()">Cerrar Pedido
                                 </button>
@@ -163,7 +202,7 @@
                 </div>
             </div>
 
-            <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white">
+            <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white" id="pedidosEspera">
                 <tr>
                     <td>Articulo</td>
                     <td>Cantidad</td>
