@@ -86,9 +86,8 @@
                         if (table.children.length == 0) {
                             $('#tbody').append(' ' +
                                 '<tr id="assistanceRow">' +
-                                '<td colspan="2" align="center"> ' +
-                                '<h3 align="center">' +
-                                '<span class="label label-primary">No hay pedidos de asistencia.</span></h3> ' +
+                                '<td colspan="3" align="center"> ' +
+                                '<span class="card-title" style="font-size: 1em;">No hay pedidos de asistencia.</span>' +
                                 '</td>' +
                                 '</tr>');
                         }
@@ -123,51 +122,52 @@
             <form id="reg-form">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table class="striped" align="center" width="85%" id="fields" name="fields">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Estado</th>
-                            </tr>
+                        <table align="center" width="85%" id="fields" name="fields">
+                            <thead style="background-color: lightgray;">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
                             </thead>
-                            <tbody id="tbody">
+                            <tbody id="tbody" style="background-color: white;">
 
-                            <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
-                                if (mesas == null) {%>
-                            <tr>
-                                <td colspan="2">
-                                    <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
-                                </td>
-                            </tr>
+                                <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
+                                    if (mesas == null) {%>
+                                <tr>
+                                    <td colspan="3">
+                                        <span class="card-title" style="font-size: 1em;">No hay pedidos de asistencia.</span>
+                                    </td>
+                                </tr>
 
-                            <%} else if (mesas != null && mesas.isEmpty()) {%>
-                            <tr id="assistanceRow">
-                                <td colspan="2">
-                                    <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
-                                </td>
-                            </tr>
+                                <%} else if (mesas != null && mesas.isEmpty()) {%>
+                                <tr id="assistanceRow">
+                                    <td colspan="3">
+                                        <span class="card-title" style="font-size: 1em;">No hay pedidos de asistencia.</span>
+                                    </td>
+                                </tr>
 
-                            <%
-                            } else if (mesas != null && !mesas.isEmpty()) {
-                                for (Mesa mesa : mesas) {
-                                    String id = mesa.getMesa();
-                                    String estado = mesa.getAsistencia();
-                            %>
-                            <tr id=<%=id%>>
-                                <td align="center"><%=id%>
-                                </td>
-                                <td align="center"><%=estado%>
-                                </td>
-                                <td align="center">
-                                    <div class="btn-group" role="group" aria-label="..." align="center">
-                                        <button type="submit" class="btn btn-default light-blue darken-3"
-                                                name="entregar" id=<%=id%> value=<%=id%>>
-                                            Asistir
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <%}%>
+                                <%
+                                } else if (mesas != null && !mesas.isEmpty()) {
+                                    for (Mesa mesa : mesas) {
+                                        String id = mesa.getMesa();
+                                        String estado = mesa.getAsistencia();
+                                %>
+                                <tr id=<%=id%>>
+                                    <td align="center"><%=id%>
+                                    </td>
+                                    <td align="center"><%=estado%>
+                                    </td>
+                                    <td align="center">
+                                        <div class="btn-group" role="group" aria-label="..." align="center">
+                                            <button type="submit" class="btn btn-default light-blue darken-3"
+                                                    name="entregar" id=<%=id%> value=<%=id%>>
+                                                Asistir
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <%}%>
                             </tbody>
                         </table>
                     </div>
