@@ -65,11 +65,6 @@ public class ClosePedidosServlet extends HttpServlet {
                         session.delete(pedido);
                         tx.commit();
              //       response.sendRedirect("/restauran3/closepedidos");
-                }else{
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("alert('Debe selecionar lo que quiere borrar');");
-                    out.println("location='closepedidos';");
-                    out.println("</script>");
                 }
 
             } catch (Exception e){

@@ -14,19 +14,35 @@
     <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
     <script src="/restauran3/js/util/jquery-ui.js"></script>
     <script src="/restauran3/materialize/js/materialize.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.button-collapse').sideNav({
+                    menuWidth: 240,
+                    edge: 'left',
+                    closeOnClick: true
+                }
+            );
+            $('.modal').modal();
+        });
+        
+        function openModal() {
+            $('#modal1').modal('open');
+        }
+    </script>
 </head>
 
 <body>
-<script>
-    $(document).ready(function () {
-        $('.button-collapse').sideNav({
-                menuWidth: 240,
-                edge: 'left',
-                closeOnClick: true
-            }
-        );
-    });
-</script>
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>Restauran3</h4>
+        <p>Realmente desea de salir del sistema?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="/restauran3/jsps/loginPage.jsp" class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+    </div>
+</div>
 
 <div class="col s12">
     <nav>
@@ -44,8 +60,7 @@
                 <li><a class="link-1" href="${pageContext.request.contextPath}/displaymenu">Ver Menu</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/displaytables">Ver Mesas</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/editAdmin">Editar Admin</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/logout"
-                       onclick="return confirm('Realmente desea salir del sistema?')">Salir</a></li>
+                <li><a class="link-1" href="#modal1" onclick="openModal()">Salir</a></li>
             </ul>
             <ul id="slide-out" class="side-nav">
                 <li>
@@ -57,13 +72,14 @@
                         <span class="white-text name" style="font-size: 2em; display: inline-block">Restauran3</span>
                     </div>
                 </li>
-                <li style="margin-top: 5px"><a class="link-1" href="${pageContext.request.contextPath}/displaypedidos">Ver Pedidos</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/displayassistances">Ver Pedidos de Asistencia</a></li>
+                <li style="margin-top: 5px"><a class="link-1" href="${pageContext.request.contextPath}/displaypedidos">Ver
+                    Pedidos</a></li>
+                <li><a class="link-1" href="${pageContext.request.contextPath}/displayassistances">Ver Pedidos de
+                    Asistencia</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/displaymenu">Ver Menu</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/displaytables">Ver Mesas</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/editAdmin">Editar Admin</a></li>
-                <li><a class="link-1" href="${pageContext.request.contextPath}/logout"
-                       onclick="return confirm('Realmente desea salir del sistema?')">Salir</a></li>
+                <li><a class="link-1" href="#modal1" onclick="openModal()">Salir</a></li>
             </ul>
         </div>
     </nav>

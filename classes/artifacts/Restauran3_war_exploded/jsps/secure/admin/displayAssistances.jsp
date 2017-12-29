@@ -28,7 +28,7 @@
                 var parts = event.data.split(" ");
                 var action = parts[0];
                 var user = parts[1];
-                if (action == "asistencia") {
+                if (action === "asistencia") {
                     writeAsistenciaResponseAA(event.data);
                 }
             };
@@ -50,7 +50,7 @@
             var action = parts[0];
             var user = parts[1];
             var table = document.getElementById(user);
-            if (table == null) {
+            if (table === null) {
                 $('#assistanceRow').remove();
                 createIDTable(user);
             }
@@ -83,7 +83,7 @@
                         var row = document.getElementById(nameVar);
                         var table = row.parentNode;
                         table.removeChild(row);
-                        if (table.children.length == 0) {
+                        if (table.children.length === 0) {
                             $('#tbody').append(' ' +
                                 '<tr id="assistanceRow">' +
                                 '<td colspan="3" align="center"> ' +

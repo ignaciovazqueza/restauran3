@@ -72,15 +72,15 @@
                     var msg = '' + responseText.msg + '';
                     if (msg.valueOf() === "different") {
                         $('#passworda').val('');
-                        alert("La contraseña actual no coincide");
+                        Materialize.toast('La contraseña actual no coincide.', 5000);
                     } else if (msg.valueOf() === "missing") {
-                        alert("Todos los campos deben estar completos");
+                        Materialize.toast('Todos los campos deben estar completos.', 5000);
                     } else if (msg.valueOf() === "ok") {
                         $('#passworda').val('');
                         $('#password').val('');
                         $('#passwordc').val('');
                         $('.strength').text('');
-                        alert("La contraseña se guardó con éxito");
+                        Materialize.toast('La contraseña se guardó con éxito.', 5000);
                     }
                 })
             });
@@ -95,7 +95,7 @@
                     var msg = '' + responseText.msg + '';
                     if (msg.valueOf() === "ok") {
                         $('#name').val('').attr("placeholder", name);
-                        alert("El nombre de usuario ha sido actualizado con éxito");
+                        Materialize.toast('El nombre de usuario ha sido actualizado con éxito.', 5000);
                     }
                 })
             });

@@ -14,19 +14,35 @@
     <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
     <script src="/restauran3/js/util/jquery-ui.js"></script>
     <script src="/restauran3/materialize/js/materialize.min.js"></script>
-</head>
 
-<body>
-<script>
-    $( document ).ready(function(){
-        $('.button-collapse').sideNav({
+    <script>
+        $( document ).ready(function(){
+            $('.button-collapse').sideNav({
                     menuWidth: 240,
                     edge: 'left',
                     closeOnClick: true
                 }
-        );
-    });
-</script>
+            );
+            $('.modal').modal();
+        });
+
+        function openModal() {
+            $('#modal1').modal('open');
+        }
+    </script>
+</head>
+
+<body>
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>Restauran3</h4>
+        <p>Realmente desea de salir del sistema?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="/restauran3/jsps/outroPage.jsp" class="modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+    </div>
+</div>
 
 <div class="col s12">
     <nav>
@@ -40,7 +56,7 @@
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a></li>
-                <li><a class="link-1" href="/restauran3/jsps/outroPage.jsp" onclick="return confirm('Realmente desea salir del sistema?')">Salir</a></li>
+                <li><a class="link-1" href="#modal1" onclick="openModal()">Salir</a></li>
             </ul>
             <ul id="slide-out" class="side-nav">
                 <li>
@@ -56,7 +72,7 @@
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a></li>
-                <li><a class="link-1" href="/restauran3/jsps/outroPage.jsp" onclick="return confirm('Realmente desea salir del sistema?')">Salir</a></li>
+                <li><a class="link-1" href="#modal1" onclick="openModal()">Salir</a></li>
             </ul>
         </div>
     </nav>
