@@ -106,12 +106,6 @@
 
         }
 
-        //$(document).ready(function () {
-        //  $("button[name='eliminar']").click(function (event) {
-        //    location.reload();
-        //});
-        //});
-
     </script>
 
 </head>
@@ -136,10 +130,10 @@
 
                 <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white" id="pedidos">
                     <tr>
-                        <th>Articulo</th>
-                        <th>Cantidad</th>
+                        <th>Ítem</th>
+                        <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</th>
                         <th>Precio</th>
-                        <th>Parcial</th>
+                        <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">Parcial</th>
                         <th></th>
                     </tr>
                     <% for (Pedido pedido : pedidos) {
@@ -162,7 +156,7 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="..." align="center">
-                                <button type="submit" class="btn btn-floating small light-blue darken-3" name="eliminar" value=<%=id%> id="eliminar"><i class="material-icons">delete</i>
+                                <button type="submit" class="btn btn-floating light-blue darken-3" name="eliminar" value=<%=id%> id="eliminar"><i class="material-icons">delete</i>
                                 </button>
                             </div>
                         </td>
@@ -204,10 +198,11 @@
 
             <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white" id="pedidosEspera">
                 <tr>
-                    <td>Articulo</td>
-                    <td>Cantidad</td>
-                    <td>Precio</td>
-                    <td>Total Parcial</td>
+                    <th>Ítem</th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</th>
+                    <th>Precio</th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">Parcial</th>
+                    <th></th>
                 </tr>
                 <% for (Pedido pedido : alaespera) {
                     Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
@@ -250,10 +245,11 @@
 
             <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white">
                 <tr style="font-weight: bold;">
-                    <td>Articulo</td>
-                    <td>Cantidad</td>
-                    <td>Precio</td>
-                    <td>Total Parcial</td>
+                    <th>Ítem</th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</th>
+                    <th>Precio</th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">Parcial</th>
+                    <th></th>
                 </tr>
                 <% for (Pedido pedido : entregados) {
                     Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());

@@ -95,7 +95,7 @@
                     var msg = '' + responseText.msg + '';
                     if (msg.valueOf() === "ok") {
                         $('#name').val('').attr("placeholder", name);
-                        alert("El nombre de usuario ha sido actualizado con éxito");
+                        Materialize.toast('El nombre de usuario ha sido actualizado con éxito.', 5000);
                     }
                 })
             });

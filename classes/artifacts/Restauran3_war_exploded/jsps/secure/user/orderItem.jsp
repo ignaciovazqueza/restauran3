@@ -82,7 +82,7 @@
             <div class="panel-heading">
                 <div class="card-panel white">
                     <div class="card-content black-text">
-                        <span class="card-title" style="font-size: 1.5em;">Elija la cantidad de cada artículo</span>
+                        <span class="card-title" style="font-size: 1.5em;">Elija la cantidad de cada ítem</span>
                     </div>
                 </div>
             </div>
@@ -118,9 +118,9 @@
                                    style="overflow-x:auto; text-align: center;" id="table" bgcolor="white">
                                 <tr>
 
-                                    <th> Nombre</th>
+                                    <th>Ítem</th>
                                     <th>Precio</th>
-                                    <th>Cantidad</th>
+                                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</th>
                                 </tr>
                                 <% List<Menu> data = (List<Menu>) request.getAttribute("data");
                                     for (Menu menu : data) {
