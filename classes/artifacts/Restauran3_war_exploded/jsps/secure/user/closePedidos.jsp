@@ -72,12 +72,13 @@
                     $.post('../restauran3/closepedidos', {id: idVar, action: actionVar}, function (responseText) {
                         var rowCount = $('#pedidos >tbody >tr').length;
                         if (rowCount == 2){
+                            $("#pedidosDiv")[0].style.display = 'none';
                             $('#pedidos').remove();
                             $('#cerrarButton').remove();
                             $('#pedidosActuales').remove();
                         }else{
                             var id = $('#eliminar').prop("value");
-                            $('#'+id).remove();
+                            $('#' + id).remove();
                         }
                     })
                 });
@@ -86,16 +87,17 @@
                     event.preventDefault();
                     var actionVar = "cerrar";
                     $.post('../restauran3/closepedidos', {action: actionVar}, function (responseText) {
-                        $('#pedidos tr').each(function() {
+                        $('#pedidos tr').each(function () {
                             var articulo = $(this).find("td").eq(0).html();
                             var cantidad = $(this).find("td").eq(1).html();
                             var precio = $(this).find("td").eq(2).html();
                             var total = $(this).find("td").eq(3).html();
-                            if (articulo!= null) {
+                            if (articulo != null) {
                                 $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
                             }
                             });
 
+                        $("#pedidosDiv")[0].style.display = 'none';
                         $('#pedidos').remove();
                         $('#cerrarButton').remove();
                         $('#pedidosActuales').remove();
@@ -119,7 +121,7 @@
             <% List<Pedido> pedidos = (List<Pedido>) request.getAttribute("pedidos");
                 if (!pedidos.isEmpty()) {
             %>
-            <div class="center-block panel panel-primary" style="width:85%;text-align: center">
+            <div class="center-block panel panel-primary" id="pedidosDiv" style="text-align: center">
                 <div class="panel-heading" id="pedidosActuales">
                     <div class="card-panel white">
                         <div class="card-content black-text">
@@ -128,12 +130,15 @@
                     </div>
                 </div>
 
-                <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white" id="pedidos">
+                <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;"
+                       bgcolor="white" id="pedidos">
                     <tr>
                         <th>Ítem</th>
                         <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</th>
                         <th>Precio</th>
-                        <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">Parcial</th>
+                        <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">
+                            Parcial
+                        </th>
                         <th></th>
                     </tr>
                     <% for (Pedido pedido : pedidos) {
@@ -156,7 +161,8 @@
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="..." align="center">
-                                <button type="submit" class="btn btn-floating light-blue darken-3" name="eliminar" value=<%=id%> id="eliminar"><i class="material-icons">delete</i>
+                                <button type="submit" class="btn btn-floating light-blue darken-3" name="eliminar"
+                                        value=<%=id%> id="eliminar"><i class="material-icons">delete</i>
                                 </button>
                             </div>
                         </td>
@@ -170,8 +176,8 @@
                     <table>
                         <td>
                             <div class="btn-group" role="group" aria-label="..." align="center" id="cerrarButton">
-                                <button type="submit" class="btn btn-default light-blue darken-3" name="cerrar" id="cerrar"
-                                        onclick="sendPedido()">Cerrar Pedido
+                                <button type="submit" class="btn btn-default light-blue darken-3" name="cerrar"
+                                        id="cerrar">Cerrar Pedido
                                 </button>
                             </div>
                         </td>
@@ -187,7 +193,7 @@
             if (!alaespera.isEmpty()) {
         %>
 
-        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
+        <div class="center-block panel panel-primary" style="text-align: center">
             <div class="panel-heading">
                 <div class="card-panel white">
                     <div class="card-content black-text">
@@ -196,13 +202,15 @@
                 </div>
             </div>
 
-            <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white" id="pedidosEspera">
+            <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;"
+                   bgcolor="white" id="pedidosEspera">
                 <tr>
                     <th>Ítem</th>
                     <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</th>
                     <th>Precio</th>
-                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">Parcial</th>
-                    <th></th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">
+                        Parcial
+                    </th>
                 </tr>
                 <% for (Pedido pedido : alaespera) {
                     Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
@@ -233,7 +241,7 @@
             if (!entregados.isEmpty()) {
         %>
         <br>
-        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
+        <div class="center-block panel panel-primary" style="text-align: center">
 
             <div class="panel-heading">
                 <div class="card-panel white">
@@ -243,13 +251,15 @@
                 </div>
             </div>
 
-            <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;" bgcolor="white">
+            <table align="center" class="table striped" width="80%" style="overflow-x:auto; text-align: center;"
+                   bgcolor="white">
                 <tr style="font-weight: bold;">
                     <th>Ítem</th>
                     <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</th>
                     <th>Precio</th>
-                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">Parcial</th>
-                    <th></th>
+                    <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">
+                        Parcial
+                    </th>
                 </tr>
                 <% for (Pedido pedido : entregados) {
                     Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
@@ -277,9 +287,11 @@
         <%}%>
 
         <% if ((pedidos.isEmpty() && alaespera.isEmpty()) && entregados.isEmpty()) {%>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
+        <div class="panel panel-default" style="margin-left: 10px;margin-right: 10px;">
+            <div class="card-panel white">
+                <div class="card-content black-text">
+                    <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
+                </div>
             </div>
         </div>
         <%}%>

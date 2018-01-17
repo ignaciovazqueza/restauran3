@@ -86,7 +86,7 @@
 
 <div class="row">
     <div class="col s12">
-        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
+        <div class="center-block panel panel-primary" style="text-align: center">
             <div class="panel-heading">
                 <div class="card-panel white">
                     <div class="card-content black-text">

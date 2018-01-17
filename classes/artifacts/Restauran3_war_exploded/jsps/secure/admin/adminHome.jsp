@@ -39,8 +39,8 @@
         <p>Realmente desea de salir del sistema?</p>
     </div>
     <div class="modal-footer">
-        <a href="/restauran3/jsps/loginPage.jsp" class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="/restauran3/jsps/loginPage.jsp" class="modal-action modal-close btn-flat">Ok</a>
+        <a href="#!" class="modal-action modal-close btn-flat">Cancelar</a>
     </div>
 </div>
 

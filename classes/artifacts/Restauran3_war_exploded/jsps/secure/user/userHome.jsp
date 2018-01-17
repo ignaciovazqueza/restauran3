@@ -26,8 +26,12 @@
             $('.modal').modal();
         });
 
-        function openModal() {
+        function openModal1() {
             $('#modal1').modal('open');
+        }
+
+        function openModal2() {
+            $('#modal2').modal('open');
         }
     </script>
 </head>
@@ -39,8 +43,19 @@
         <p>Realmente desea de salir del sistema?</p>
     </div>
     <div class="modal-footer">
-        <a href="/restauran3/jsps/outroPage.jsp" class="modal-action modal-close waves-effect waves-green btn-flat">OK</a>
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="/restauran3/jsps/outroPage.jsp" class="modal-action modal-close btn-flat">OK</a>
+        <a href="#!" class="modal-action modal-close btn-flat">Cancelar</a>
+    </div>
+</div>
+
+<div id="modal2" class="modal">
+    <div class="modal-content">
+        <h4>Restauran3</h4>
+        <p>Realmente desea pedir la cuenta? Si clickea en OK, se procedera en quitarlo del sistema.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="/restauran3/jsps/outroPage.jsp" class="modal-action modal-close btn-flat">OK</a>
+        <a href="#!" class="modal-action modal-close btn-flat">Cancelar</a>
     </div>
 </div>
 
@@ -56,7 +71,7 @@
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a></li>
-                <li><a class="link-1" href="#modal1" onclick="openModal()">Salir</a></li>
+                <li><a class="link-1" href="#modal1" onclick="openModal1()">Salir</a></li>
             </ul>
             <ul id="slide-out" class="side-nav">
                 <li>
@@ -72,7 +87,7 @@
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closepedidos">Ver pedidos</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/askassistance">Pedir asistencia</a></li>
                 <li><a class="link-1" href="${pageContext.request.contextPath}/closetable">Pedir cuenta</a></li>
-                <li><a class="link-1" href="#modal1" onclick="openModal()">Salir</a></li>
+                <li><a class="link-1" href="#modal1" onclick="openModal1()" style="color: #ea0e0e;">Salir</a></li>
             </ul>
         </div>
     </nav>

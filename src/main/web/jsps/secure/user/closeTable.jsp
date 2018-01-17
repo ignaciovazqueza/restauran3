@@ -29,7 +29,7 @@
                 int sumatotal = 0;
                 if (!entregados.isEmpty() || !alaespera.isEmpty()) {
             %>
-            <div class="center-block panel panel-primary" style="width:85%;text-align: center">
+            <div class="center-block panel panel-primary" style="text-align: center">
                 <div class="panel-heading">
                     <div class="card-panel white">
                         <div class="card-content black-text">
@@ -44,7 +44,9 @@
                         <td>Ítem</td>
                         <td class="tooltipped" data-position="top" data-delay="50" data-tooltip="Cantidad">Cant.</td>
                         <td>Precio</td>
-                        <td class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">Parcial</td>
+                        <td class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">
+                            Parcial
+                        </td>
                     </tr>
 
                     <% for (Pedido pedido : entregados) {
@@ -106,11 +108,12 @@
                 <br>
                 <div align="center">
                     <div class="btn-group" role="group" aria-label="..." align="center">
-                        <button type="submit" class="btn btn-default light-blue darken-3" id="close-table"
+                        <a type="submit" class="btn btn-default light-blue darken-3" id="close-table"
                                 name="entregar"
-                                onclick="return confirm('¿Realmente desea pedir la cuenta? Si clickea en Aceptar, se procederá en quitarlo del sistema.')">
+                                href="#modal2"
+                                onclick="openModal2()">
                             Pedir Cuenta
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -118,8 +121,10 @@
 
         <%} else {%>
         <div class="panel panel-default">
-            <div class="panel-body">
-                <h3 align="center"><span class="label label-primary">No hay pedidos.</span></h3>
+            <div class="card-panel white">
+                <div class="card-content black-text">
+                    <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>
+                </div>
             </div>
         </div>
         <%}%>
