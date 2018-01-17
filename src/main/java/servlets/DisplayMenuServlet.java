@@ -82,42 +82,38 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
             try {
                 Class.forName(driver).newInstance();
                 Session session = HibernateUtil.getInstance().getSession();
-                String selected = request.getParameter("selected");
+                String selected = request.getParameter("id");
                 if (selected!=null) {
-                        Menu menu = (Menu) session.createQuery("from Menu where idArticulo= " + selected + " ").uniqueResult();
-                        String nombre = request.getParameter("name");
-                        String precio = request.getParameter("price");
-                        String categoriaN = request.getParameter("category").toUpperCase();
-                       // Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre =" + categoriaN.toUpperCase()+ "");
-                        List categoria = session.createQuery("from Categoria where nombre ='"+categoriaN+"'").list();
-                        if (categoria.size()==0){
-                            tx = session.beginTransaction();
-                            Categoria c = new Categoria();
-                            c.setNombre(categoriaN);
-                            session.saveOrUpdate(c);
-                            tx.commit();
-                        }
-
+                    Menu menu = (Menu) session.createQuery("from Menu where idArticulo= " + selected + " ").uniqueResult();
+                    String nombre = request.getParameter("nombre");
+                    String precio = request.getParameter("precio");
+                    String state = "";
+                    if (nombre != null && nombre != "" && precio != null && precio != "") {
                         menu.setNombre(nombre);
                         menu.setPrecio(Integer.parseInt(precio));
-                        menu.setCategoria(categoriaN);
                         tx = session.beginTransaction();
                         session.saveOrUpdate(menu);
                         tx.commit();
-
-                            //String art = "{ \"id\": \"" + nombre + "\", \"precio\": \"" + precio + "\" }";
-//                            response.setContentType("application/json");
-//                            PrintWriter out = response.getWriter();
-//                            out.print(art);
-//                            out.flush();
-                        }
-
+                        state = "ok";
+                    } else{
+                        precio = ""+menu.getPrecio();
+                        nombre = menu.getNombre();
+                    }
+                    String id = ""+menu.getIdArticulo();
+                    String art = "{ \"state\": \"" + state + "\", \"precio\": \"" + precio + "\",\"nombre\":\""+nombre+"\",\"id\":\""+id+"\" }";
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(art);
+                    out.flush();
+                }
 
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
     }

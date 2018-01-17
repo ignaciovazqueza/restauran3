@@ -33,6 +33,23 @@
                         location.reload();
                     })
                 });
+                $("button[name='editarMenu']").click(function (event) {
+                    event.preventDefault();
+                    var idVar = this.value;
+                    var actionVar = "edit";
+                    var nameVar = $('#name'+this.value).val();
+                    var priceVar = $('#price'+this.value).val()
+                    $.post('../restauran3/displaymenu', {id: idVar, action: actionVar, nombre: nameVar, precio: priceVar}, function (responseText) {
+                        var data = '' + responseText.state + '';
+                        if (data.valueOf() === "ok") {
+                            alert("Menu editado");
+                        }else{
+                            alert("No se pueden dejar campos en blanco");
+                            $('#name'+responseText.id).val(responseText.nombre);
+                            $('#price'+responseText.id).val(responseText.precio);
+                        }
+                    })
+                });
 
                 $("button[name='upMenu']").click(function (event) {
                     event.preventDefault();
@@ -66,7 +83,7 @@
                         if (data.valueOf() === "vacio"){
                             alert("no pueden quedar campos vacios, cambiar");
                         }else{
-                            $('#menu'+this.value+'tr:last').after('<tr><td> ' + responseText.nombre + '</td><td> ' + responseText.precio + '</td></tr>')
+                            $('#menu'+responseText.categoria+'tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td></tr>');
                         }
                     })
                 });
@@ -105,7 +122,7 @@
                                 <div>
                                     <div class="input-field">
                                         <input  id="newCat" type="text" class="validate">
-                                        <label class="active" for="first_name2"></label>
+                                        <label class="active" ></label>
                                     </div>
                                 </div>
                             </td>
@@ -162,7 +179,7 @@
                                         <div>
                                             <div class="input-field">
                                                 <input id="nombreTd<%=categoria.getNombre()%>" type="text" class="validate">
-                                                <label class="active" for="first_name2" name="nombreTd"></label>
+                                                <label class="active"  name="nombreTd"></label>
                                             </div>
                                         </div>
                                     </td>
@@ -170,7 +187,7 @@
                                         <div>
                                             <div class="input-field">
                                                 <input  id="precioTd<%=categoria.getNombre()%>" type="text" class="validate">
-                                                <label class="active"  for="first_name2" name="precioTd"></label>
+                                                <label class="active"   name="precioTd"></label>
                                             </div>
                                         </div>
                                     </td>
@@ -193,16 +210,16 @@
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input value='<%=menu.getNombre()%>' id="first_name" type="text" class="validate">
-                                                <label class="active" for="first_name2"></label>
+                                                <input value='<%=menu.getNombre()%>' id="name<%=id%>" type="text" class="validate">
+                                                <label class="active" ></label>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input value='<%=menu.getPrecio()%>' id="first_name2" type="text" class="validate">
-                                                <label class="active" for="first_name2"></label>
+                                                <input value='<%=menu.getPrecio()%>' id="price<%=id%>" type="text" class="validate">
+                                                <label class="active" ></label>
                                             </div>
                                         </div>
                                     </td>
