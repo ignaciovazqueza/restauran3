@@ -1,165 +1,78 @@
+<%@ page import="tables.Categoria" %>
 <%@ page import="java.util.List" %>
 <%@ page import="tables.Menu" %>
 <%@ page import="securityfilter.Constants" %>
-<%@ page import="tables.Categoria" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="org.json.JSONArray" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Tomas
-  Date: 4/7/2016
-  Time: 7:10 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="/restauran3/css/jquery-ui.css">
-    <script src="/restauran3/js/util/jquery-3.2.1.js"></script>
-    <script src="/restauran3/js/util/jquery-ui.js"></script>
+    <title><%=Constants.COMMON_TITLE_BASE%>Menu</title>
 
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-
-
-    <title><%=Constants.COMMON_TITLE_BASE%>Ver Menu</title>
-
-    <%
-        List<Categoria> categoriasAuto = (List<Categoria>) request.getAttribute("categorias");
-        List<String> categories = new ArrayList<>(categoriasAuto.size());
-        for (int i = 0; i < categoriasAuto.size(); i++) {
-            categories.add(categoriasAuto.get(i).getNombre());
-        }
-        JSONArray jsonArray = new JSONArray(categories);
-    %>
-
-    <style>
-        /* The Modal (background) */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            padding-top: 100px; /* Location of the box */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-
-        /* Modal Content */
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        /* The Close Button */
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
+    <% String username = request.getUserPrincipal().getName();%>
 
     <script>
-        $(function () {
-            var autoCategorias = <%=jsonArray%>;
-            $("#categoria").autocomplete({
-                source: autoCategorias
-            });
-        });
-        $(document).ready(function () {
-            $('#add').click(function (event) {
-                event.preventDefault();
-                var nombreVar = "";
-                nombreVar = $('#nombre').val();
-                var precioVar = "";
-                precioVar = $('#precio').val();
-                var catVar = "";
-                catVar = $('#categoria').val();
-                var actionVar = "add";
-                $.post('../restauran3/displaymenu', {
-                    nombre: nombreVar,
-                    precio: precioVar,
-                    categoria: catVar,
-                    action: actionVar
-                }, function (responseText) {
-                    var id = '' + responseText.nombre + '';
-                    if (id.valueOf() == "newCat") {
+        function window_onload() {
+
+            $(document).ready(function () {
+                var a = $('.link-1')[2];
+                a.parentElement.className = 'active';
+
+                $("button[name='eliminarMenu']").click(function (event) {
+                    event.preventDefault();
+                    var idVar = this.value;
+                    var actionVar = "delete";
+                    $.post('../restauran3/displaymenu', {id: idVar, action: actionVar}, function (responseText) {
+                        var rowCount = $('#pedidos >tbody >tr').length;
+//                        if (rowCount == 2){
+//                            $('#pedidos').remove();
+//                            $('#cerrarButton').remove();
+//                            $('#pedidosActuales').remove();
+//                        }else{
+                            $('#'+idVar).remove();
+//                        }
                         location.reload();
-                    } else if (id.valueOf() == "vacio") {
-                        alert("No pueden quedar casilleros en blanco");
-                    }
-                    else {
-                        $('#' + responseText.categoria + ' tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td><td><input type=radio name="radio"  value=' + responseText.id + ' ></td></tr>');
-                        $('#nombre').val("");
-                        $('#precio').val("");
-                        $('#categoria').val("");
-                    }
+                    })
                 });
-            });
-            $('#delete').click(function (event) {
-                event.preventDefault();
-                var selectedVar = $("input[type='radio'][name='radio']:checked").val();
-                var actionVar = "delete";
-                var statusVar = confirm('¿Realmente desea borrar el articulo seleccionado?');
-                $.post('../restauran3/displaymenu', {
-                    selected: selectedVar,
-                    action: actionVar,
-                    status: statusVar
-                }, function (responseText) {
-                    var id = '' + responseText.id + '';
-                    if (id.valueOf() == "no selected") {
-                        alert("Debe seleccionar que articulo desea borrar");
-                    } else {
+
+                $("button[name='upMenu']").click(function (event) {
+                    event.preventDefault();
+                    var idUp = this.value;
+                    var actionVar = "moveUp";
+                    $.post('../restauran3/displaymenu', {id: idUp, action: actionVar}, function (responseText) {
+//                        $('#menus tr').each(function() {
+//                            var nombre = $(this).find("td").eq(0).html();
+//                            var precio = $(this).find("td").eq(1).html();
                         location.reload();
-                    }
+                    })
+                });
+
+                $("button[name='downMenu']").click(function (event) {
+                    event.preventDefault();
+                    var idUp = this.value;
+                    var actionVar = "moveDown";
+                    $.post('../restauran3/displaymenu', {id: idUp, action: actionVar}, function (responseText) {
+                       location.reload();
+                    })
+                });
+
+                $("button[name='saveMenu']").click(function (event) {
+                    event.preventDefault();
+                    var catVar = this.value;
+                    var nombreVar = $('#nombreTd'+catVar.valueOf()).prop('value');
+                    var precioVar = $('#precioTd'+catVar.valueOf()).prop('value');
+                    var actionVar = "add";
+                    $.post('../restauran3/displaymenu', {precio: precioVar,categoria: catVar, nombre: nombreVar, action: actionVar}, function (responseText) {
+                        var data = '' + responseText.nombre + '';
+                        if (data.valueOf() === "vacio"){
+                            alert("no pueden quedar campos vacios, cambiar");
+                        }else{
+                            $('#menu'+this.value+'tr:last').after('<tr><td> ' + responseText.nombre + '</td><td> ' + responseText.precio + '</td></tr>')
+                        }
+                    })
                 });
             });
 
-            $("select[title='Delete']").onclick(function(event){
-
-            })
-
-
-            $('#edit').click(function (event) {
-                event.preventDefault();
-                var selectedVar = $("input[type='radio'][name='radio']:checked").val();
-                var actionVar = "edit";
-                var $row = $("tr[data-id='" + selectedVar + "']");
-                $.post('../restauran3/displaymenu', {
-                    selected: selectedVar,
-                    action: actionVar,
-                    newNombre: $row.find("input[type=text]").val(),
-                    newPrecio: $row.find('input[name="precio' + selectedVar + '"]').val()
-                },
-                        function (responseText) {
-                    var id = '' + responseText.id + '';
-                    if (id.valueOf() == "no selected") {
-                        alert("Debe seleccionar que articulo desea editar");
-                    } else if (id.valueOf() == "campo vacio") {
-                        alert("No pueden quedar casilleros en blanco");
-                    } else {
-                        alert("Articulo editado con exito");
-                    }
-                });
-            });
-        });
+        }
 
     </script>
 
@@ -167,172 +80,167 @@
 
 <jsp:include page="adminHome.jsp"></jsp:include>
 
-<body>
+<body onload="window_onload();">
 
-<form id="reg-form" action="../restauran3/displaymenu" method="post">
+<div class="row">
+    <div class="col s12">
 
-    <%--<h3 align="center"><span class="label label-primary">Agregar Articulo</span></h3>--%>
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
 
-    <%--<br>--%>
-    <%--<table align="center">--%>
-        <%--<tr>--%>
-            <%--<td>--%>
-                <%--<div class="input-group">--%>
-                    <%--<span class="input-group-addon" id="basic-addon1">Nombre</span>--%>
-                    <%--<input type="text"class="form-control" id="nombre" name="nombre"--%>
-                           <%--spellcheck="false"--%>
-                           <%--aria-describedby="basic-addon1">--%>
-                <%--</div>--%>
-            <%--</td>--%>
-            <%--<td>--%>
-                <%--<div class="input-group">--%>
-                    <%--<span class="input-group-addon" id="basic-addon2">Precio</span>--%>
-                    <%--<input type="number" min="1" class="form-control" id="precio" name="precio"--%>
-                           <%--spellcheck="false"--%>
-                           <%--aria-describedby="basic-addon1">--%>
-                <%--</div>--%>
-            <%--</td>--%>
-            <%--<td>--%>
-                <%--<div class="input-group">--%>
-                    <%--<span class="input-group-addon" id="basic-addon3">Categoria</span>--%>
-                    <%--<input type="text" class="form-control" id="categoria" name="categoria"--%>
-                           <%--spellcheck="false"--%>
-                           <%--aria-describedby="basic-addon1">--%>
-                    <%--<input type="hidden" value="<%=jsonArray%>" id="jsonArray">--%>
-                <%--</div>--%>
-            <%--</td>--%>
-        <%--</tr>--%>
-
-
-    <%--</table>--%>
-    <%--<br>--%>
-    <%--<div align="center">--%>
-        <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
-            <%--<button type="submit" class="btn btn-default" name="add" id="add">Agregar</button>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-        <br>
-        <br>
-
-    <%
-        JSONArray json = (JSONArray) request.getAttribute("json");
-    %>
-
-
-    <script>
-
-        $(function() {
-
-            $("#jsGrid").jsGrid({
-                width: "90%",
-                align: "center",
-
-                inserting: true,
-                filtering: false,
-                editing: true,
-                sorting: true,
-                paging: true,
-                autoload: true,
-
-                pageSize: 10,
-                pageButtonCount: 2,
-
-                deleteConfirm: function(item) {
-                    var modal = document.getElementById('myModal');
-                    return "¿Estas seguro que desea borrar el producto \"" + item.nombre + "\" del menu?";
-                },
-
-                controller: {
-                    loadData: function (filter) {
-                    },
-                    insertItem: function (item) {
-                        if (item.nombre != "" && item.precio != null && item.categoria!= ""){
-                        return $.post("../restauran3/displaymenu", {
-                            name: item.nombre,
-                            price: item.precio,
-                            category: item.categoria,
-                            action: "add",
-                            status: true
-
-                        })
-                        }else {
-                            alert("campo vacio no se agrego el articulo");
-                            $("#jsGrid").jsGrid("clearInsert");
-                            location.reload();
-
-                        };
-                    },
-                    updateItem: function (item) {
-                        if (item.nombre != "" && item.precio != null && item.categoria!= ""){
-                            return $.post("../restauran3/displaymenu", {
-                                name: item.nombre,
-                                price: item.precio,
-                                category: item.categoria,
-                                action: "edit",
-                                selected: item.idArticulo
-
-                            })
-                        }else{
-                            alert("campo vacio no se realizaron los cambios");
-                            $("#jsGrid").jsGrid("cancelEdit");
-                            location.reload();
-
-                        }
-                    },
-                    deleteItem: function (item) {
-                         return $.post("../restauran3/displaymenu",{
-                            id: item.idArticulo,
-                            action: "delete",
-                            status: true
-
-                        });
-                    }
-
-                },
-
-                data: <%=json%>,
-
-
-
-                fields: [
-                    { name: "nombre", type: "text", width: 50, align: "center"},
-                    { name: "precio", type: "number", width: 20},
-                    { name: "categoria", type: "text", width: 50},
-                    { type: "control" }
-                ]
-
-            });
-
-        });
-
-    </script>
-
-        <style>
-            .center {
-                margin: auto;
-                width: 100%;
-            }
-        </style>
-
-    <%    for (int i = 0; i <categoriasAuto.size() ; i++) {
-
-    %>
-    <div id="jsGrid" align="center" class="center"></div>
-    <%
-        }
-    %>
-        <div id="myModal" class="modal">
-
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <p>Some text in the Modal..</p>
+            <div class="panel-heading">
+                <div class="card-panel white">
+                    <div class="card-content black-text">
+                        <span class="card-title" style="font-size: 1.5em;">Menu</span>
+                    </div>
+                </div>
             </div>
 
+            <form id="reg-form" action="../../restauran3/orderitem" method="post">
+
+                <li>
+                    <table align="center" class="striped" width="300">
+                        <tr class="row">
+                            <td class="col s5">Agregar Categoria</td>
+                            <td class="col s5">
+                                <div>
+                                    <div class="input-field">
+                                        <input  id="newCat" type="text" class="validate">
+                                        <label class="active" for="first_name2"></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col s2">
+                                <div class="btn-group" role="group" aria-label="..." align="center">
+                                    <button type="submit" class="btn btn-floating small light-blue darken-3" name="addCat" id="addCat"><i class="material-icons">add</i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+
+                <ul class="collapsible" data-collapsible="accordion">
+                    <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+                        for (Categoria categoria : categorias) {
+                    %>
+
+                    <style>
+                        #
+                        <%=categoria.getNombre()%>
+                        ,
+                        #table {
+                            padding: 5px;
+                            text-align: center;
+                            background-color: #1b6595;
+                            border: solid 1px #c3c3c3;
+                            color: white;
+                            width: 10%;
+                        }
+                    </style>
+
+
+                    <li>
+                        <div class="collapsible-header active center-align"
+                             style="background-color: #1b6595; color: white;" id=<%=categoria.getNombre()%>>
+                            <%=categoria.getNombre()%>
+                        </div>
+                        <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>"
+                             style="padding: 0rem;">
+                            <table align="center" class="striped" width="300"
+                                   style="overflow-x:auto; text-align: center;" id="menu<%=categoria.getNombre()%>" bgcolor="white">
+                                <thead>
+                                <tr class="row" id="topRow">
+                                    <th class="col s5">Nombre</th>
+                                    <th class="col s5">Precio</th>
+                                    <th class="col s1"></th>
+                                    <th class="col s1"></th>
+
+                                </tr>
+                                </thead>
+                                <tr class="row" id="addRow">
+                                    <td class="col s5">
+                                        <div>
+                                            <div class="input-field">
+                                                <input id="nombreTd<%=categoria.getNombre()%>" type="text" class="validate">
+                                                <label class="active" for="first_name2" name="nombreTd"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col s5">
+                                        <div>
+                                            <div class="input-field">
+                                                <input  id="precioTd<%=categoria.getNombre()%>" type="text" class="validate">
+                                                <label class="active"  for="first_name2" name="precioTd"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col s2">
+                                        <div class="btn-group" role="group" aria-label="..." align="center">
+                                            <button type="submit" class="btn btn-floating small light-blue darken-3" value=<%=categoria.getNombre()%> id="saveMenu" name="saveMenu" ><i class="material-icons">save</i>
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <% List<Menu> data = (List<Menu>) request.getAttribute("data");
+                                    for (Menu menu : data) {
+                                        if (menu.getCategoria().equals(categoria.getNombre())) {
+                                            int id = menu.getIdArticulo();
+                                            int index = menu.getIndex();
+                                %>
+                                <tr class="row" id=<%=id%>>
+
+                                    <td class="col s5">
+                                        <div>
+                                            <div class="input-field">
+                                                <input value='<%=menu.getNombre()%>' id="first_name" type="text" class="validate">
+                                                <label class="active" for="first_name2"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col s5">
+                                        <div>
+                                            <div class="input-field">
+                                                <input value='<%=menu.getPrecio()%>' id="first_name2" type="text" class="validate">
+                                                <label class="active" for="first_name2"></label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col s1">
+                                        <div class="btn-group" role="group" aria-label="..." align="center">
+                                            <button type="submit" class="btn btn-floating small light-blue darken-3" id="editarMenu" name="editarMenu" value=<%=id%> ><i class="material-icons">check</i>
+                                            </button>
+                                        </div>
+                                        <div class="btn-group" role="group" aria-label="..." align="center">
+                                            <button type="submit" class="btn btn-floating small light-blue darken-3" id="eliminarMenu" name="eliminarMenu" value=<%=id%>><i class="material-icons">delete</i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="col s1">
+                                        <div class="btn-group" role="group" aria-label="..." align="center">
+                                            <button type="submit" class="btn btn-floating small light-blue darken-3" name="upMenu" id="upMenu" value=<%=id%> ><i class="material-icons">arrow_upward</i>
+                                            </button>
+                                        </div>
+                                        <div class="btn-group" role="group" aria-label="..." align="center">
+                                            <button type="submit" class="btn btn-floating small light-blue darken-3" name="downMenu" id="downMenu" value=<%=id%> ><i class="material-icons">arrow_downward</i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <%}%>
+                                <%}%>
+                            </table>
+                        </div>
+                    </li>
+
+                    <%}%>
+                </ul>
+
+                <br>
+
+            </form>
         </div>
-
-
-
-</form>
+    </div>
+</div>
 </body>
 </html>

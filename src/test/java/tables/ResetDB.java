@@ -14,17 +14,18 @@ public class ResetDB {
 
     public static void main(String[] args) throws Exception {
         factory = HibernateUtil.getInstance().getSession().getSessionFactory();
-        addArticulo("papas",20,"principal");
-        addArticulo("agua",10,"bebida");
-        addArticulo("coca",15,"bebida");
-        addArticulo("milanesa",80,"principal");
+        addArticulo("papas",20,"principal",1);
+        addArticulo("agua",10,"bebida",3);
+        addArticulo("coca",15,"bebida",2);
+        addArticulo("sprite",15,"bebida",1);
+        addArticulo("milanesa",80,"principal",2);
         addMesa("mesa1","No pide asistencia","1");
         addMesa("mesa2","No pide asistencia","2");
         addMesa("mesa3","No pide asistencia","3");
         factory.close();
     }
 
-    private static void addArticulo( String nombre, int precio, String cat) {
+    private static void addArticulo( String nombre, int precio, String cat, int index) {
         Session session = factory.openSession();
         Transaction tx = null;
         try {
@@ -45,6 +46,7 @@ public class ResetDB {
             menu.setCategoria(categoria);
             menu.setNombre(nombre);
             menu.setPrecio(precio);
+            menu.setIndex(index);
             session.saveOrUpdate(menu);
             tx.commit();
         } catch (HibernateException e) {

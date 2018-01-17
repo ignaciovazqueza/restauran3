@@ -18,6 +18,9 @@ public class Menu {
     @Column(name = "precio")
     private int precio;
 
+    @Column(name = "index")
+    private int index;
+
     @Column(name = "nombre")
     private String nombre;
 
@@ -56,5 +59,12 @@ public class Menu {
         this.precio = precio;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
 }

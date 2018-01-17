@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -79,6 +80,7 @@ public class OrderItemServlet extends HttpServlet {
             Session session = HibernateUtil.getInstance().getSession();
             List<Categoria> categorias = session.createQuery("from Categoria").list();
             List<Menu> data = session.createQuery("from Menu").list();
+            data.sort(Comparator.comparing(Menu::getIndex));
 
             request.setAttribute("categorias",categorias);
             request.setAttribute("data",data);
