@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,16 +37,19 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
             JSONArray jsonArray = new JSONArray(data);
             request.setAttribute("json", jsonArray);
             request.setAttribute("data",data);
+
+            List categoriasNames = new ArrayList();
             List categorias = session.createQuery("from Categoria ").list();
             for (Object c: categorias){
                 String categoria = ((Categoria) c).getNombre().toString();
+                categoriasNames.add(categoria);
                 JSONArray catJson = new JSONArray(session.createQuery("from Menu where categoria ='"+categoria+"'").list());
-               request.setAttribute(categoria,catJson);
+                request.setAttribute(categoria,catJson);
 
             }
 
-
             request.setAttribute("categorias",categorias);
+            request.setAttribute("categoriasNames",categoriasNames);
             RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/jsGrid.jsp");
             rd.forward(request,response);
         }catch (Exception e){

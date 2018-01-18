@@ -9,6 +9,7 @@
     <title><%=Constants.COMMON_TITLE_BASE%>Menu</title>
 
     <% String username = request.getUserPrincipal().getName();%>
+    <% List<Categoria> categoriasNames = (List<Categoria>) request.getAttribute("categoriasNames"); %>
 
     <script>
         function window_onload() {
@@ -16,6 +17,15 @@
             $(document).ready(function () {
                 var a = $('.link-1')[2];
                 a.parentElement.className = 'active';
+
+                var categories = <%=categoriasNames%>;
+                var catSize = categories.length;
+                for (i = 0; i < catSize; i++) {
+                    var catRow = $('#menu' + categories[i].innerText)[0];
+                    catRow.children[1].children[1].children[3].children[0].children[0].className += " disabled";
+                    var cantRows = catRow.children[1].children.length;
+                    catRow.children[1].children[cantRows-1].children[3].children[1].children[0].className += " disabled";
+                }
 
                 $("button[name='eliminarMenu']").click(function (event) {
                     event.preventDefault();
@@ -33,16 +43,21 @@
                     event.preventDefault();
                     var idVar = this.value;
                     var actionVar = "edit";
-                    var nameVar = $('#name'+this.value).val();
-                    var priceVar = $('#price'+this.value).val()
-                    $.post('../restauran3/displaymenu', {id: idVar, action: actionVar, nombre: nameVar, precio: priceVar}, function (responseText) {
+                    var nameVar = $('#name' + this.value).val();
+                    var priceVar = $('#price' + this.value).val();
+                    $.post('../restauran3/displaymenu', {
+                        id: idVar,
+                        action: actionVar,
+                        nombre: nameVar,
+                        precio: priceVar
+                    }, function (responseText) {
                         var data = '' + responseText.state + '';
                         if (data.valueOf() === "ok") {
-                            alert("Menu editado");
-                        }else{
-                            alert("No se pueden dejar campos en blanco");
-                            $('#name'+responseText.id).val(responseText.nombre);
-                            $('#price'+responseText.id).val(responseText.precio);
+                            Materialize.toast('Menu editado con éxito.', 4000);
+                        } else {
+                            Materialize.toast('No se pueden dejar campos en blanco.', 4000);
+                            $('#name' + responseText.id).val(responseText.nombre);
+                            $('#price' + responseText.id).val(responseText.precio);
                         }
                     })
                 });
@@ -80,21 +95,30 @@
                     var idUp = this.value;
                     var actionVar = "moveDown";
                     $.post('../restauran3/displaymenu', {id: idUp, action: actionVar}, function (responseText) {
-                       location.reload();
+                        location.reload();
                     })
                 });
 
                 $("button[name='saveMenu']").click(function (event) {
                     event.preventDefault();
                     var catVar = this.value;
-                    var nombreVar = $('#nombreTd'+catVar.valueOf()).prop('value');
-                    var precioVar = $('#precioTd'+catVar.valueOf()).prop('value');
+                    var nombreVar = $('#nombreTd' + catVar.valueOf()).prop('value');
+                    var precioVar = $('#precioTd' + catVar.valueOf()).prop('value');
                     var actionVar = "add";
-                    $.post('../restauran3/displaymenu', {precio: precioVar,categoria: catVar, nombre: nombreVar, action: actionVar}, function (responseText) {
+                    $.post('../restauran3/displaymenu', {
+                        precio: precioVar,
+                        categoria: catVar,
+                        nombre: nombreVar,
+                        action: actionVar
+                    }, function (responseText) {
                         var data = '' + responseText.nombre + '';
                         if (data.valueOf() === "vacio"){
-                            alert("no pueden quedar campos vacios, cambiar");
+                            Materialize.toast('No se pueden dejar campos en blanco.', 4000);
                         }else{
+                            var catRow = $('#menu' + responseText.categoria)[0];
+                            var cantRows = catRow.children[1].children.length;
+                            catRow.children[1].children[cantRows-1].children[3].children[1].children[0].className = catRow.children[1].children[1].children[3].children[0].children[0].className.substring(0,53);
+
                             $('#menu'+responseText.categoria+' tr:last').after(''
                                     +'<tr class="row" id='+responseText.id+'"> <td class="col s5"> <div> <div class="input-field">'
                                     +'<input value='+responseText.nombre+' id="name'+responseText.id+'" type="text" class="validate"> <label class="active" ></label>'
@@ -107,7 +131,7 @@
                                     +'</button> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
                                     +'<button type="submit" class="btn btn-floating small light-blue darken-3" name="upMenu" id="upMenu" value='+responseText.id+'" ><i class="material-icons">arrow_upward</i>'
                                     +'</button> </div> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" name="downMenu" id="downMenu" value='+responseText.id+'" ><i class="material-icons">arrow_downward</i>'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 disabled" name="downMenu" id="downMenu" value='+responseText.id+'" ><i class="material-icons">arrow_downward</i>'
                                     +'</button> </div> </td> </tr>');
 
                             $('#nombreTd'+responseText.categoria).val("");
@@ -142,30 +166,32 @@
 
             <form id="reg-form" action="../../restauran3/orderitem" method="post">
 
-                <li>
-                    <table align="center" class="striped" width="300">
-                        <tr class="row">
-                            <td class="col s5">Agregar Categoria</td>
-                            <td class="col s5">
-                                <div>
-                                    <div class="input-field">
-                                        <input  id="newCat" type="text" class="validate">
-                                        <label class="active" ></label>
-                                    </div>
+                <table align="center" class="striped" width="300">
+                    <tr class="row" style="background-color: white;">
+                        <td class="col s3" style="font-weight: bold; height: 80px; line-height: 80px; text-align: center;">Agregar Categoria</td>
+                        <td class="col s6">
+                            <div>
+                                <div class="input-field">
+                                    <input id="newCat" type="text" class="validate">
+                                    <label class="active"></label>
                                 </div>
-                            </td>
-                            <td class="col s2">
-                                <div class="btn-group" role="group" aria-label="..." align="center">
-                                    <button type="submit" class="btn btn-floating small light-blue darken-3" name="addCat" id="addCat"><i class="material-icons">add</i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
+                            </div>
+                        </td>
+                        <td class="col s3" style="height: 80px; line-height: 80px; text-align: center;">
+                            <div class="btn-group" role="group" aria-label="..." align="center">
+                                <button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped"
+                                        name="addCat" id="addCat"
+                                        data-position="top" data-delay="50" data-tooltip="Agregar categoría"><i class="material-icons">add</i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
 
                 <ul class="collapsible" data-collapsible="accordion">
-                    <% List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
+
+                    <%
+                        List<Categoria> categorias = (List<Categoria>) request.getAttribute("categorias");
                         for (Categoria categoria : categorias) {
                     %>
 
@@ -192,7 +218,8 @@
                         <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>"
                              style="padding: 0rem;">
                             <table align="center" class="striped" width="300"
-                                   style="overflow-x:auto; text-align: center;" id="menu<%=categoria.getNombre()%>" bgcolor="white">
+                                   style="overflow-x:auto; text-align: center;" id="menu<%=categoria.getNombre()%>"
+                                   bgcolor="white">
                                 <thead>
                                 <tr class="row" id="topRow">
                                     <th class="col s5">Nombre</th>
@@ -206,22 +233,29 @@
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input id="nombreTd<%=categoria.getNombre()%>" type="text" class="validate">
-                                                <label class="active"  name="nombreTd"></label>
+                                                <input id="nombreTd<%=categoria.getNombre()%>" type="text"
+                                                       class="validate">
+                                                <label class="active" name="nombreTd"></label>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input  id="precioTd<%=categoria.getNombre()%>" type="text" class="validate">
-                                                <label class="active"   name="precioTd"></label>
+                                                <input id="precioTd<%=categoria.getNombre()%>" type="text"
+                                                       class="validate">
+                                                <label class="active" name="precioTd"></label>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="col s2">
-                                        <div class="btn-group" role="group" aria-label="..." align="center">
-                                            <button type="submit" class="btn btn-floating small light-blue darken-3" value=<%=categoria.getNombre()%> id="saveMenu" name="saveMenu" ><i class="material-icons">save</i>
+                                        <div class="btn-group" role="group" aria-label="..." align="center"
+                                             style="height: 80px; line-height: 80px; text-align: center;">
+                                            <button type="submit"
+                                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                    value=<%=categoria.getNombre()%> id="saveMenu" name="saveMenu"
+                                                    data-position="top" data-delay="50" data-tooltip="Agregar ítem"><i
+                                                    class="material-icons">add</i>
                                             </button>
                                         </div>
                                     </td>
@@ -238,36 +272,61 @@
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input value='<%=menu.getNombre()%>' id="name<%=id%>" type="text" class="validate">
-                                                <label class="active" ></label>
+                                                <input value='<%=menu.getNombre()%>' id="name<%=id%>" type="text"
+                                                       class="validate">
+                                                <label class="active"></label>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input value='<%=menu.getPrecio()%>' id="price<%=id%>" type="text" class="validate">
-                                                <label class="active" ></label>
+                                                <input value='<%=menu.getPrecio()%>' id="price<%=id%>" type="text"
+                                                       class="validate">
+                                                <label class="active"></label>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="col s1">
                                         <div class="btn-group" role="group" aria-label="..." align="center">
-                                            <button type="submit" class="btn btn-floating small light-blue darken-3" id="editarMenu" name="editarMenu" value=<%=id%> ><i class="material-icons">check</i>
+                                            <button type="submit"
+                                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                    id="editarMenu" name="editarMenu"
+                                                    style="margin-top: 5px; margin-bottom: 5px;"
+                                                    data-position="top" data-delay="50" data-tooltip="Guardar"
+                                                    value=<%=id%>>
+                                                <i class="material-icons">save</i>
                                             </button>
                                         </div>
                                         <div class="btn-group" role="group" aria-label="..." align="center">
-                                            <button type="submit" class="btn btn-floating small light-blue darken-3" id="eliminarMenu" name="eliminarMenu" value=<%=id%>><i class="material-icons">delete</i>
+                                            <button type="submit"
+                                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                    id="eliminarMenu" name="eliminarMenu" style="margin-bottom: 5px;"
+                                                    data-position="bottom" data-delay="50" data-tooltip="Eliminar"
+                                                    value=<%=id%>><i
+                                                    class="material-icons">delete</i>
                                             </button>
                                         </div>
                                     </td>
                                     <td class="col s1">
                                         <div class="btn-group" role="group" aria-label="..." align="center">
-                                            <button type="submit" class="btn btn-floating small light-blue darken-3" name="upMenu" id="upMenu" value=<%=id%> ><i class="material-icons">arrow_upward</i>
+                                            <button type="submit"
+                                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                    name="upMenu" id="upMenu"
+                                                    style="margin-top: 5px; margin-bottom: 5px;"
+                                                    data-position="top" data-delay="50"
+                                                    data-tooltip="Mover fila hacia arriba"
+                                                    value=<%=id%>><i class="material-icons">arrow_upward</i>
                                             </button>
                                         </div>
                                         <div class="btn-group" role="group" aria-label="..." align="center">
-                                            <button type="submit" class="btn btn-floating small light-blue darken-3" name="downMenu" id="downMenu" value=<%=id%> ><i class="material-icons">arrow_downward</i>
+                                            <button type="submit"
+                                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                    name="downMenu" id="downMenu" style="margin-bottom: 5px;"
+                                                    data-position="bottom" data-delay="50"
+                                                    data-tooltip="Mover fila hacia abajo"
+                                                    value=<%=id%>><i
+                                                    class="material-icons">arrow_downward</i>
                                             </button>
                                         </div>
                                     </td>
