@@ -131,6 +131,9 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
 
                     Menu menu = (Menu) session.createQuery("from Menu where idArticulo= " + id + " ").uniqueResult();
                     String cat = menu.getCategoria();
+                    String nombre = menu.getNombre();
+                    int precio = menu.getPrecio();
+
 
                         tx = session.beginTransaction();
                         session.delete(menu);
@@ -144,6 +147,13 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                             session.delete(categoria);
                             tx2.commit();
                         }
+                    String status = "ok";
+                    String newMenu = "{ \"nombre\": \"" + nombre + "\",\"categoria\": \"" + cat + "\", \"precio\": \"" + precio +
+                            "\",\"id\": \"" + id + "\",\"status\":\""+status+"\"}";
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(newMenu);
+                    out.flush();
                     }
 
                 } catch (IllegalAccessException e1) {
@@ -152,6 +162,8 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 e1.printStackTrace();
             } catch (ClassNotFoundException e1) {
                 e1.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
     }
@@ -246,12 +258,28 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 session.saveOrUpdate(menu);
                 session.saveOrUpdate(upMenu);
                 tx.commit();
+                String nombreUp = menu.getNombre();
+                int precioUp = menu.getPrecio();
+                int precioDown = upMenu.getPrecio();
+                String nombreDown = upMenu.getNombre();
+                int idDown = upMenu.getIdArticulo();
+                String status = "ok";
+
+                String newMenu = "{ \"nombreUp\": \"" + nombreUp + "\",\"nombreDown\": \"" + nombreDown + "\", \"precioUp\": \"" + precioUp + "\",\"idUp\": \"" + id +
+                        "\",\"precioDown\":\""+precioDown+"\",\"idDown\":\""+idDown+"\",\"status\":\""+status+"\"}";
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print(newMenu);
+                out.flush();
+
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

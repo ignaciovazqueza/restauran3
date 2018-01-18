@@ -22,17 +22,13 @@
                     var idVar = this.value;
                     var actionVar = "delete";
                     $.post('../restauran3/displaymenu', {id: idVar, action: actionVar}, function (responseText) {
-                        var rowCount = $('#pedidos >tbody >tr').length;
-//                        if (rowCount == 2){
-//                            $('#pedidos').remove();
-//                            $('#cerrarButton').remove();
-//                            $('#pedidosActuales').remove();
-//                        }else{
-                            $('#'+idVar).remove();
-//                        }
-                        location.reload();
+                        var data = '' + responseText.state + '';
+                        if (data.valueOf() === "ok") {
+                            $('#'+responseText.id).remove();
+                        }
                     })
                 });
+
                 $("button[name='editarMenu']").click(function (event) {
                     event.preventDefault();
                     var idVar = this.value;
@@ -54,12 +50,28 @@
                 $("button[name='upMenu']").click(function (event) {
                     event.preventDefault();
                     var idUp = this.value;
+
                     var actionVar = "moveUp";
                     $.post('../restauran3/displaymenu', {id: idUp, action: actionVar}, function (responseText) {
-//                        $('#menus tr').each(function() {
-//                            var nombre = $(this).find("td").eq(0).html();
-//                            var precio = $(this).find("td").eq(1).html();
-                        location.reload();
+                        var data = '' + responseText.status + '';
+                        if (data.valueOf() === "ok") {
+                            $('#name' + responseText.idUp).val(responseText.nombreDown);
+                            $('#name' + responseText.idDown).val(responseText.nombreUp);
+                            $('#name' + responseText.idUp)[0].id = "aux";
+                            $('#name' + responseText.idDown)[0].id = "name"+responseText.idUp;
+                            $('#aux')[0].id = "name"+responseText.idDown;
+
+                            $('#price' + responseText.idUp).val(responseText.precioDown);
+                            $('#price' + responseText.idDown).val(responseText.precioUp);
+                            $('#price' + responseText.idUp)[0].id = "aux";
+                            $('#price' + responseText.idDown)[0].id = "price"+responseText.idUp;
+                            $('#aux')[0].id = "price"+responseText.idDown;
+
+                            $('#'+responseText.idUp)[0].children[3].children[0].children[0].value = responseText.idDown;
+                            $('#'+responseText.idDown)[0].children[3].children[0].children[0].value = responseText.idUp;
+                            $('#'+responseText.idUp)[0].id = responseText.idDown;
+                            $('#'+responseText.idDown)[0].id = responseText.idUp;
+                        }
                     })
                 });
 
@@ -83,7 +95,23 @@
                         if (data.valueOf() === "vacio"){
                             alert("no pueden quedar campos vacios, cambiar");
                         }else{
-                            $('#menu'+responseText.categoria+'tr:last').after('<tr><td><input type=text value="' + responseText.nombre + '"id="' + responseText.nombre + '"></td><td><input type=text value="' + responseText.precio + '"id="' + responseText.precio + '"></td></tr>');
+                            $('#menu'+responseText.categoria+' tr:last').after(''
+                                    +'<tr class="row" id='+responseText.id+'"> <td class="col s5"> <div> <div class="input-field">'
+                                    +'<input value='+responseText.nombre+' id="name'+responseText.id+'" type="text" class="validate"> <label class="active" ></label>'
+                                    +'</div> </div> </td> <td class="col s5"> <div> <div class="input-field">'
+                                    +'<input value='+responseText.precio+' id="price"'+responseText.id+'" type="text" class="validate"> <label class="active" ></label>'
+                                    +'</div> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" id="editarMenu" name="editarMenu" value='+responseText.id+'" ><i class="material-icons">check</i>'
+                                    +'</button> </div> <div class="btn-group" role="group" aria-label="..." align="center">'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" id="eliminarMenu" name="eliminarMenu" value='+responseText.id+'"><i class="material-icons">delete</i>'
+                                    +'</button> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" name="upMenu" id="upMenu" value='+responseText.id+'" ><i class="material-icons">arrow_upward</i>'
+                                    +'</button> </div> <div class="btn-group" role="group" aria-label="..." align="center">'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" name="downMenu" id="downMenu" value='+responseText.id+'" ><i class="material-icons">arrow_downward</i>'
+                                    +'</button> </div> </td> </tr>');
+
+                            $('#nombreTd'+responseText.categoria).val("");
+                            $('#precioTd'+responseText.categoria).val("");
                         }
                     })
                 });
