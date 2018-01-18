@@ -32,10 +32,19 @@
                     var idVar = this.value;
                     var actionVar = "delete";
                     $.post('../restauran3/displaymenu', {id: idVar, action: actionVar}, function (responseText) {
-                        var data = '' + responseText.state + '';
+                        var data = '' + responseText.status + '';
                         if (data.valueOf() === "ok") {
                             $('#'+responseText.id).remove();
                         }
+                    })
+                });
+
+                $("button[name='addCat']").click(function (event) {
+                    event.preventDefault();
+                    var nameVar = $('#newCat').val();
+                    var actionVar = "addCat";
+                    $.post('../restauran3/displaymenu', {name: nameVar, action: actionVar}, function (responseText) {
+                        location.reload();
                     })
                 });
 
@@ -95,7 +104,25 @@
                     var idUp = this.value;
                     var actionVar = "moveDown";
                     $.post('../restauran3/displaymenu', {id: idUp, action: actionVar}, function (responseText) {
-                        location.reload();
+                        var data = '' + responseText.status + '';
+                        if (data.valueOf() === "ok") {
+                            $('#name' + responseText.idUp).val(responseText.nombreDown);
+                            $('#name' + responseText.idDown).val(responseText.nombreUp);
+                            $('#name' + responseText.idUp)[0].id = "aux";
+                            $('#name' + responseText.idDown)[0].id = "name"+responseText.idUp;
+                            $('#aux')[0].id = "name"+responseText.idDown;
+
+                            $('#price' + responseText.idUp).val(responseText.precioDown);
+                            $('#price' + responseText.idDown).val(responseText.precioUp);
+                            $('#price' + responseText.idUp)[0].id = "aux";
+                            $('#price' + responseText.idDown)[0].id = "price"+responseText.idUp;
+                            $('#aux')[0].id = "price"+responseText.idDown;
+
+                            $('#'+responseText.idUp)[0].children[3].children[1].children[0].value = responseText.idDown;
+                            $('#'+responseText.idDown)[0].children[3].children[1].children[0].value = responseText.idUp;
+                            $('#'+responseText.idUp)[0].id = responseText.idDown;
+                            $('#'+responseText.idDown)[0].id = responseText.idUp;
+                        }
                     })
                 });
 
@@ -125,14 +152,18 @@
                                     +'</div> </div> </td> <td class="col s5"> <div> <div class="input-field">'
                                     +'<input value='+responseText.precio+' id="price"'+responseText.id+'" type="text" class="validate"> <label class="active" ></label>'
                                     +'</div> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" id="editarMenu" name="editarMenu" value='+responseText.id+'" ><i class="material-icons">check</i>'
-                                    +'</button> </div> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" id="eliminarMenu" name="eliminarMenu" value='+responseText.id+'"><i class="material-icons">delete</i>'
+                                    +'<button type="submit"class="btn btn-floating small light-blue darken-3 tooltipped"id="editarMenu" name="editarMenu"'
+                                    +'style="margin-top: 5px; margin-bottom: 5px;"data-position="top" data-delay="50" data-tooltip="Guardar"'
+                                    +'value='+responseText.id+'> <i class="material-icons">save</i> </button></div> <div class="btn-group" role="group" aria-label="..." align="center">'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped"'
+                                    +'id="eliminarMenu" name="eliminarMenu" style="margin-bottom: 5px;"'
+                                    +'data-position="bottom" data-delay="50" data-tooltip="Eliminar"value='+responseText.id+'><i class="material-icons">delete</i>'
                                     +'</button> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3" name="upMenu" id="upMenu" value='+responseText.id+'" ><i class="material-icons">arrow_upward</i>'
-                                    +'</button> </div> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 disabled" name="downMenu" id="downMenu" value='+responseText.id+'" ><i class="material-icons">arrow_downward</i>'
-                                    +'</button> </div> </td> </tr>');
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped" name="upMenu" id="upMenu"'
+                                    +'style="margin-top: 5px; margin-bottom: 5px;" data-position="top" data-delay="50" data-tooltip="Mover fila hacia arriba"'
+                                    +'value='+responseText.id+'><i class="material-icons">arrow_upward</i> </button> </div> <div class="btn-group" role="group" aria-label="..." align="center">'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped" name="downMenu" id="downMenu" style="margin-bottom: 5px;"'
+                                    +'data-position="bottom" data-delay="50" data-tooltip="Mover fila hacia abajo" value='+responseText.id+'><i class="material-icons">arrow_downward</i> </button> </div> </td> </tr>');
 
                             $('#nombreTd'+responseText.categoria).val("");
                             $('#precioTd'+responseText.categoria).val("");

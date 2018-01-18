@@ -75,8 +75,9 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 break;
             case("moveDown"): moveSelectedDown(request,response);
                 break;
+            case("addCat"): agregarCategoria(request,response);
+                break;
         }
-
     }
 
     private void editMenu(HttpServletRequest request, HttpServletResponse response) {
@@ -313,6 +314,20 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 session.saveOrUpdate(menu);
                 session.saveOrUpdate(downMenu);
                 tx.commit();
+
+                String nombreUp = downMenu.getNombre();
+                int precioUp = downMenu.getPrecio();
+                int precioDown = menu.getPrecio();
+                String nombreDown = menu.getNombre();
+                int idUp = downMenu.getIdArticulo();
+                String status = "ok";
+
+                String newMenu = "{ \"nombreUp\": \"" + nombreUp + "\",\"nombreDown\": \"" + nombreDown + "\", \"precioUp\": \"" + precioUp + "\",\"idUp\": \"" + idUp +
+                        "\",\"precioDown\":\""+precioDown+"\",\"idDown\":\""+id+"\",\"status\":\""+status+"\"}";
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print(newMenu);
+                out.flush();
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -320,8 +335,63 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+    }
+
+    private void agregarCategoria(HttpServletRequest request, HttpServletResponse response){
+        String driver = "org.hsqldb.jdbc.JDBCDriver";
+        Transaction tx = null;
+
+        try {
+            Class.forName(driver).newInstance();
+
+            Session session = HibernateUtil.getInstance().getSession();
+            String nombre = request.getParameter("name").toUpperCase();
+            if (nombre == null || nombre == "" ){
+                nombre = "vacio";
+                String newMenu = "{ \"nombre\": \"" + nombre +"\"}";
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print(newMenu);
+                out.flush();
+
+            } else {
+
+                Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre='" + nombre + "'").uniqueResult();
+                if (categoria == null) {
+                    tx = session.beginTransaction();
+                    Categoria nuevaCat = new Categoria();
+                    nuevaCat.setNombre(nombre);
+                    session.saveOrUpdate(nuevaCat);
+                    tx.commit();
+                    String newCat = "{ \"nombre\": \"" + nombre + "\"}";
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(newCat);
+                    out.flush();
+
+                }else{
+                    nombre = "repeat";
+                    String newMenu = "{ \"nombre\": \"" + nombre +"\"}";
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(newMenu);
+                    out.flush();
+                }
+
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
