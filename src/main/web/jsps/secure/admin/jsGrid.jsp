@@ -22,9 +22,12 @@
                 var catSize = categories.length;
                 for (i = 0; i < catSize; i++) {
                     var catRow = $('#menu' + categories[i].innerText)[0];
-                    catRow.children[1].children[1].children[3].children[0].children[0].className += " disabled";
-                    var cantRows = catRow.children[1].children.length;
-                    catRow.children[1].children[cantRows-1].children[3].children[1].children[0].className += " disabled";
+                    var rowCount = $('#menu'+categories[i].innerText+ '>tbody >tr').length;
+                    if(rowCount != 1) {
+                        catRow.children[1].children[1].children[3].children[0].children[0].className += " disabled";
+                        var cantRows = catRow.children[1].children.length;
+                        catRow.children[1].children[cantRows - 1].children[3].children[1].children[0].className += " disabled";
+                    }
                 }
 
                 $("button[name='eliminarMenu']").click(function (event) {
@@ -144,7 +147,7 @@
                         }else{
                             var catRow = $('#menu' + responseText.categoria)[0];
                             var cantRows = catRow.children[1].children.length;
-                            catRow.children[1].children[cantRows-1].children[3].children[1].children[0].className = catRow.children[1].children[1].children[3].children[0].children[0].className.substring(0,53);
+                            catRow.children[1].children[cantRows - 1].children[3].children[1].children[0].className = catRow.children[1].children[1].children[3].children[0].children[0].className.substring(0, 53);
 
                             $('#menu'+responseText.categoria+' tr:last').after(''
                                     +'<tr class="row" id='+responseText.id+'"> <td class="col s5"> <div> <div class="input-field">'
@@ -162,7 +165,7 @@
                                     +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped" name="upMenu" id="upMenu"'
                                     +'style="margin-top: 5px; margin-bottom: 5px;" data-position="top" data-delay="50" data-tooltip="Mover fila hacia arriba"'
                                     +'value='+responseText.id+'><i class="material-icons">arrow_upward</i> </button> </div> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped" name="downMenu" id="downMenu" style="margin-bottom: 5px;"'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped disabled" name="downMenu" id="downMenu" style="margin-bottom: 5px;"'
                                     +'data-position="bottom" data-delay="50" data-tooltip="Mover fila hacia abajo" value='+responseText.id+'><i class="material-icons">arrow_downward</i> </button> </div> </td> </tr>');
 
                             $('#nombreTd'+responseText.categoria).val("");

@@ -211,7 +211,10 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
 
                 List<Menu> menusCat = session.createQuery("from Menu where categoria='" + categoria + "'").list();
                 menusCat.sort(Comparator.comparing(Menu::getIndex));
-                int index = menusCat.get(menusCat.size()-1).getIndex();
+                int index = 1;
+                if (menusCat.size() !=0) {
+                    index = menusCat.get(menusCat.size() - 1).getIndex();
+                }
                 tx = session.beginTransaction();
                 Menu menu = new Menu();
                 menu.setCategoria(categoriaT);
