@@ -142,45 +142,57 @@
                             if (!pedidos.isEmpty()) {
                 %>
 
-                <div class="panel-body">
-                    <h3 align="center"><span class="label label-primary"><%=mesa.getMesa().toUpperCase()%></span>
-                    </h3>
-                    <table class="table" align="center" width="85%">
-                        <tr>
-                            <td>Pedido</td>
-                            <td>Articulo</td>
-                            <td>Cantidad</td>
-                            <td>Estado</td>
-                        </tr>
-                            <% for (Pedido pedido : pedidos) {
-            int id = pedido.getIdPedido();
-            Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
-            String estado = articulo.getNombre();
-            int cantidad = Integer.parseInt(pedido.getCantidad());
-        %>
+
+                <div class="center-block panel panel-primary" style="text-align: center">
+
+                    <div class="panel-heading">
+                        <div class="card-panel white">
+                            <div class="card-content black-text">
+                                <span class="card-title"
+                                      style="font-size: 1.5em;"><%=mesa.getMesa().toUpperCase()%></span>
+                            </div>
+                        </div>
+                            <table align="center" class="table striped" width="80%"
+                                   style="overflow-x:auto; text-align: center; margin-top: -34px;"
+                                   bgcolor="white">
+                                <tr>
+                                    <th>Pedido</th>
+                                    <th>Articulo</th>
+                                    <th>Cantidad</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                                <% for (Pedido pedido : pedidos) {
+                                    int id = pedido.getIdPedido();
+                                    Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
+                                    String estado = articulo.getNombre();
+                                    int cantidad = Integer.parseInt(pedido.getCantidad());
+                                %>
 
 
-                        <tr>
-                            <td><%=id%>
-                            </td>
-                            <td><%=estado%>
-                            </td>
-                            <td><%=cantidad%>
-                            </td>
-                            <td><%=pedido.getEntregado()%>
-                            </td>
-                            <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
-                            <td>
-                                <div class="btn-group" role="group" aria-label="..." align="center">
-                                    <button type="submit" class="btn btn-default light-blue darken-3"
-                                            id=<%=id%> name="entregar">Entregar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td><%=id%>
+                                    </td>
+                                    <td><%=estado%>
+                                    </td>
+                                    <td><%=cantidad%>
+                                    </td>
+                                    <td><%=pedido.getEntregado()%>
+                                    </td>
+                                    <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="..." align="center">
+                                            <button type="submit" class="btn btn-default light-blue darken-3"
+                                                    id=<%=id%> name="entregar">Entregar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <%}%>
 
+                            </table>
+                    </div>
 
-                            <%}%>
                 </div>
                 <%
                             }
@@ -206,7 +218,6 @@
         </div>
 
     </div>
-</div>
 </div>
 
 </body>

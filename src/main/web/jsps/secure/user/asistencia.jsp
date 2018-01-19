@@ -29,6 +29,7 @@
             webSocketA.onmessage = function (event) {
                 if (event.data == "asistencia") {
                     writeAsistenciaResponse(event.data);
+                    $('#asistencia')[0].className = $('#asistencia')[0].className.substring(0, 35);
                 }
             };
 
@@ -40,6 +41,7 @@
         function sendAsistencia() {
             //    var user = "";
             //   user = $('#user').value;
+            $('#asistencia')[0].className += " disabled";
             var user = document.getElementById('user').value;
             var text = "asistencia " + user;
             webSocketA.send(text);
@@ -63,7 +65,12 @@
                 var a = $('.link-1')[2];
                 a.parentElement.className = 'active';
 
+                if ($('#nombre')[0].innerText == "Asistir mesa"){
+                    $('#asistencia')[0].className += " disabled";
+                }
+
                 $("button[name='asistencia']").click(function (event) {
+                    Materialize.toast('¡La asistencia está en camino!', 4000);
                     event.preventDefault();
                     $.post('../restauran3/askassistance', {}, function (responseText) {
                         $('#nombre').html('Asistir mesa');
