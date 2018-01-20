@@ -89,21 +89,30 @@
                     event.preventDefault();
                     var actionVar = "cerrar";
                     $.post('../restauran3/closepedidos', {action: actionVar}, function (responseText) {
-                        $('#pedidos tr').each(function () {
-                            var articulo = $(this).find("td").eq(0).html();
-                            var cantidad = $(this).find("td").eq(1).html();
-                            var precio = $(this).find("td").eq(2).html();
-                            var total = $(this).find("td").eq(3).html();
-                            if (articulo != null) {
-                                $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
-                            }
-                        });
+                        if($('#pedidosEspera')[0] == undefined){
+                            $('#titleActuales')[0].innerText = "Pedidos a la espera de ser entregados";
+                            $('#titleActuales')[0].id = "titleEspera";
+                            $('#pedidos')[0].id = "pedidosEspera";
+                            $('#tdEliminar').remove();
+                            $('#thEliminar').remove();
+                        }
+                        else {
+                            $('#pedidos tr').each(function () {
+                                var articulo = $(this).find("td").eq(0).html();
+                                var cantidad = $(this).find("td").eq(1).html();
+                                var precio = $(this).find("td").eq(2).html();
+                                var total = $(this).find("td").eq(3).html();
+                                if (articulo != null) {
+                                    $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
+                                }
 
-                        $("#pedidosDiv")[0].style.display = 'none';
-                        $('#pedidos').remove();
+                            });
+
+                            $("#pedidosDiv")[0].style.display = 'none';
+                            $('#pedidos').remove();
+                            $('#pedidosActuales').remove();
+                        }
                         $('#cerrarButton').remove();
-                        $('#pedidosActuales').remove();
-
                     })
                 });
             });
@@ -118,7 +127,7 @@
 
 <body onload="window_onload();">
 <div class="row">
-    <div class="col s12">
+    <div class="col s12" id="cols12">
         <% List<Pedido> pedidos = (List<Pedido>) request.getAttribute("pedidos");
             if (!pedidos.isEmpty()) {
         %>
@@ -126,8 +135,8 @@
             <div class="center-block panel panel-primary" id="pedidosDiv" style="text-align: center">
                 <div class="panel-heading" id="pedidosActuales">
                     <div class="card-panel white">
-                        <div class="card-content black-text">
-                            <span class="card-title" style="font-size: 1.5em;">Pedidos actuales</span>
+                        <div class="card-content black-text" id="cardPedidosActuales">
+                            <span class="card-title" id="titleActuales" style="font-size: 1.5em;">Pedidos actuales</span>
                         </div>
                     </div>
                     <table align="center" class="table striped" width="80%"
@@ -141,7 +150,7 @@
                             <th class="tooltipped" data-position="top" data-delay="50" data-tooltip="Precio x Cantidad">
                                 Parcial
                             </th>
-                            <th></th>
+                            <th id="thEliminar"></th>
                         </tr>
                         <% for (Pedido pedido : pedidos) {
                             int id = pedido.getIdPedido();
@@ -161,7 +170,7 @@
                             </td>
                             <td>$<%=total%>
                             </td>
-                            <td>
+                            <td id="tdEliminar">
                                 <div class="btn-group" role="group" aria-label="..." align="center">
                                     <button type="submit" class="btn btn-floating light-blue darken-3" name="eliminar"
                                             value=<%=id%> id="eliminar"><i class="material-icons">delete</i>
