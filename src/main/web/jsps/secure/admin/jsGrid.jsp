@@ -206,7 +206,7 @@
                                     +'<tr class="row" id='+responseText.id+'"> <td class="col s5"> <div> <div class="input-field">'
                                     +'<input value='+responseText.nombre+' id="name'+responseText.id+'" type="text" class="validate"> <label class="active" ></label>'
                                     +'</div> </div> </td> <td class="col s5"> <div> <div class="input-field">'
-                                    +'<input value='+responseText.precio+' id="price"'+responseText.id+'" type="text" class="validate"> <label class="active" ></label>'
+                                    +'<input value="'+responseText.precio+'" id="price"'+responseText.id+'" type="text" class="validate"> <label class="active" ></label>'
                                     +'</div> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
                                     +'<button type="submit"class="btn btn-floating small light-blue darken-3 tooltipped"id="editarMenu" name="editarMenu"'
                                     +'style="margin-top: 5px; margin-bottom: 5px;"data-position="top" data-delay="50" data-tooltip="Guardar"'
@@ -223,6 +223,7 @@
 
                             $('#nombreTd'+responseText.categoria).val("");
                             $('#precioTd'+responseText.categoria).val("");
+                            $('#name'+responseText.id)[0].value = responseText.nombre;
                             handleMoveButtons();
 
                         }

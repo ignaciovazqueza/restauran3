@@ -28,7 +28,9 @@
         <div class="row" align="center">
             <div class="col s12 m6 offset-m3" align="center" >
                 <div class="card-panel" align="center">
-                    <span class="black-text">El servicio al que intenta acceder no esta disponible para su rol.</span>
+                    <span class="black-text">
+                        Ha ocurrido un error en nuestro sistema. Disculpe las molestias.
+                    </span>
                     <div class="btn-group" role="group" aria-label="..." align="center" id="volverButton">
                         <br>
                         <a href="javascript:history.back()" class="btn btn-default light-blue darken-3" name="volver" id="volver">Volver
