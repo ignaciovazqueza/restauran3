@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 
 @WebServlet(name = "EditAdminServlet" , urlPatterns = {"/editAdmin"})
 public class EditAdminServlet extends HttpServlet {
@@ -78,11 +79,16 @@ public class EditAdminServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        AdminValues adminValues = new AdminValues();
-        request.setAttribute("username", adminValues.getAdminName());
-        request.setAttribute("pass",adminValues.getPassword());
-        RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/editAdminUser.jsp");
-        rd.forward(request, response);
-
+        Principal userPrincipal = request.getUserPrincipal();
+        if (!userPrincipal.getName().equals(RedirectServlet.getAdminName())) {
+            RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
+            rd.forward(request,response);
+        } else {
+            AdminValues adminValues = new AdminValues();
+            request.setAttribute("username", adminValues.getAdminName());
+            request.setAttribute("pass", adminValues.getPassword());
+            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/editAdminUser.jsp");
+            rd.forward(request, response);
+        }
     }
 }

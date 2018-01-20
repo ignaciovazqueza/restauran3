@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -31,27 +32,33 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
         try {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
-            List<Menu> data = session.createQuery("from Menu").list();
-            data.sort(Comparator.comparing(Menu::getIndex));
+            Principal userPrincipal = request.getUserPrincipal();
+            if (!userPrincipal.getName().equals(RedirectServlet.getAdminName())) {
+                RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
+                rd.forward(request,response);
+            } else {
+                List<Menu> data = session.createQuery("from Menu").list();
+                data.sort(Comparator.comparing(Menu::getIndex));
 
-            JSONArray jsonArray = new JSONArray(data);
-            request.setAttribute("json", jsonArray);
-            request.setAttribute("data",data);
+                JSONArray jsonArray = new JSONArray(data);
+                request.setAttribute("json", jsonArray);
+                request.setAttribute("data", data);
 
-            List categoriasNames = new ArrayList();
-            List categorias = session.createQuery("from Categoria ").list();
-            for (Object c: categorias){
-                String categoria = ((Categoria) c).getNombre().toString();
-                categoriasNames.add(categoria);
-                JSONArray catJson = new JSONArray(session.createQuery("from Menu where categoria ='"+categoria+"'").list());
-                request.setAttribute(categoria,catJson);
+                List categoriasNames = new ArrayList();
+                List categorias = session.createQuery("from Categoria ").list();
+                for (Object c : categorias) {
+                    String categoria = ((Categoria) c).getNombre().toString();
+                    categoriasNames.add(categoria);
+                    JSONArray catJson = new JSONArray(session.createQuery("from Menu where categoria ='" + categoria + "'").list());
+                    request.setAttribute(categoria, catJson);
 
-            }
+                }
             categorias.sort(Comparator.comparing(Categoria::getIndex));
-            request.setAttribute("categorias",categorias);
-            request.setAttribute("categoriasNames",categoriasNames);
-            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/jsGrid.jsp");
-            rd.forward(request,response);
+                request.setAttribute("categorias", categorias);
+                request.setAttribute("categoriasNames", categoriasNames);
+                RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/jsGrid.jsp");
+                rd.forward(request, response);
+            }
         }catch (Exception e){
             RequestDispatcher rd = request.getRequestDispatcher("/error.jsp");
             rd.forward(request,response);

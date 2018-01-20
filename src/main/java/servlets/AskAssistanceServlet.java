@@ -29,12 +29,17 @@ public class AskAssistanceServlet extends HttpServlet {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
             Principal userPrincipal = request.getUserPrincipal();
-            String idMesa = userPrincipal.getName();
-            Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + idMesa + "'").uniqueResult();
-            String estado = mesa.getAsistencia();
-            request.setAttribute("estado",estado);
-            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/asistencia.jsp");
-            rd.forward(request,response);
+            if (userPrincipal.getName().equals(RedirectServlet.getAdminName())) {
+                RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
+                rd.forward(request,response);
+            } else {
+                String idMesa = userPrincipal.getName();
+                Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + idMesa + "'").uniqueResult();
+                String estado = mesa.getAsistencia();
+                request.setAttribute("estado",estado);
+                RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/asistencia.jsp");
+                rd.forward(request,response);
+            }
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();

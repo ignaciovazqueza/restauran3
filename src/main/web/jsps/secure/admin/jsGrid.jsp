@@ -12,23 +12,33 @@
     <% List<Categoria> categoriasNames = (List<Categoria>) request.getAttribute("categoriasNames"); %>
 
     <script>
+        function handleMoveButtons() {
+            var categories = <%=categoriasNames%>;
+            var catSize = categories.length;
+
+            var catColl = $('.collapsible-header');
+            catColl[0].children[0].children[0].children[0].children[1].children[0].children[0].className += " disabled";
+            catColl[catSize-1].children[0].children[0].children[0].children[2].children[0].children[0].className += " disabled";
+
+            for (i = 0; i < catSize; i++) {
+                var catRow = $('#menu' + categories[i].id);
+                var rowCount = $('#menu'+ categories[i].id + '>tbody >tr').length;
+                if(rowCount > 1) {
+                    catRow[0].children[1].children[1].children[3].children[0].children[0].className += ' disabled';
+                    var cantRows = catRow[0].children[1].children.length;
+                    catRow[0].children[1].children[cantRows - 1].children[3].children[1].children[0].className += " disabled";
+                }
+            }
+
+        }
+
         function window_onload() {
 
             $(document).ready(function () {
                 var a = $('.link-1')[2];
                 a.parentElement.className = 'active';
 
-                var categories = <%=categoriasNames%>;
-                var catSize = categories.length;
-                for (i = 0; i < catSize; i++) {
-                    var catRow = $('#menu' + categories[i].innerText);
-                    var rowCount = $('#menu'+categories[i].innerText+ '>tbody >tr').length;
-                    if(rowCount > 1) {
-                        catRow[0].children[1].children[1].children[3].children[0].children[0].className += ' disabled';
-                        var cantRows = catRow.children[1].children.length;
-                        catRow.children[1].children[cantRows - 1].children[3].children[1].children[0].className += " disabled";
-                    }
-                }
+                handleMoveButtons();
 
                 $("button[name='eliminarMenu']").click(function (event) {
                     event.preventDefault();
@@ -38,6 +48,7 @@
                         var data = '' + responseText.status + '';
                         if (data.valueOf() === "ok") {
                             $('#'+responseText.id).remove();
+                            handleMoveButtons();
                         }
                     })
                 });
@@ -98,6 +109,8 @@
                             $('#'+responseText.idDown)[0].children[3].children[0].children[0].value = responseText.idUp;
                             $('#'+responseText.idUp)[0].id = responseText.idDown;
                             $('#'+responseText.idDown)[0].id = responseText.idUp;
+
+                            handleMoveButtons();
                         }
                     })
                 });
@@ -125,6 +138,8 @@
                             $('#'+responseText.idDown)[0].children[3].children[1].children[0].value = responseText.idUp;
                             $('#'+responseText.idUp)[0].id = responseText.idDown;
                             $('#'+responseText.idDown)[0].id = responseText.idUp;
+
+                            handleMoveButtons()
                         }
                     })
                 });
@@ -196,9 +211,9 @@
                                     +'<button type="submit"class="btn btn-floating small light-blue darken-3 tooltipped"id="editarMenu" name="editarMenu"'
                                     +'style="margin-top: 5px; margin-bottom: 5px;"data-position="top" data-delay="50" data-tooltip="Guardar"'
                                     +'value='+responseText.id+'> <i class="material-icons">save</i> </button></div> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped"'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 "'
                                     +'id="eliminarMenu" name="eliminarMenu" style="margin-bottom: 5px;"'
-                                    +'data-position="bottom" data-delay="50" data-tooltip="Eliminar"value='+responseText.id+'><i class="material-icons">delete</i>'
+                                    +'value='+responseText.id+'><i class="material-icons">delete</i>'
                                     +'</button> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
                                     +'<button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped" name="upMenu" id="upMenu"'
                                     +'style="margin-top: 5px; margin-bottom: 5px;" data-position="top" data-delay="50" data-tooltip="Mover fila hacia arriba"'
@@ -208,6 +223,8 @@
 
                             $('#nombreTd'+responseText.categoria).val("");
                             $('#precioTd'+responseText.categoria).val("");
+                            handleMoveButtons();
+
                         }
                     })
                 });
@@ -287,7 +304,7 @@
                              style="background-color: #1b6595; color: white;" id=<%=categoria.getNombre()%>>
                             <table class="table">
                                 <tr class="row">
-                                <td class="col s10">
+                                <td class="col s10" style="line-height: 50px;">
                                 <%=categoria.getNombre()%>
                                 </td>
                                 <td class="col s1">
@@ -295,7 +312,7 @@
                                         <button type="submit"
                                                 class="btn btn-floating small light-blue darken-3 tooltipped"
                                                 name="upCat" id="upCat"
-                                                style="margin-top: 5px; margin-bottom: 5px;"
+                                                style="padding-left: 5px; margin-left: 24px;"
                                                 data-position="top" data-delay="50"
                                                 data-tooltip="Mover categoria hacia arriba"
                                                 value=<%=categoria.getNombre()%>><i class="material-icons">arrow_upward</i>
@@ -306,7 +323,7 @@
                                     <div class="btn-group" role="group" aria-label="..." align="center">
                                         <button type="submit"
                                                 class="btn btn-floating small light-blue darken-3 tooltipped"
-                                                name="downCat" id="downCat" style="margin-bottom: 5px;"
+                                                name="downCat" id="downCat" style="padding-left: 5px; margin-left: 28px;"
                                                 data-position="bottom" data-delay="50"
                                                 data-tooltip="Mover categoria hacia abajo"
                                                 value=<%=categoria.getNombre()%>><i
@@ -402,9 +419,8 @@
                                         </div>
                                         <div class="btn-group" role="group" aria-label="..." align="center">
                                             <button type="submit"
-                                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                    class="btn btn-floating small light-blue darken-3 "
                                                     id="eliminarMenu" name="eliminarMenu" style="margin-bottom: 5px;"
-                                                    data-position="bottom" data-delay="50" data-tooltip="Eliminar"
                                                     value=<%=id%>><i
                                                     class="material-icons">delete</i>
                                             </button>

@@ -26,7 +26,7 @@ public class RedirectServlet extends HttpServlet {
         }
     }
 
-    private String getAdminName() throws IOException {
+    public static String getAdminName() throws IOException {
 
         AdminValues adminValues = new AdminValues();
         String name ="";

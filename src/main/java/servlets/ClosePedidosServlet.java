@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by AlumnosFI on 11/05/2016.
  */
-@WebServlet(name = "ClosePedidosServlet" ,urlPatterns = {"/closepedidos"})
+@WebServlet(name = "ClosePedidosServlet", urlPatterns = {"/closepedidos"})
 public class ClosePedidosServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,9 +29,9 @@ public class ClosePedidosServlet extends HttpServlet {
         String driver = "org.hsqldb.jdbc.JDBCDriver";
         Transaction tx = null;
         PrintWriter out = response.getWriter();
-        if (request.getParameter("action").equals("cerrar")){
+        if (request.getParameter("action").equals("cerrar")) {
 
-            try{
+            try {
                 Class.forName(driver).newInstance();
                 Session session = HibernateUtil.getInstance().getSession();
                 Principal userPrincipal = request.getUserPrincipal();
@@ -39,12 +39,12 @@ public class ClosePedidosServlet extends HttpServlet {
                 Integer idorden = (Integer) session.createQuery("select idorden from Orden where idMesa='" + idMesa + "' and estado='opened'").uniqueResult();
 
                 List<Pedido> pedidos = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Pidiendo...' ").list();
-                    tx = session.beginTransaction();
-                    for (Pedido pedido : pedidos){
-                        pedido.setEntregado("A la espera");
-                        session.saveOrUpdate(pedido);
-                        tx.commit();
-                        }
+                tx = session.beginTransaction();
+                for (Pedido pedido : pedidos) {
+                    pedido.setEntregado("A la espera");
+                    session.saveOrUpdate(pedido);
+                    tx.commit();
+                }
 
                 response.sendRedirect("/restauran3/closepedidos");
             } catch (IllegalAccessException e) {
@@ -54,20 +54,20 @@ public class ClosePedidosServlet extends HttpServlet {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        } else if (request.getParameter("action").equals("eliminar")){
+        } else if (request.getParameter("action").equals("eliminar")) {
 
-            try{
+            try {
                 Session session = HibernateUtil.getInstance().getSession();
                 String idPedido = request.getParameter("id");
-                if (idPedido !=null) {
-                        Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + idPedido + "").uniqueResult();
-                        tx = session.beginTransaction();
-                        session.delete(pedido);
-                        tx.commit();
-             //       response.sendRedirect("/restauran3/closepedidos");
+                if (idPedido != null) {
+                    Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + idPedido + "").uniqueResult();
+                    tx = session.beginTransaction();
+                    session.delete(pedido);
+                    tx.commit();
+                    //       response.sendRedirect("/restauran3/closepedidos");
                 }
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -81,23 +81,28 @@ public class ClosePedidosServlet extends HttpServlet {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
             Principal userPrincipal = request.getUserPrincipal();
-            String idMesa = userPrincipal.getName();
-            Integer idorden = (Integer) session.createQuery("select idorden from Orden where idMesa='" + idMesa + "' and estado='opened'").uniqueResult();
-            List<Pedido> pedidos = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Pidiendo...'").list();
-            List<Pedido> alaespera = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='A la espera'").list();
-            List<Pedido> entregados = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Entregado'").list();
+            if (userPrincipal.getName().equals(RedirectServlet.getAdminName())) {
+                RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
+                rd.forward(request, response);
+            } else {
+                String idMesa = userPrincipal.getName();
+                Integer idorden = (Integer) session.createQuery("select idorden from Orden where idMesa='" + idMesa + "' and estado='opened'").uniqueResult();
+                List<Pedido> pedidos = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Pidiendo...'").list();
+                List<Pedido> alaespera = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='A la espera'").list();
+                List<Pedido> entregados = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Entregado'").list();
 
-            request.setAttribute("pedidos",pedidos);
-            request.setAttribute("alaespera",alaespera);
-            request.setAttribute("entregados",entregados);
-            JSONArray jsonE = new JSONArray(entregados);
-            request.setAttribute("entregadosJson", jsonE);
-            JSONArray jsonP = new JSONArray(pedidos);
-            request.setAttribute("pedidosJson", jsonP);
-            JSONArray jsonA = new JSONArray(alaespera);
-            request.setAttribute("alaesperaJson", jsonA);
-            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/closePedidos.jsp");
-            rd.forward(request,response);
+                request.setAttribute("pedidos", pedidos);
+                request.setAttribute("alaespera", alaespera);
+                request.setAttribute("entregados", entregados);
+                JSONArray jsonE = new JSONArray(entregados);
+                request.setAttribute("entregadosJson", jsonE);
+                JSONArray jsonP = new JSONArray(pedidos);
+                request.setAttribute("pedidosJson", jsonP);
+                JSONArray jsonA = new JSONArray(alaespera);
+                request.setAttribute("alaesperaJson", jsonA);
+                RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/closePedidos.jsp");
+                rd.forward(request, response);
+            }
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -108,14 +113,13 @@ public class ClosePedidosServlet extends HttpServlet {
         }
     }
 
-    public static Menu getArticulo(int idArticulo){
+    public static Menu getArticulo(int idArticulo) {
         Menu menu = null;
         try {
             Session session = HibernateUtil.getInstance().getSession();
-            menu = (Menu) session.createQuery("from Menu where idArticulo="+ idArticulo + "").uniqueResult();
-        }catch (Exception e){
-        }
-        finally {
+            menu = (Menu) session.createQuery("from Menu where idArticulo=" + idArticulo + "").uniqueResult();
+        } catch (Exception e) {
+        } finally {
             return menu;
         }
     }

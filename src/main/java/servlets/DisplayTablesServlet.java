@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,19 @@ public class DisplayTablesServlet extends HttpServlet {
         response.setContentType("text/html;character=UTF-8");
         try {
             Session session = HibernateUtil.getInstance().getSession();
-            List<Mesa> data = session.createQuery("from Mesa").list();
-            request.setAttribute("data", data);
+            Principal userPrincipal = request.getUserPrincipal();
+            if (!userPrincipal.getName().equals(RedirectServlet.getAdminName())) {
+                RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
+                rd.forward(request,response);
+            } else {
+                List<Mesa> data = session.createQuery("from Mesa").list();
+                request.setAttribute("data", data);
 
-            JSONArray jsonArray = new JSONArray(data);
-            request.setAttribute("json", jsonArray);
-            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/displayTables.jsp");
-            rd.forward(request, response);
+                JSONArray jsonArray = new JSONArray(data);
+                request.setAttribute("json", jsonArray);
+                RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/displayTables.jsp");
+                rd.forward(request, response);
+            }
         } catch (Exception e) {
             RequestDispatcher rd = request.getRequestDispatcher("/error.jsp");
             rd.forward(request, response);

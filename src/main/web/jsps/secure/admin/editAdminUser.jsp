@@ -100,7 +100,17 @@
                 })
             });
 
+
+
         });
+
+        function checkAdminName() {
+            if ($('#name')[0].value.substring(0,4) === "mesa") {
+                $('#user')[0].className += " disabled";
+            } else {
+                $('#user')[0].className = $('#user')[0].className.substring(0,35);
+            }
+        }
     </script>
 
 </head>
@@ -128,6 +138,7 @@
                             <span class="card-title" style="font-size: 1em;">Usuario</span>
                             <input type="text" class="form-control" id="name" name="name"
                                    placeholder="<%=request.getAttribute("username")%>" spellcheck="false"
+                                   onchange="checkAdminName()"
                                    aria-describedby="basic-addon1">
                         </div>
                         <div class="card-action">

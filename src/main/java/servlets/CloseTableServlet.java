@@ -68,15 +68,20 @@ public class CloseTableServlet extends HttpServlet {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
             Principal userPrincipal = request.getUserPrincipal();
-            String idMesa = userPrincipal.getName();
-            Integer idorden = (Integer) session.createQuery("select idorden from Orden where idMesa='" + idMesa + "' and estado='opened'").uniqueResult();
-            List<Pedido> alaespera = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='A la espera'").list();
-            List<Pedido> entregados = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Entregado'").list();
+            if (userPrincipal.getName().equals(RedirectServlet.getAdminName())) {
+                RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
+                rd.forward(request, response);
+            } else {
+                String idMesa = userPrincipal.getName();
+                Integer idorden = (Integer) session.createQuery("select idorden from Orden where idMesa='" + idMesa + "' and estado='opened'").uniqueResult();
+                List<Pedido> alaespera = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='A la espera'").list();
+                List<Pedido> entregados = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Entregado'").list();
 
-            request.setAttribute("entregados",entregados);
-            request.setAttribute("alaespera",alaespera);
-            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/closeTable.jsp");
-            rd.forward(request,response);
+                request.setAttribute("entregados", entregados);
+                request.setAttribute("alaespera", alaespera);
+                RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/closeTable.jsp");
+                rd.forward(request, response);
+            }
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();

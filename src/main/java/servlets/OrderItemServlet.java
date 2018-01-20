@@ -78,16 +78,21 @@ public class OrderItemServlet extends HttpServlet {
         response.setContentType("text/html;character=UTF-8");
         try {
             Session session = HibernateUtil.getInstance().getSession();
-            List<Categoria> categorias = session.createQuery("from Categoria").list();
-            List<Menu> data = session.createQuery("from Menu").list();
-            data.sort(Comparator.comparing(Menu::getIndex));
+            Principal userPrincipal = request.getUserPrincipal();
+            if (userPrincipal.getName().equals(RedirectServlet.getAdminName())) {
+                RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
+                rd.forward(request,response);
+            } else {
+                List<Categoria> categorias = session.createQuery("from Categoria").list();
+                List<Menu> data = session.createQuery("from Menu").list();
+                data.sort(Comparator.comparing(Menu::getIndex));
 
-            categorias.sort(Comparator.comparing(Categoria::getIndex));
-            request.setAttribute("categorias",categorias);
+            categorias.sort(Comparator.comparing(Categoria::getIndex));request.setAttribute("categorias",categorias);
             request.setAttribute("data",data);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/orderItem.jsp");
-            rd.forward(request,response);
+                RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/user/orderItem.jsp");
+                rd.forward(request, response);
+            }
         }catch (Exception e){
             RequestDispatcher rd = request.getRequestDispatcher("/error.jsp");
             rd.forward(request,response);
