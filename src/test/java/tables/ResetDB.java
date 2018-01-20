@@ -6,6 +6,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import securityfilter.util.HibernateUtil;
 
+import java.util.List;
+
 /**
  * Created by Tomas on 5/26/2016.
  */
@@ -32,10 +34,18 @@ public class ResetDB {
 
 
             String categoria = (String) session.createQuery("select nombre from Categoria where nombre='"+ cat.toUpperCase() +"'").uniqueResult();
+
+
             if(categoria == null){
+                List categoriaList = session.createQuery("from Categoria ").list();
+                int catIndex= 1;
+                if (categoriaList.size() !=0) {
+                    catIndex = categoriaList.size() + 1;
+                }
                 tx = session.beginTransaction();
                 Categoria c = new Categoria();
                 c.setNombre(cat.toUpperCase());
+                c.setIndex(catIndex);
                 session.saveOrUpdate(c);
                 tx.commit();
                 categoria = cat.toUpperCase();

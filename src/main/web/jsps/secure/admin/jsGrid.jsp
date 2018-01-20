@@ -21,10 +21,10 @@
                 var categories = <%=categoriasNames%>;
                 var catSize = categories.length;
                 for (i = 0; i < catSize; i++) {
-                    var catRow = $('#menu' + categories[i].innerText)[0];
+                    var catRow = $('#menu' + categories[i].innerText);
                     var rowCount = $('#menu'+categories[i].innerText+ '>tbody >tr').length;
-                    if(rowCount != 1) {
-                        catRow.children[1].children[1].children[3].children[0].children[0].className += " disabled";
+                    if(rowCount > 1) {
+                        catRow[0].children[1].children[1].children[3].children[0].children[0].className += ' disabled';
                         var cantRows = catRow.children[1].children.length;
                         catRow.children[1].children[cantRows - 1].children[3].children[1].children[0].className += " disabled";
                     }
@@ -125,6 +125,44 @@
                             $('#'+responseText.idDown)[0].children[3].children[1].children[0].value = responseText.idUp;
                             $('#'+responseText.idUp)[0].id = responseText.idDown;
                             $('#'+responseText.idDown)[0].id = responseText.idUp;
+                        }
+                    })
+                });
+
+                $("button[name='downCat']").click(function (event) {
+                    event.preventDefault();
+                    var idUp = this.value;
+                    var actionVar = "downCat";
+                    $.post('../restauran3/displaymenu', {name: idUp, action: actionVar}, function (responseText) {
+                        var data = '' + responseText.status + '';
+                        if (data.valueOf() === "ok") {
+                            location.reload();
+                        }
+                    })
+                });
+
+                $("button[name='upCat']").click(function (event) {
+                    event.preventDefault();
+                    var idUp = this.value;
+                    var actionVar = "upCat";
+                    $.post('../restauran3/displaymenu', {name: idUp, action: actionVar}, function (responseText) {
+                        var data = '' + responseText.status + '';
+                        if (data.valueOf() === "ok") {
+                            $('#panel'+responseText.nombreUp)[0].style.display = "none";
+                            $('#panel'+responseText.nombreDown)[0].style.display = "none";
+                            $('#'+responseText.nombreDown)[0].children[0].children[0].children[0].children[0].innerText = responseText.nombreUp;
+                            $('#'+responseText.nombreUp)[0].children[0].children[0].children[0].children[0].innerText = responseText.nombreDown;
+                            var tablaSubir = $('#menu'+responseText.nombreUp);
+                            var tablaBajar = $('#menu'+responseText.nombreDown);
+                            $('#menu'+responseText.nombreUp+' tr').each(function () {
+                                var nombreItem = $(this)[0].children[0].children[0].children[0].children[0].value
+                                var idItem = $(this)[0].children[0].children[0].children[0].children[0].id
+                                var valorPrecio = $(this)[0].children[0].children[0].children[0].children[0].value
+                                var idPrecio = $(this)[0].children[0].children[0].children[0].children[0].id
+//                                if (nombre != null) {
+//                                    $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
+//                                }
+                            });
                         }
                     })
                 });
@@ -247,7 +285,37 @@
                     <li>
                         <div class="collapsible-header active center-align"
                              style="background-color: #1b6595; color: white;" id=<%=categoria.getNombre()%>>
-                            <%=categoria.getNombre()%>
+                            <table class="table">
+                                <tr class="row">
+                                <td class="col s10">
+                                <%=categoria.getNombre()%>
+                                </td>
+                                <td class="col s1">
+                                    <div class="btn-group" role="group" aria-label="..." align="center">
+                                        <button type="submit"
+                                                class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                name="upCat" id="upCat"
+                                                style="margin-top: 5px; margin-bottom: 5px;"
+                                                data-position="top" data-delay="50"
+                                                data-tooltip="Mover categoria hacia arriba"
+                                                value=<%=categoria.getNombre()%>><i class="material-icons">arrow_upward</i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="col s1">
+                                    <div class="btn-group" role="group" aria-label="..." align="center">
+                                        <button type="submit"
+                                                class="btn btn-floating small light-blue darken-3 tooltipped"
+                                                name="downCat" id="downCat" style="margin-bottom: 5px;"
+                                                data-position="bottom" data-delay="50"
+                                                data-tooltip="Mover categoria hacia abajo"
+                                                value=<%=categoria.getNombre()%>><i
+                                                class="material-icons">arrow_downward</i>
+                                        </button>
+                                    </div>
+                                </td>
+                                </tr>
+                            </table>
                         </div>
                         <div class="collapsible-body active" id="panel<%=categoria.getNombre()%>"
                              style="padding: 0rem;">

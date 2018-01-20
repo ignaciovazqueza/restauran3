@@ -82,6 +82,7 @@ public class OrderItemServlet extends HttpServlet {
             List<Menu> data = session.createQuery("from Menu").list();
             data.sort(Comparator.comparing(Menu::getIndex));
 
+            categorias.sort(Comparator.comparing(Categoria::getIndex));
             request.setAttribute("categorias",categorias);
             request.setAttribute("data",data);
 

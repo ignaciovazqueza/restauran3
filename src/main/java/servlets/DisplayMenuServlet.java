@@ -47,7 +47,7 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 request.setAttribute(categoria,catJson);
 
             }
-
+            categorias.sort(Comparator.comparing(Categoria::getIndex));
             request.setAttribute("categorias",categorias);
             request.setAttribute("categoriasNames",categoriasNames);
             RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/jsGrid.jsp");
@@ -73,9 +73,13 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                 break;
             case("moveUp"): moveSelectedUp(request,response);
                 break;
-            case("moveDown"): moveSelectedDown(request,response);
+            case("moveDown"): moveMenuDown(request,response);
                 break;
             case("addCat"): agregarCategoria(request,response);
+                break;
+            case("downCat"): moveCategoriaDown(request,response);
+                break;
+            case("upCat"): moveCategoriaUp(request,response);
                 break;
         }
     }
@@ -293,7 +297,159 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
 
     }
 
-    private void moveSelectedDown(HttpServletRequest request, HttpServletResponse response){
+    private void moveCategoriaDown(HttpServletRequest request, HttpServletResponse response){
+        String driver = "org.hsqldb.jdbc.JDBCDriver";
+        Transaction tx = null;
+
+        try {
+            Class.forName(driver).newInstance();
+
+            Session session = HibernateUtil.getInstance().getSession();
+            String categoryName = request.getParameter("name");
+
+            if (categoryName!=null && !categoryName.equals("")){
+                Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre='" + categoryName + "'").uniqueResult();
+                List<Categoria> categorias = session.createQuery("from Categoria").list();
+                categorias.sort(Comparator.comparing(Categoria::getIndex));
+                int index  = categoria.getIndex();
+                Categoria downCat = categorias.get(categorias.indexOf(categoria)+1);
+
+                categoria.setIndex(downCat.getIndex());
+                downCat.setIndex(index);
+                tx = session.beginTransaction();
+                session.saveOrUpdate(categoria);
+                session.saveOrUpdate(downCat);
+                tx.commit();
+
+                String nombreUp = downCat.getNombre();
+                String nombreDown = categoria.getNombre();
+                String status = "ok";
+
+                String newMenu = "{ \"nombreUp\": \"" + nombreUp + "\",\"nombreDown\": \"" + nombreDown + "\",\"status\":\""+status+"\"}";
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print(newMenu);
+                out.flush();
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void moveCategoriaUp(HttpServletRequest request, HttpServletResponse response){
+        String driver = "org.hsqldb.jdbc.JDBCDriver";
+        Transaction tx = null;
+
+        try {
+            Class.forName(driver).newInstance();
+
+            Session session = HibernateUtil.getInstance().getSession();
+            String categoryName = request.getParameter("name");
+
+            if (categoryName!=null && !categoryName.equals("")){
+                Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre='" + categoryName + "'").uniqueResult();
+                List<Categoria> categorias = session.createQuery("from Categoria").list();
+                categorias.sort(Comparator.comparing(Categoria::getIndex));
+                int index  = categoria.getIndex();
+                Categoria downCat = categorias.get(categorias.indexOf(categoria)-1);
+
+                categoria.setIndex(downCat.getIndex());
+                downCat.setIndex(index);
+                tx = session.beginTransaction();
+                session.saveOrUpdate(categoria);
+                session.saveOrUpdate(downCat);
+                tx.commit();
+
+                String nombreDown = downCat.getNombre();
+                String nombreUp = categoria.getNombre();
+                String status = "ok";
+
+                String newMenu = "{ \"nombreUp\": \"" + nombreUp + "\",\"nombreDown\": \"" + nombreDown + "\",\"status\":\""+status+"\",\"status\":\""+status+"\"}";
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print(newMenu);
+                out.flush();
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void agregarCategoria(HttpServletRequest request, HttpServletResponse response){
+        String driver = "org.hsqldb.jdbc.JDBCDriver";
+        Transaction tx = null;
+
+        try {
+            Class.forName(driver).newInstance();
+
+            Session session = HibernateUtil.getInstance().getSession();
+            String nombre = request.getParameter("name").toUpperCase();
+            if (nombre == null || nombre == "" ){
+                nombre = "vacio";
+                String newMenu = "{ \"nombre\": \"" + nombre +"\"}";
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print(newMenu);
+                out.flush();
+
+            } else {
+
+                Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre='" + nombre + "'").uniqueResult();
+                if (categoria == null) {
+                    List<Categoria> categoriaList = session.createQuery("from Categoria ").list();
+                    categoriaList.sort(Comparator.comparing(Categoria::getIndex));
+                    int index = 1;
+                    if (categoriaList.size()!=0){
+                        index = categoriaList.get(categoriaList.size()-1).getIndex()+1;
+                    }
+                    tx = session.beginTransaction();
+                    Categoria nuevaCat = new Categoria();
+                    nuevaCat.setNombre(nombre);
+                    nuevaCat.setIndex(index);
+                    session.saveOrUpdate(nuevaCat);
+                    tx.commit();
+                    String newCat = "{ \"nombre\": \"" + nombre + "\"}";
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(newCat);
+                    out.flush();
+
+                }else{
+                    nombre = "repeat";
+                    String newMenu = "{ \"nombre\": \"" + nombre +"\"}";
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(newMenu);
+                    out.flush();
+                }
+
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void moveMenuDown(HttpServletRequest request, HttpServletResponse response){
         String driver = "org.hsqldb.jdbc.JDBCDriver";
         Transaction tx = null;
 
@@ -342,59 +498,6 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         }
 
-    }
-
-    private void agregarCategoria(HttpServletRequest request, HttpServletResponse response){
-        String driver = "org.hsqldb.jdbc.JDBCDriver";
-        Transaction tx = null;
-
-        try {
-            Class.forName(driver).newInstance();
-
-            Session session = HibernateUtil.getInstance().getSession();
-            String nombre = request.getParameter("name").toUpperCase();
-            if (nombre == null || nombre == "" ){
-                nombre = "vacio";
-                String newMenu = "{ \"nombre\": \"" + nombre +"\"}";
-                response.setContentType("application/json");
-                PrintWriter out = response.getWriter();
-                out.print(newMenu);
-                out.flush();
-
-            } else {
-
-                Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre='" + nombre + "'").uniqueResult();
-                if (categoria == null) {
-                    tx = session.beginTransaction();
-                    Categoria nuevaCat = new Categoria();
-                    nuevaCat.setNombre(nombre);
-                    session.saveOrUpdate(nuevaCat);
-                    tx.commit();
-                    String newCat = "{ \"nombre\": \"" + nombre + "\"}";
-                    response.setContentType("application/json");
-                    PrintWriter out = response.getWriter();
-                    out.print(newCat);
-                    out.flush();
-
-                }else{
-                    nombre = "repeat";
-                    String newMenu = "{ \"nombre\": \"" + nombre +"\"}";
-                    response.setContentType("application/json");
-                    PrintWriter out = response.getWriter();
-                    out.print(newMenu);
-                    out.flush();
-                }
-
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 
