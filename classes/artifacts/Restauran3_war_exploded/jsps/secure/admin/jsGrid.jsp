@@ -163,21 +163,7 @@
                     $.post('../restauran3/displaymenu', {name: idUp, action: actionVar}, function (responseText) {
                         var data = '' + responseText.status + '';
                         if (data.valueOf() === "ok") {
-                            $('#panel'+responseText.nombreUp)[0].style.display = "none";
-                            $('#panel'+responseText.nombreDown)[0].style.display = "none";
-                            $('#'+responseText.nombreDown)[0].children[0].children[0].children[0].children[0].innerText = responseText.nombreUp;
-                            $('#'+responseText.nombreUp)[0].children[0].children[0].children[0].children[0].innerText = responseText.nombreDown;
-                            var tablaSubir = $('#menu'+responseText.nombreUp);
-                            var tablaBajar = $('#menu'+responseText.nombreDown);
-                            $('#menu'+responseText.nombreUp+' tr').each(function () {
-                                var nombreItem = $(this)[0].children[0].children[0].children[0].children[0].value
-                                var idItem = $(this)[0].children[0].children[0].children[0].children[0].id
-                                var valorPrecio = $(this)[0].children[0].children[0].children[0].children[0].value
-                                var idPrecio = $(this)[0].children[0].children[0].children[0].children[0].id
-//                                if (nombre != null) {
-//                                    $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
-//                                }
-                            });
+                            location.reload();
                         }
                     })
                 });

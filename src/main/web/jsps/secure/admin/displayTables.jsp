@@ -187,6 +187,86 @@
                 </div>
             </div>
 
+            <table align="center" class="striped" width="300">
+                <tr class="row" style="background-color: white;">
+                    <td class="col s3" style="font-weight: bold; height: 80px; line-height: 80px; text-align: center;">Agregar Mesa</td>
+                    <td class="col s6">
+                        <div>
+                            <div class="input-field">
+                                <input id="newTable" type="text" class="validate">
+                                <label class="active"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="col s3" style="height: 80px; line-height: 80px; text-align: center;">
+                        <div class="btn-group" role="group" aria-label="..." align="center">
+                            <button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped"
+                                    name="addTable" id="addTable"
+                                    data-position="top" data-delay="50" data-tooltip="Agregar categoría"><i class="material-icons">add</i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <table align="center" class="striped" width="300"
+                   style="overflow-x:auto; text-align: center;" id="mesas"
+                   bgcolor="white">
+                <thead>
+                <tr class="row" id="topRow">
+                    <th class="col s5">Nombre</th>
+                    <th class="col s5">Token</th>
+                    <th class="col s1"></th>
+                    <th class="col s1"></th>
+
+                </tr>
+                </thead>
+            <%
+                List<Mesa> mesas = (List<Mesa>) request.getAttribute("data");
+                for (Mesa mesa : mesas) {
+            %>
+
+
+                <tr class="row" id=<%=mesa.getMesa()%>>
+
+                    <td class="col s5" id="nombre"<%=mesa.getMesa()%>>
+                        <%=mesa.getMesa()%>
+                    </td>
+                    <td class="col s5" id="precio"<%=mesa.getMesa()%>>
+                        <div>
+                            <div class="input-field">
+                                <input id="tokenTd<%=mesa.getMesa()%>" type="text"
+                                       class="validate" value=<%=mesa.getToken()%>>
+                                <label class="active" name="tokenTd"></label>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="col s1">
+                        <div class="btn-group" role="group" aria-label="..." align="center">
+                            <button type="submit"
+                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                    id="editarMenu" name="editarMesa"
+                                    style="margin-top: 5px; margin-bottom: 5px;"
+                                    data-position="top" data-delay="50" data-tooltip="Guardar"
+                                    value=<%=mesa.getMesa()%>>
+                                <i class="material-icons">save</i>
+                            </button>
+                        </div>
+                        </td>
+                    <td class="col s1">
+                        <div class="btn-group" role="group" aria-label="..." align="center">
+                            <button type="submit"
+                                    class="btn btn-floating small light-blue darken-3 "
+                                    id="eliminarMenu" name="eliminarMesa" style="margin-bottom: 5px;"
+                                    value=<%=mesa.getMesa()%>><i
+                                    class="material-icons">delete</i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <%}%>
+            </table>
+
             <form id="reg-form" action="../restauran3/displaytables" method="post">
             </form>
 
