@@ -9,34 +9,38 @@
     <title><%=Constants.COMMON_TITLE_BASE%>Pedidos</title>
     <% String username = request.getUserPrincipal().getName();%>
     <input type="hidden" value="<%=username%>" id="user">
+    <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
 
     <script type="text/javascript">
 
-        var webSocketP;
-        var ip = "10.10.10.6";
+        var webSocketPedido;
+        var myIp;
+        getUserIP(function(ip){
+            myIp = ip;
+        });
 
         function openSocketP() {
 
-            if (webSocketP !== undefined && webSocketP.readyState !== WebSocket.CLOSED) {
+            if (webSocketPedido !== undefined && webSocketPedido.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
                 return;
             }
 
-            webSocketP = new WebSocket("ws://" + ip + ":8080/restauran3/pedido");
+            webSocketPedido = new WebSocket("ws://" + myIp + ":8080/restauran3/pedido");
 
-            webSocketP.onopen = function (event) {
+            webSocketPedido.onopen = function (event) {
                 if (event.data === undefined)
                     return;
                 writeResponse(event.data);
             };
 
-            webSocketP.onmessage = function (event) {
+            webSocketPedido.onmessage = function (event) {
                 if (event.data == "pedido") {
                     writePedidoResponse(event.data);
                 }
             };
 
-            webSocketP.onclose = function (event) {
+            webSocketPedido.onclose = function (event) {
                 writeResponse("Connection closed");
             };
         }
@@ -44,11 +48,11 @@
         function sendPedido() {
             var user = document.getElementById('user').value;
             var text = "pedido " + user;
-            webSocketP.send(text);
+            webSocketPedido.send(text);
         }
 
         function closeSocketP() {
-            webSocketP.close();
+            webSocketPedido.close();
         }
 
         function writeResponse(text) {
