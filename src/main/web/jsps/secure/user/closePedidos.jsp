@@ -14,12 +14,16 @@
     <script type="text/javascript">
 
         var webSocketPedido;
-        var myIp;
-        getUserIP(function(ip){
-            myIp = ip;
-        });
+        var myIp = "10.10.10.9";
+//        getUserIP(function(ip){
+//            myIp = ip;
+//        });
 
         function openSocketP() {
+
+            window.onunload = function () {
+                closeSocket();
+            };
 
             if (webSocketPedido !== undefined && webSocketPedido.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
@@ -35,20 +39,19 @@
             };
 
             webSocketPedido.onmessage = function (event) {
+                debugger;
                 if (event.data == "pedido") {
                     writePedidoResponse(event.data);
+                } else if (event.data == "cerrar pedido"){
+                    writeCloseResponse();
+                } else {
+                    writeEliminarResponse(event);
                 }
             };
 
             webSocketPedido.onclose = function (event) {
                 writeResponse("Connection closed");
             };
-        }
-
-        function sendPedido() {
-            var user = document.getElementById('user').value;
-            var text = "pedido " + user;
-            webSocketPedido.send(text);
         }
 
         function closeSocketP() {
@@ -60,7 +63,80 @@
         }
 
         function writePedidoResponse(text) {
-            location.reload();
+            console.log(text);
+            setTimeout(function() {
+                location.reload()
+            },1000);
+        }
+
+        function writeEliminarResponse(event) {
+            debugger;
+            var rowCount = $('#pedidos >tbody >tr').length;
+            if (rowCount == 2) {
+                $("#pedidosDiv")[0].style.display = 'none';
+                $('#pedidos').remove();
+                $('#cerrarButton').remove();
+                $('#pedidosActuales').remove();
+            } else {
+                $('#' + JSON.parse(event.data).id).remove();
+            }
+        }
+
+        function writeCloseResponse(){
+            if($('#pedidosEspera')[0] == undefined){
+                $('#titleActuales')[0].innerText = "Pedidos a la espera de ser entregados";
+                $('#titleActuales')[0].id = "titleEspera";
+                $('#pedidos')[0].id = "pedidosEspera";
+                $('#tdEliminar').remove();
+                $('#thEliminar').remove();
+            }
+            else {
+                $('#pedidos tr').each(function () {
+                    var articulo = $(this).find("td").eq(0).html();
+                    var cantidad = $(this).find("td").eq(1).html();
+                    var precio = $(this).find("td").eq(2).html();
+                    var total = $(this).find("td").eq(3).html();
+                    if (articulo != null) {
+                        $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
+                    }
+
+                });
+
+                $("#pedidosDiv")[0].style.display = 'none';
+                $('#pedidos').remove();
+                $('#pedidosActuales').remove();
+            }
+            $('#cerrarButton').remove();
+        }
+
+        function postDelete() {
+            Materialize.toast('El ítem ha sido eliminado con éxito.', 4000);
+            event.preventDefault();
+            var idVar = $('#eliminar').prop("value");
+            var actionVar = "eliminar";
+            $.post('../restauran3/closepedidos', {id: idVar, action: actionVar}, function (responseText) {
+                writeEliminarResponse(responseText);
+                sendDelete(responseText);
+            });
+        }
+
+        function sendDelete(responseText) {
+            webSocketPedido.send(JSON.stringify(responseText));
+        }
+
+        function postClose() {
+            Materialize.toast('¡El pedido ya está en camino!', 4000);
+            event.preventDefault();
+            var actionVar = "cerrar";
+            $.post('../restauran3/closepedidos', {action: actionVar}, function (responseText) {
+                writeCloseResponse();
+            });
+            sendClose();
+        }
+
+        function sendClose() {
+            var text = "cerrar pedido";
+            webSocketPedido.send(text);
         }
 
         function window_onload() {
@@ -70,54 +146,11 @@
                 a.parentElement.className = 'active';
 
                 $("button[name='eliminar']").click(function (event) {
-                    Materialize.toast('El ítem ha sido eliminado con éxito.', 4000);
-                    event.preventDefault();
-                    var idVar = $('#eliminar').prop("value");
-                    var actionVar = "eliminar";
-                    $.post('../restauran3/closepedidos', {id: idVar, action: actionVar}, function (responseText) {
-                        var rowCount = $('#pedidos >tbody >tr').length;
-                        if (rowCount == 2) {
-                            $("#pedidosDiv")[0].style.display = 'none';
-                            $('#pedidos').remove();
-                            $('#cerrarButton').remove();
-                            $('#pedidosActuales').remove();
-                        } else {
-                            var id = $('#eliminar').prop("value");
-                            $('#' + id).remove();
-                        }
-                    })
+                    postDelete();
                 });
 
                 $("button[name='cerrar']").click(function (event) {
-                    Materialize.toast('¡El pedido ya está en camino!', 4000);
-                    event.preventDefault();
-                    var actionVar = "cerrar";
-                    $.post('../restauran3/closepedidos', {action: actionVar}, function (responseText) {
-                        if($('#pedidosEspera')[0] == undefined){
-                            $('#titleActuales')[0].innerText = "Pedidos a la espera de ser entregados";
-                            $('#titleActuales')[0].id = "titleEspera";
-                            $('#pedidos')[0].id = "pedidosEspera";
-                            $('#tdEliminar').remove();
-                            $('#thEliminar').remove();
-                        }
-                        else {
-                            $('#pedidos tr').each(function () {
-                                var articulo = $(this).find("td").eq(0).html();
-                                var cantidad = $(this).find("td").eq(1).html();
-                                var precio = $(this).find("td").eq(2).html();
-                                var total = $(this).find("td").eq(3).html();
-                                if (articulo != null) {
-                                    $('#pedidosEspera tr:last').after('<tr><td> ' + articulo + '</td><td> ' + cantidad + '</td><td> ' + precio + '</td><td> ' + total + '</td></tr>');
-                                }
-
-                            });
-
-                            $("#pedidosDiv")[0].style.display = 'none';
-                            $('#pedidos').remove();
-                            $('#pedidosActuales').remove();
-                        }
-                        $('#cerrarButton').remove();
-                    })
+                    postClose();
                 });
             });
 
