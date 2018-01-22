@@ -75,27 +75,27 @@ public class DisplayTablesServlet extends HttpServlet {
         try {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
-            String selected = request.getParameter("id");
-            String status = request.getParameter("status");
-            String idMesa;
+            String id = request.getParameter("id");
             String token="";
+            String state = "";
 
-            if (selected!=null && status.equals("true")) {
-                Mesa mesa = (Mesa) session.createQuery("from Mesa where mesa='" + selected + "'").uniqueResult();
-                idMesa = mesa.getMesa();
+            if (id!=null && id!="") {
+                Mesa mesa = (Mesa) session.createQuery("from Mesa where mesa='" + id + "'").uniqueResult();
+                id = mesa.getMesa();
                 token = mesa.getToken();
-                String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\" }";
                 tx = session.beginTransaction();
                 session.delete(mesa);
                 tx.commit();
+                state = "ok";
+                String table = "{ \"id\": \"" + id + "\", \"token\": \"" + token + "\", \"state\": \"" + state + "\"}";
 
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 out.print(table);
                 out.flush();
-            }else if (selected==null && status.equals("true")){
-                idMesa = "no selected";
-                String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\" }";
+            }else {
+                state = "no selected";
+                String table = "{ \"id\": \"" + id + "\", \"state\": \"" + state + "\" }";
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 out.print(table);
@@ -172,30 +172,25 @@ public class DisplayTablesServlet extends HttpServlet {
         try {
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
-            String selected = request.getParameter("name");
-            if (selected!=null) {
-                Mesa mesa = (Mesa) session.createQuery("from Mesa where mesa= '" + selected + "' ").uniqueResult();
-                String token = request.getParameter("pass");
-                String idMesa = mesa.getMesa();
-                if (token != "" && !token.equals(null)) {
+            String id = request.getParameter("id");
+            String status = "no selected";
+            if (id!=null) {
+                Mesa mesa = (Mesa) session.createQuery("from Mesa where mesa='" + id + "'").uniqueResult();
+                String token = request.getParameter("token");
+                String state = "";
+                if (token != null && token != "") {
                     mesa.setToken(token);
+                    tx = session.beginTransaction();
+                    session.saveOrUpdate(mesa);
+                    tx.commit();
+                    state = "ok";
+                } else{
+                    token = ""+mesa.getToken();
                 }
-                String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\" }";
-                tx = session.beginTransaction();
-                session.saveOrUpdate(mesa);
-                tx.commit();
-
+                String art = "{ \"state\": \"" + state + "\", \"token\": \"" + token + "\",\"id\":\""+id+"\" }";
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                out.print(table);
-                out.flush();
-
-            } else {
-                String idMesa = "no selected";
-                String table = "{ \"id\": \"" + idMesa + "\"}";
-                response.setContentType("application/json");
-                PrintWriter out = response.getWriter();
-                out.print(table);
+                out.print(art);
                 out.flush();
             }
 
