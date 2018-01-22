@@ -13,11 +13,15 @@
 
     <script type="text/javascript">
 
+        window.onunload = function () {
+            closeSocket();
+        };
+
         var webSocketPedido;
-        var myIp;
-        getUserIP(function(ip){
-            myIp = ip;
-        });
+        var myIp = "10.10.10.9";
+        //        getUserIP(function(ip){
+        //            myIp = ip;
+        //        });;
 
         function openSocket() {
             if (webSocketPedido !== undefined && webSocketPedido.readyState !== WebSocket.CLOSED) {
@@ -30,10 +34,6 @@
                 if (event.data === undefined)
                     return;
 
-                writeResponse(event.data);
-            };
-
-            webSocketPedido.onmessage = function (event) {
                 writeResponse(event.data);
             };
 
@@ -54,7 +54,7 @@
         }
 
         function writeResponse(text) {
-            //   messages.innerHTML += "<br/>" + text;
+            console.log(text);
         }
 
         function window_onload() {

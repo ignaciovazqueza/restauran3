@@ -63,6 +63,12 @@ public class ClosePedidosServlet extends HttpServlet {
                     Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + idPedido + "").uniqueResult();
                     tx = session.beginTransaction();
                     session.delete(pedido);
+                    String text = "eliminar pedido";
+                    String newMenu = "{ \"id\": \"" + idPedido + "\",\"text\": \"" + text + "\"}";
+                    response.setContentType("application/json");
+                    out = response.getWriter();
+                    out.print(newMenu);
+                    out.flush();
                     tx.commit();
                     //       response.sendRedirect("/restauran3/closepedidos");
                 }

@@ -13,11 +13,15 @@
 
     <script type="text/javascript">
 
+        window.onunload = function () {
+            closeSocket();
+        };
+
         var webSocketPedido;
-        var myIp;
-        getUserIP(function(ip){
-            myIp = ip;
-        });
+        var myIp = "10.10.10.9";
+        //        getUserIP(function(ip){
+        //            myIp = ip;
+        //        });;
 
         function openSocket() {
             if (webSocketPedido !== undefined && webSocketPedido.readyState !== WebSocket.CLOSED) {
@@ -33,10 +37,6 @@
                 writeResponse(event.data);
             };
 
-            webSocketPedido.onmessage = function (event) {
-                writeResponse(event.data);
-            };
-
             webSocketPedido.onclose = function (event) {
                 writeResponse("Connection closed");
             };
@@ -46,8 +46,6 @@
             var user = "";
             user = $('#user').val();
             var text = "pedido";
-            debugger;
-            console.log("Pedido a punto de ser enviado");
             webSocketPedido.send(text);
         }
 
@@ -56,7 +54,7 @@
         }
 
         function writeResponse(text) {
-            //   messages.innerHTML += "<br/>" + text;
+            console.log(text);
         }
 
         function window_onload() {
