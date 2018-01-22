@@ -40,42 +40,35 @@
                         }
                     });
                 });
-                $('#edit').click(function (event) {
+                $("button[name='editarMesa']").click(function (event) {
                     event.preventDefault();
-                    var selectedVar = $("input[type='radio'][name='radio']:checked").val();
+                    var idVar = this.value;
                     var actionVar = "edit";
-                    var $row = $("tr[data-id='" + selectedVar + "']");
+                    var tokenVar = $('#tokenTd' + this.value).val();
                     $.post('../restauran3/displaytables', {
-                        selected: selectedVar,
+                        id: idVar,
                         action: actionVar,
-                        newToken: $row.find("input[type=text]").val()
+                        token: tokenVar
                     }, function (responseText) {
-                        var id = '' + responseText.id + '';
-                        if (id.valueOf() == "no selected") {
-                            alert("Debe seleccionar que mesa desea editar");
+                        var data = '' + responseText.state + '';
+                        if (data.valueOf() === "ok") {
+                            Materialize.toast('Menu editado con éxito.', 4000);
                         } else {
-                            alert(selectedVar + " editada con exito");
+                            Materialize.toast('No se pueden dejar campos en blanco.', 4000);
+                            $('#tokenTd' + responseText.id).val(responseText.token);
                         }
-                    });
+                    })
                 });
-                $('#delete').click(function (event) {
+                $("button[name='eliminarMesa']").click(function (event) {
                     event.preventDefault();
-                    var selectedVar = $("input[type='radio'][name='radio']:checked").val();
+                    var idVar = this.value;
                     var actionVar = "delete";
-                    var statusVar = confirm('¿Realmente desea borrar la mesa seleccionada?');
-                    $.post('../restauran3/displaytables', {
-                        selected: selectedVar,
-                        action: actionVar,
-                        status: statusVar
-                    }, function (responseText) {
-                        var id = '' + responseText.id + '';
-                        if (id.valueOf() == "no selected") {
-                            alert("Debe seleccionar que mesa quiere borrar");
-                        } else if (statusVar) {
-                            location.reload();
+                    $.post('../restauran3/displaytables', {id: idVar, action: actionVar}, function (responseText) {
+                        var data = '' + responseText.state + '';
+                        if (data.valueOf() === "ok") {
+                            $('#'+responseText.id).remove();
                         }
-
-                    });
+                    })
                 });
             });
         }
@@ -84,91 +77,6 @@
     <%
         JSONArray json = (JSONArray) request.getAttribute("json");
     %>
-    <script>
-
-        $(function () {
-
-            $("#jsGrid").jsGrid({
-
-                width: "60%",
-                align: "center",
-
-                inserting: true,
-                filtering: false,
-                editing: true,
-                sorting: true,
-                paging: true,
-                autoload: true,
-
-                pageSize: 10,
-                pageButtonCount: 2,
-
-                deleteConfirm: function (item) {
-                    return "¿Estas seguro que desea borrar la mesa:  \"" + item.mesa + "\" ?";
-                },
-
-                controller: {
-                    loadData: function (filter) {
-                    },
-                    insertItem: function (item) {
-                        if (item.mesa != "" && item.token != "") {
-                            return $.post("../restauran3/displaytables", {
-                                name: item.mesa,
-                                pass: item.token,
-                                action: "add",
-                                status: true
-
-                            })
-                        } else {
-                            // $("#jsGrid").jsGrid("refresh");
-                            alert("campo vacio no se agrego la mesa");
-                            location.reload();
-
-                        }
-                        ;
-                    },
-                    updateItem: function (item) {
-                        if (item.mesa != "" && item.token != "") {
-                            return $.post("../restauran3/displaytables", {
-                                name: item.mesa,
-                                pass: item.token,
-                                action: "edit",
-                                selected: item.mesa
-
-                            })
-                            location.reload();
-                        } else {
-                            $("#jsGrid").jsGrid("cancelEdit");
-                            alert("campo vacio no se realizaron los cambios");
-                            location.reload();
-
-                        }
-                    },
-                    deleteItem: function (item) {
-                        return $.post("../restauran3/displaytables", {
-                            id: item.mesa,
-                            action: "delete",
-                            status: true
-
-                        });
-                    }
-
-                },
-
-                data: <%=json%>,
-
-
-                fields: [
-                    {name: "mesa", width: 50, align: "center", readOnly: true, valueField: "mesa"},
-                    {name: "token", type: "text", width: 20, align: "center"},
-                    {type: "control", align: "center", width: 20}
-                ]
-
-            });
-
-        });
-
-    </script>
 
 </head>
 
