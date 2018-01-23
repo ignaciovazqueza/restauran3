@@ -39,14 +39,17 @@ public class ClosePedidosServlet extends HttpServlet {
                 Integer idorden = (Integer) session.createQuery("select idorden from Orden where idMesa='" + idMesa + "' and estado='opened'").uniqueResult();
 
                 List<Pedido> pedidos = session.createQuery("from Pedido where idOrden=" + idorden + " and entregado='Pidiendo...' ").list();
-                tx = session.beginTransaction();
+
                 for (Pedido pedido : pedidos) {
+                    tx = session.beginTransaction();
                     pedido.setEntregado("A la espera");
                     session.saveOrUpdate(pedido);
                     tx.commit();
                 }
 
-                response.sendRedirect("/restauran3/closepedidos");
+
+
+
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {

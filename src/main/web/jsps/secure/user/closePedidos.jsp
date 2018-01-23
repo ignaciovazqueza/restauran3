@@ -86,8 +86,10 @@
             if($('#pedidosEspera')[0] == undefined){
                 $('#titleActuales')[0].innerText = "Pedidos a la espera de ser entregados";
                 $('#titleActuales')[0].id = "titleEspera";
+                $('#pedidos tr').each(function () {
+                    $('#tdEliminar').remove();
+                });
                 $('#pedidos')[0].id = "pedidosEspera";
-                $('#tdEliminar').remove();
                 $('#thEliminar').remove();
             }
             else {
@@ -106,7 +108,7 @@
                 $('#pedidos').remove();
                 $('#pedidosActuales').remove();
             }
-            $('#cerrarButton').remove();
+            $('#cerrar').remove();
         }
 
         function postDelete() {
