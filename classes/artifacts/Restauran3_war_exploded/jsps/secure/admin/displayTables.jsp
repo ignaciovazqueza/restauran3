@@ -17,29 +17,16 @@
             var a = $('.link-1')[3];
             a.parentElement.className = 'active';
             $(document).ready(function () {
-                $('#add').click(function (event) {
+
+                $("button[name='addTable']").click(function (event) {
                     event.preventDefault();
-                    var mesaVar = $('#mesa').val();
-                    var tokenVar = $('#token').val();
+                    var nameVar = $('#newTable').val();
                     var actionVar = "add";
-                    $.post('../restauran3/displaytables', {
-                        mesa: mesaVar,
-                        token: tokenVar,
-                        action: actionVar
-                    }, function (responseText) {
-                        var id = '' + responseText.token + '';
-                        if (id.valueOf() == "mesa duplicada") {
-                            alert("Ya existe la mesa con id: " + responseText.id);
-                        } else if (id.valueOf() == "dato vacio") {
-                            alert("Campo ID/Token en blanco");
-                        }
-                        else {
-                            $('#tables tr:last').after('<tr><td>' + responseText.id + '</td><td><input type="text" name=' + responseText.token + ' value=' + responseText.token + '></td><td> <input type="radio" name="radio" id=' + responseText.id + ' value=' + responseText.id + '> </td> </tr>');
-                            $('#mesa').val("");
-                            $('#token').val("");
-                        }
-                    });
+                    $.post('../restauran3/displaymenu', {name: nameVar, action: actionVar}, function (responseText) {
+                        location.reload();
+                    })
                 });
+
                 $("button[name='editarMesa']").click(function (event) {
                     event.preventDefault();
                     var idVar = this.value;
@@ -59,6 +46,7 @@
                         }
                     })
                 });
+
                 $("button[name='eliminarMesa']").click(function (event) {
                     event.preventDefault();
                     var idVar = this.value;

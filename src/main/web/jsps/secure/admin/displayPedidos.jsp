@@ -88,11 +88,35 @@
             $(document).ready(function () {
                 var a = $('.link-1')[0];
                 a.parentElement.className = 'active';
-                $("button").click(function (event) {
+
+                $("button[name='entregar']").click(function (event) {
+                    event.preventDefault();
                     var name = $(this).attr('id');
-                    $.post('../restauran3/displaypedidos', {
-                        id: name
-                    });
+                    var tableVar = this.value;
+                    $.post('../restauran3/displaypedidos', { id: name, table: tableVar }, function(responseText){
+                        var data = '' + responseText.status + '';
+                        if (data.valueOf() === "ok") {
+
+                            var rowCount = $('#pedidos'+responseText.mesa+ '>tbody >tr').length;
+                            if (rowCount > 2){
+                                debugger;
+                                $('#tr'+responseText.id).remove();
+                            }else {
+                                $('#pedidos'+responseText.mesa).remove();
+                                $('#panel'+responseText.mesa).remove();
+                                debugger;
+                                var data = '' + responseText.tables + '';
+                                if (data.valueOf() === "false") {
+                                    $('#mesas').append('<div class="panel panel-default"> <div class="card-panel white">'
+                                    +'<div class="card-content black-text"> <span class="card-title" style="font-size: 1em;">No hay pedidos.</span>'
+                                    +'</div> </div> </div>');
+                                }
+                            }
+                            Materialize.toast('Pedido entregado con éxito.', 4000);
+                        } else {
+                            Materialize.toast('Error no se pudo entregar.', 4000);
+                        }
+                    })
                 });
             });
         }
@@ -108,7 +132,7 @@
 
 <div class="row">
     <div class="col s12">
-        <div class="center-block panel panel-primary" style="width:85%;text-align: center">
+        <div class="center-block panel panel-primary" style="width:85%;text-align: center" id="mesas">
 
             <div class="panel-heading">
                 <div class="card-panel white">
@@ -143,16 +167,16 @@
                 %>
 
 
-                <div class="center-block panel panel-primary" style="text-align: center">
+                <div class="center-block panel panel-primary" style="text-align: center" >
 
-                    <div class="panel-heading">
+                    <div class="panel-heading" id="panel<%=mesa.getMesa()%>" >
                         <div class="card-panel white">
                             <div class="card-content black-text">
                                 <span class="card-title"
                                       style="font-size: 1.5em;"><%=mesa.getMesa().toUpperCase()%></span>
                             </div>
                         </div>
-                            <table align="center" class="table striped" width="80%"
+                            <table align="center" class="table striped" id="pedidos<%=mesa.getMesa()%>" width="80%"
                                    style="overflow-x:auto; text-align: center; margin-top: -34px;"
                                    bgcolor="white">
                                 <tr>
@@ -170,7 +194,7 @@
                                 %>
 
 
-                                <tr>
+                                <tr id="tr<%=id%>">
                                     <td><%=id%>
                                     </td>
                                     <td><%=estado%>
@@ -179,11 +203,10 @@
                                     </td>
                                     <td><%=pedido.getEntregado()%>
                                     </td>
-                                    <%--<td><input align="center" type=checkbox name=check id=<%=id%> value=<%=id%>></td>--%>
                                     <td>
                                         <div class="btn-group" role="group" aria-label="..." align="center">
                                             <button type="submit" class="btn btn-default light-blue darken-3"
-                                                    id=<%=id%> name="entregar">Entregar
+                                                    id=<%=id%>  value=<%=mesa.getMesa()%> name="entregar">Entregar
                                             </button>
                                         </div>
                                     </td>

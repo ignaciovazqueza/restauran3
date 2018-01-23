@@ -29,17 +29,35 @@ public class DisplayPedidosServlet extends HttpServlet {
             try {
 
                 Session session = HibernateUtil.getInstance().getSession();
-                //String[] selected = request.getParameterValues("check");
                 String id = request.getParameter("id");
+                String mesa = request.getParameter("table");
+                String status = "";
+                Boolean moreTables = false;
                 if (id!=null) {
                         Pedido pedido = (Pedido) session.createQuery("from Pedido where idPedido= " + id + "").uniqueResult();
                         pedido.setEntregado("Entregado");
+                        String estado = "A la espera";
+                        List<Pedido>  pedidos = session.createQuery("from Pedido where entregado ='" + estado + "'").list();
 
+                    for (Pedido espera:  pedidos) {
+                        Orden orden = (Orden) session.createQuery("from Orden where idorden= " + espera.getIdOrden() + "").uniqueResult();
+                        if (!(orden.getIdMesa()).equals(mesa)){
+                            moreTables = true;
+                            break;
+                        }
+                    }
                         tx = session.beginTransaction();
                         session.saveOrUpdate(pedido);
                         tx.commit();
+                        status = "ok";
+
                 }
-                response.sendRedirect("/restauran3/displaypedidos");
+                String ped = "{ \"status\": \"" + status + "\",\"id\":\""+id+"\",\"mesa\":\""+mesa+"\",\"tables\":\""+moreTables+"\"}";
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                out.print(ped);
+                out.flush();
+
             }catch (Exception e){
                 e.printStackTrace();
             }
