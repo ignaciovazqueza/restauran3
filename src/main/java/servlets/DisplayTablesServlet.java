@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -117,43 +118,39 @@ public class DisplayTablesServlet extends HttpServlet {
         Transaction tx = null;
 
         try {
-            String idMesa = request.getParameter("name");
-            String token = request.getParameter("pass");
-
+            String token = request.getParameter("password");
+            String status = "";
             Class.forName(driver).newInstance();
             Session session = HibernateUtil.getInstance().getSession();
-            if (!idMesa.equals("") && !token.equals("")) {
+            if (!token.equals(null) && !token.equals("")) {
                 tx = session.beginTransaction();
                 Mesa mesa = new Mesa();
-                mesa.setMesa(idMesa);
                 mesa.setToken(token);
                 mesa.setAsistencia("No pide asistencia");
+                List<Mesa> mesas = session.createQuery("from Mesa").list();
+                mesas.sort(Comparator.comparing(Mesa::getMesa));
+                String lastTable = mesas.get(mesas.size() - 1).getMesa();
+                String idMesa = "mesa"+(Integer.parseInt(lastTable.substring(4,5))+1);
+                mesa.setMesa(idMesa);
                 Mesa newMesa = (Mesa) session.createQuery("from Mesa where mesa ='" + idMesa + "'").uniqueResult();
 
                 if (newMesa == null) {
                     session.saveOrUpdate(mesa);
                     tx.commit();
-
-                    String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\" }";
+                    status = "ok";
+                    String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\", \"status\": \"" + status + "\" }";
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(table);
                     out.flush();
                 } else {
-                    token = "mesa duplicada";
-                    String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\" }";
+                    status = "mesa duplicada";
+                    String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\", \"status\": \"" + status + "\" }";
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(table);
                     out.flush();
                 }
-            }else{
-                token = "dato vacio";
-                String table = "{ \"id\": \"" + idMesa + "\", \"token\": \"" + token + "\" }";
-                response.setContentType("application/json");
-                PrintWriter out = response.getWriter();
-                out.print(table);
-                out.flush();
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -164,6 +161,7 @@ public class DisplayTablesServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private void editMesa(HttpServletRequest request, HttpServletResponse response) {

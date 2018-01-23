@@ -20,10 +20,30 @@
 
                 $("button[name='addTable']").click(function (event) {
                     event.preventDefault();
-                    var nameVar = $('#newTable').val();
+                    var passwordVar = $('#newTable').val();
                     var actionVar = "add";
-                    $.post('../restauran3/displaymenu', {name: nameVar, action: actionVar}, function (responseText) {
-                        location.reload();
+                    $.post('../restauran3/displaytables', {password: passwordVar, action: actionVar}, function (responseText) {
+                        var data = '' + responseText.status + '';
+                        debugger;
+                        if (data.valueOf() === "ok") {
+                            $('#mesas tr:last').after('' +
+                                    '<tr class="row" id='+responseText.id+'> <td class="col s5" id="nombre"'+responseText.id+'>'
+                                    +''+responseText.id+' </td> <td class="col s5" id="precio"'+responseText.id+'>'
+                                    +'<div> <div class="input-field"> <input id="tokenTd'+responseText.id+'" type="text"'
+                        +'class="validate" value='+responseText.token+'> <label class="active" name="tokenTd"></label>'
+                                    +'</div> </div> </td> <td class="col s1">'
+                                    +'<div class="btn-group" role="group" aria-label="..." align="center"> <button type="submit"'
+                        +'class="btn btn-floating small light-blue darken-3 tooltipped" id="editarMenu" name="editarMesa"'
+                            +'style="margin-top: 5px; margin-bottom: 5px;" data-position="top" data-delay="50" data-tooltip="Guardar"'
+                            +'value='+responseText.id+'> <i class="material-icons">save</i> </button> </div> </td>'
+                                    +'<td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 "'
+                           +' id="eliminarMesa" name="eliminarMesa" style="margin-bottom: 5px;" value='+responseText.id+'><i '
+                        +'class="material-icons">delete</i> </button> </div> </td> </tr>');
+
+                            $('#newTable')[0].value = "";
+                        }
+
                     })
                 });
 
@@ -89,7 +109,7 @@
                     <td class="col s6">
                         <div>
                             <div class="input-field">
-                                <input id="newTable" type="text" class="validate">
+                                <input id="newTable" type="text" class="validate" placeholder="password">
                                 <label class="active"></label>
                             </div>
                         </div>
@@ -98,7 +118,7 @@
                         <div class="btn-group" role="group" aria-label="..." align="center">
                             <button type="submit" class="btn btn-floating small light-blue darken-3 tooltipped"
                                     name="addTable" id="addTable"
-                                    data-position="top" data-delay="50" data-tooltip="Agregar categoría"><i class="material-icons">add</i>
+                                    data-position="top" data-delay="50" data-tooltip="Agregar mesa"><i class="material-icons">add</i>
                             </button>
                         </div>
                     </td>
@@ -141,7 +161,7 @@
                         <div class="btn-group" role="group" aria-label="..." align="center">
                             <button type="submit"
                                     class="btn btn-floating small light-blue darken-3 tooltipped"
-                                    id="editarMenu" name="editarMesa"
+                                    id="editarMesa" name="editarMesa"
                                     style="margin-top: 5px; margin-bottom: 5px;"
                                     data-position="top" data-delay="50" data-tooltip="Guardar"
                                     value=<%=mesa.getMesa()%>>
@@ -153,7 +173,7 @@
                         <div class="btn-group" role="group" aria-label="..." align="center">
                             <button type="submit"
                                     class="btn btn-floating small light-blue darken-3 "
-                                    id="eliminarMenu" name="eliminarMesa" style="margin-bottom: 5px;"
+                                    id="eliminarMesa" name="eliminarMesa" style="margin-bottom: 5px;"
                                     value=<%=mesa.getMesa()%>><i
                                     class="material-icons">delete</i>
                             </button>
