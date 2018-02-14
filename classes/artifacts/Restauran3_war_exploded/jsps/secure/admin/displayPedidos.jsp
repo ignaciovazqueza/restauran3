@@ -7,22 +7,28 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="tables.Menu" %>
 <%@ page import="servlets.ClosePedidosServlet" %>
+<%@ page import="java.net.InetAddress" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Pedidos</title>
+    <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
+
+    <% InetAddress localHost = InetAddress.getLocalHost();
+        String ip = localHost.getHostAddress();
+    %>
 
     <script type="text/javascript">
 
         var webSocketPP;
-        var ip = "10.10.10.6";
+        var myIp = "<%=ip%>";
 
         function openSocketPP() {
             if (webSocketPP !== undefined && webSocketPP.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
                 return;
             }
-            webSocketPP = new WebSocket("ws://" + ip + ":8080/restauran3/pedido");
+            webSocketPP = new WebSocket("ws://" + myIp + ":8080/restauran3/pedido");
 
             webSocketPP.onopen = function (event) {
                 if (event.data === undefined)
@@ -31,10 +37,8 @@
             };
 
             webSocketPP.onmessage = function (event) {
-                var parts = event.data.split(" ");
-                var action = parts[0];
-                var user = parts[1];
-                if (action == "pedido") {
+                var action = event.data;
+                if (action === "cerrar pedido") {
                     setTimeout(writeAsistenciaResponsePP(event.data), 1000);
                 }
             };
@@ -52,7 +56,7 @@
         }
 
         function writeAsistenciaResponsePP(text) {
-            location.reload();
+            setTimeout(location.reload(),1000);
 //            var parts = text.split(" ");
 //            var action = parts[0];
 //                var user = parts[1];

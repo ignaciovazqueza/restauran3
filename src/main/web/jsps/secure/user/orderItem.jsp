@@ -2,14 +2,18 @@
 <%@ page import="java.util.List" %>
 <%@ page import="tables.Menu" %>
 <%@ page import="securityfilter.Constants" %>
+<%@ page import="java.net.InetAddress" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Ordenar</title>
-
-    <% String username = request.getUserPrincipal().getName();%>
     <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
+
+    <% String username = request.getUserPrincipal().getName();
+       InetAddress localHost = InetAddress.getLocalHost();
+       String ip = localHost.getHostAddress();
+    %>
 
     <script type="text/javascript">
 
@@ -18,10 +22,7 @@
         };
 
         var webSocketPedido;
-        var myIp = "10.10.10.9";
-        //        getUserIP(function(ip){
-        //            myIp = ip;
-        //        });;
+        var myIp = "<%=ip%>";
 
         function openSocket() {
             if (webSocketPedido !== undefined && webSocketPedido.readyState !== WebSocket.CLOSED) {

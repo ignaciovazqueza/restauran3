@@ -1,22 +1,28 @@
 <%@ page import="securityfilter.Constants" %>
 <%@ page import="tables.Mesa" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.net.InetAddress" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Asistencia</title>
+    <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
+
+    <% InetAddress localHost = InetAddress.getLocalHost();
+       String ip = localHost.getHostAddress();
+    %>
 
     <script type="text/javascript">
 
         var webSocketAA;
-        var ip = "10.10.10.7";
+        var myIp = "<%=ip%>";
 
         function openSocketAA() {
             if (webSocketAA !== undefined && webSocketAA.readyState !== WebSocket.CLOSED) {
                 writeResponse("WebSocket is already opened.");
                 return;
             }
-            webSocketAA = new WebSocket("ws://" + ip + ":8080/restauran3/asistencia");
+            webSocketAA = new WebSocket("ws://" + myIp + ":8080/restauran3/asistencia");
 
             webSocketAA.onopen = function (event) {
                 if (event.data === undefined)

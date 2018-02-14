@@ -3,6 +3,7 @@
 <%@ page import="tables.Pedido" %>
 <%@ page import="servlets.ClosePedidosServlet" %>
 <%@ page import="tables.Menu" %>
+<%@ page import="java.net.InetAddress" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -11,13 +12,14 @@
     <input type="hidden" value="<%=username%>" id="user">
     <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
 
+    <% InetAddress localHost = InetAddress.getLocalHost();
+        String ip = localHost.getHostAddress();
+    %>
+
     <script type="text/javascript">
 
         var webSocketPedido;
-        var myIp = "10.10.10.9";
-//        getUserIP(function(ip){
-//            myIp = ip;
-//        });
+        var myIp = "<%=ip%>";
 
         function openSocketP() {
 
@@ -138,6 +140,7 @@
 
         function sendClose() {
             var text = "cerrar pedido";
+            debugger;
             webSocketPedido.send(text);
         }
 

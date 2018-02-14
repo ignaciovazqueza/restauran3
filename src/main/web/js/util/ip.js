@@ -33,3 +33,7 @@ function getUserIP(onNewIP) { //  onNewIp - your listener function for new IPs
         ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
     };
 }
+
+function getIP() {
+   return "192.168.0.102";
+}

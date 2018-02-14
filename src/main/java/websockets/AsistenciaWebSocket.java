@@ -1,9 +1,6 @@
 package websockets;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Collections;
@@ -38,4 +35,8 @@ public class AsistenciaWebSocket {
         clients.remove(session);
     }
 
+    @OnError
+    public void onError(Session session, Throwable thr) {
+        thr.getMessage();
+    }
 }

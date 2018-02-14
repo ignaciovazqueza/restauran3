@@ -66,7 +66,7 @@
                         if (id.valueOf() === "no selected") {
                             alert("Debe seleccionar que articulo desea borrar");
                         } else {
-                            location.reload();
+                            setTimeout(location.reload(),1000);
                         }
                     });
                 });

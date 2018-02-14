@@ -1,15 +1,20 @@
 <%@ page import="securityfilter.Constants" %>
+<%@ page import="java.net.InetAddress" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Asistencia</title>
-    <% String username = request.getUserPrincipal().getName();%>
+    <% String username = request.getUserPrincipal().getName();
+       InetAddress localHost = InetAddress.getLocalHost();
+       String ip = localHost.getHostAddress();
+    %>
     <input type="hidden" value="<%=username%>" id="user">
+    <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
 
     <script type="text/javascript">
 
         var webSocketA;
-        var ip = "10.10.10.9";
+        var myIp = "<%=ip%>";
 
         function openSocketA() {
 
@@ -18,7 +23,7 @@
                 return;
             }
 
-            webSocketA = new WebSocket("ws://" + ip + ":8080/restauran3/asistencia");
+            webSocketA = new WebSocket("ws://" + myIp + ":8080/restauran3/asistencia");
 
             webSocketA.onopen = function (event) {
                 if (event.data === undefined)
@@ -56,7 +61,7 @@
         }
 
         function writeAsistenciaResponse(text) {
-            location.reload();
+            setTimeout(location.reload(),1000);
         }
 
         function window_onload() {
