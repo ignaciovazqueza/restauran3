@@ -248,7 +248,7 @@
                         <td class="col s6">
                             <div>
                                 <div class="input-field">
-                                    <input id="newCat" type="text" class="validate">
+                                    <input id="newCat" type="text" class="validate" placeholder="Nueva categoria">
                                     <label class="active"></label>
                                 </div>
                             </div>
@@ -327,9 +327,9 @@
                                    style="overflow-x:auto; text-align: center;" id="menu<%=categoria.getNombre()%>"
                                    bgcolor="white">
                                 <thead>
-                                <tr class="row" id="topRow">
-                                    <th class="col s5">Nombre</th>
-                                    <th class="col s5">Precio</th>
+                                <tr class="row" id="topRow" style="background-color: #d0d0d0">
+                                    <th class="col s5" style="text-align: center;">Nombre</th>
+                                    <th class="col s5" style="text-align: center;">Precio</th>
                                     <th class="col s1"></th>
                                     <th class="col s1"></th>
 
@@ -339,7 +339,7 @@
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input id="nombreTd<%=categoria.getNombre()%>" type="text"
+                                                <input id="nombreTd<%=categoria.getNombre()%>" type="text" placeholder="Nuevo nombre"
                                                        class="validate">
                                                 <label class="active" name="nombreTd"></label>
                                             </div>
@@ -348,7 +348,7 @@
                                     <td class="col s5">
                                         <div>
                                             <div class="input-field">
-                                                <input id="precioTd<%=categoria.getNombre()%>" type="text"
+                                                <input id="precioTd<%=categoria.getNombre()%>" type="text" placeholder="Nuevo precio"
                                                        class="validate">
                                                 <label class="active" name="precioTd"></label>
                                             </div>
@@ -379,7 +379,7 @@
                                         <div>
                                             <div class="input-field">
                                                 <input value='<%=menu.getNombre()%>' id="name<%=id%>" type="text"
-                                                       class="validate">
+                                                       class="validate" style="text-align: center;">
                                                 <label class="active"></label>
                                             </div>
                                         </div>
@@ -388,7 +388,7 @@
                                         <div>
                                             <div class="input-field">
                                                 <input value='<%=menu.getPrecio()%>' id="price<%=id%>" type="text"
-                                                       class="validate">
+                                                       class="validate" style="text-align: center;">
                                                 <label class="active"></label>
                                             </div>
                                         </div>

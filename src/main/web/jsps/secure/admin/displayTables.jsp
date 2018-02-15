@@ -109,7 +109,7 @@
                     <td class="col s6">
                         <div>
                             <div class="input-field">
-                                <input id="newTable" type="text" class="validate" placeholder="password">
+                                <input id="newTable" type="text" class="validate" placeholder="Token">
                                 <label class="active"></label>
                             </div>
                         </div>
@@ -129,9 +129,9 @@
                    style="overflow-x:auto; text-align: center;" id="mesas"
                    bgcolor="white">
                 <thead>
-                <tr class="row" id="topRow">
-                    <th class="col s5">Nombre</th>
-                    <th class="col s5">Token</th>
+                <tr class="row" id="topRow" style="background-color: #d0d0d0;">
+                    <th class="col s5" style="text-align: center;">Nombre</th>
+                    <th class="col s5" style="text-align: center;">Token</th>
                     <th class="col s1"></th>
                     <th class="col s1"></th>
 
@@ -145,13 +145,13 @@
 
                 <tr class="row" id=<%=mesa.getMesa()%>>
 
-                    <td class="col s5" id="nombre"<%=mesa.getMesa()%>>
+                    <td class="col s5" style="transform: translateY(120%); overflow-x: auto; text-align: center;" id="nombre"<%=mesa.getMesa()%>>
                         <%=mesa.getMesa()%>
                     </td>
                     <td class="col s5" id="precio"<%=mesa.getMesa()%>>
                         <div>
                             <div class="input-field">
-                                <input id="tokenTd<%=mesa.getMesa()%>" type="text"
+                                <input id="tokenTd<%=mesa.getMesa()%>" type="text" style="text-align: center;"
                                        class="validate" value=<%=mesa.getToken()%>>
                                 <label class="active" name="tokenTd"></label>
                             </div>
@@ -162,7 +162,7 @@
                             <button type="submit"
                                     class="btn btn-floating small light-blue darken-3 tooltipped"
                                     id="editarMesa" name="editarMesa"
-                                    style="margin-top: 5px; margin-bottom: 5px;"
+                                    style="margin-top: 20px; margin-bottom: 5px;"
                                     data-position="top" data-delay="50" data-tooltip="Guardar"
                                     value=<%=mesa.getMesa()%>>
                                 <i class="material-icons">save</i>
@@ -173,7 +173,7 @@
                         <div class="btn-group" role="group" aria-label="..." align="center">
                             <button type="submit"
                                     class="btn btn-floating small light-blue darken-3 "
-                                    id="eliminarMesa" name="eliminarMesa" style="margin-bottom: 5px;"
+                                    id="eliminarMesa" name="eliminarMesa" style="margin-top: 20px; margin-bottom: 5px;"
                                     value=<%=mesa.getMesa()%>><i
                                     class="material-icons">delete</i>
                             </button>
