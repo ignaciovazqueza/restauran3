@@ -46,6 +46,12 @@ public class ClosePedidosServlet extends HttpServlet {
                     session.saveOrUpdate(pedido);
                     tx.commit();
                 }
+                String status = "ok";
+                String newMenu = "{ \"status\":\""+status+"\"}";
+                response.setContentType("application/json");
+                PrintWriter json = response.getWriter();
+                json.print(newMenu);
+                json.flush();
 
 
 
