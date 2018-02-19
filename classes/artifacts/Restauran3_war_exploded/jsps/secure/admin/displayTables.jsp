@@ -30,14 +30,14 @@
                                     '<tr class="row" id='+responseText.id+'>'
                     +'<td class="col s5" style="transform: translateY(120%); overflow-x: auto; text-align: center;" id="nombre"'+responseText.id+'>'
                         +responseText.id+'</td> <td class="col s5" id="precio"'+responseText.id+'> <div> <div class="input-field">'
-                            +'<input id="tokenTd'+responseText.token+'" type="text" style="text-align: center;"class="validate" value='+responseText.token+'>'
+                            +'<input id="tokenTd'+responseText.id+'" type="text" style="text-align: center;"class="validate" value='+responseText.token+'>'
                             +'<label class="active" name="tokenTd"></label> </div> </div> </td> <td class="col s1">'
-                        +'<div class="btn-group" role="group" aria-label="..." align="center"> <button type="submit"'
-                        +'class="btn btn-floating small light-blue darken-3 tooltipped" id="editarMesa" name="editarMesa"'
+                        +'<div id="guardar-container" class="btn-group" role="group" aria-label="..." align="center"> <button type="submit"'
+                        +'class="btn btn-floating small light-blue darken-3 tooltipped editarMesaBtn" id="editarMesa" name="editarMesa"'
                             +'style="margin-top: 20px; margin-bottom: 5px;" data-position="top" data-delay="50" data-tooltip="Guardar"'
                             +'value='+responseText.id+'> <i class="material-icons">save</i> </button> </div> </td> <td class="col s1">'
-                        +'<div class="btn-group" role="group" aria-label="..." align="center"> <button type="submit"'
-                        +'class="btn btn-floating small light-blue darken-3 "'
+                        +'<div id="eliminar-container" class="btn-group" role="group" aria-label="..." align="center"> <button type="submit"'
+                        +'class="btn btn-floating small light-blue darken-3 eliminarMesaBtn"'
                             +'id="eliminarMesa" name="eliminarMesa" style="margin-top: 20px; margin-bottom: 5px;"'
                                  +'value='+responseText.id+'><i class="material-icons">delete</i> </button>'
                         +'</div> </td> </tr>'+'');
@@ -48,7 +48,7 @@
                     })
                 });
 
-                $("button[name='editarMesa']").click(function (event) {
+                $('body').on('click','.editarMesaBtn',function (event) {
                     event.preventDefault();
                     var idVar = this.value;
                     var actionVar = "edit";
@@ -68,7 +68,7 @@
                     })
                 });
 
-                $("button[name='eliminarMesa']").click(function (event) {
+                $('body').on('click','.eliminarMesaBtn',function (event) {
                     event.preventDefault();
                     var idVar = this.value;
                     var actionVar = "delete";
@@ -159,9 +159,9 @@
                         </div>
                     </td>
                     <td class="col s1">
-                        <div class="btn-group" role="group" aria-label="..." align="center">
+                        <div id="guardar-container" class="btn-group" role="group" aria-label="..." align="center">
                             <button type="submit"
-                                    class="btn btn-floating small light-blue darken-3 tooltipped"
+                                    class="btn btn-floating small light-blue darken-3 tooltipped editarMesaBtn"
                                     id="editarMesa" name="editarMesa"
                                     style="margin-top: 20px; margin-bottom: 5px;"
                                     data-position="top" data-delay="50" data-tooltip="Guardar"
