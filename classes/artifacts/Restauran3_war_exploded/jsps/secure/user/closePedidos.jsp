@@ -133,9 +133,12 @@
             event.preventDefault();
             var actionVar = "cerrar";
             $.post('../restauran3/closepedidos', {action: actionVar}, function (responseText) {
-                writeCloseResponse();
+                var id = '' + responseText.status + '';
+                if (id.valueOf() === "ok") {
+                    writeCloseResponse();
+                    sendClose();
+                }
             });
-            sendClose();
         }
 
         function sendClose() {

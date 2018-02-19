@@ -80,9 +80,11 @@
             $(document).ready(function () {
                 var a = $('.link-1')[1];
                 a.parentElement.className = 'active';
+
                 $("div.btn-group button[name='entregar']").click(function (event) {
                     event.preventDefault();
                     var nameVar = $(this).attr('id');
+                    debugger;
                     $.post('../restauran3/displayassistances', {
                         name: nameVar
                     }, function () {

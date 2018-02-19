@@ -95,7 +95,7 @@ public class DisplayPedidosServlet extends HttpServlet {
         Orden orden = null;
         try {
             Session session = HibernateUtil.getInstance().getSession();
-            orden = (Orden) session.createQuery("from Orden where idMesa='"+ idMesa + "'").uniqueResult();
+            orden = (Orden) session.createQuery("from Orden where idMesa='"+ idMesa + "' and estado='opened'").uniqueResult();
         }catch (Exception e){
         }
         finally {
