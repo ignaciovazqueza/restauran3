@@ -59,7 +59,7 @@
                     }, function (responseText) {
                         var data = '' + responseText.state + '';
                         if (data.valueOf() === "ok") {
-                            Materialize.toast('Menu editado con éxito.', 4000);
+                            Materialize.toast('Mesa editada con éxito.', 4000);
                         } else {
                             Materialize.toast('No se pueden dejar campos en blanco.', 4000);
                             $('#tokenTd' + responseText.id).val(responseText.token);

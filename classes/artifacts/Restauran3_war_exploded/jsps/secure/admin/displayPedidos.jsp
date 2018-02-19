@@ -57,35 +57,7 @@
 
         function writeAsistenciaResponsePP(text) {
             setTimeout(location.reload(),1000);
-//            var parts = text.split(" ");
-//            var action = parts[0];
-//                var user = parts[1];
-//                var table = document.getElementById(user);
-//                if (table == null) {
-//                    $('#assistanceRow').remove();
-//                    createIDTable(user);
-//                } else {
-//                }
         }
-
-        //function createIDTable(data) {
-        //            $('#tbody').append(' ' +
-        //          '<tr> ' +
-        //          '<td> <-id>' +
-        //          '</td>' +
-        //          '<td><-%=estado%>' +
-        //          '</td> ' +
-        //          '<td><-%=cantidad%>' +
-        //          '</td>' +
-        //          '<td><-%=pedido.getEntregado()%>' +
-        //          '</td>' +
-        //          '<td>' +
-        //          '<div class="btn-group" role="group" aria-label="..." align="center">' +
-        //          '<button type="submit" class="btn btn-default" id=<-%=id%> name="entregar">Entregar</button>'   +
-        //          '</div>' +
-        //          '</td>' +
-        //          '</tr>');
-        //}
 
         function window_onload() {
             openSocketPP();
@@ -150,6 +122,7 @@
 
                 <% List<Mesa> mesas = (List<Mesa>) request.getAttribute("mesas");
                     Orden orden = null;
+                    List<Pedido> pedidosAllTables = new ArrayList<>();
                     List<Pedido> pedidos = new ArrayList<>();
                     if (mesas.isEmpty()) {%>
 
@@ -191,6 +164,7 @@
                                     <th></th>
                                 </tr>
                                 <% for (Pedido pedido : pedidos) {
+                                    pedidosAllTables.add(pedido);
                                     int id = pedido.getIdPedido();
                                     Menu articulo = ClosePedidosServlet.getArticulo(pedido.getIdArticulo());
                                     String estado = articulo.getNombre();
@@ -225,14 +199,7 @@
                             }
                         }
                     }
-                    if (!pedidos.isEmpty()) {%>
-                <%--<div align="center">--%>
-                <%--<div class="btn-group" role="group" aria-label="..." align="center">--%>
-                <%--<button type="submit" class="btn btn-default" name="entregar">Entregar</button>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-
-                <%} else {%>
+                    if (pedidosAllTables.isEmpty()) {%>
                 <div class="panel panel-default">
                     <div class="card-panel white">
                         <div class="card-content black-text">
