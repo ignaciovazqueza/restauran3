@@ -171,9 +171,9 @@
                         </div>
                         </td>
                     <td class="col s1">
-                        <div class="btn-group" role="group" aria-label="..." align="center">
+                        <div id="eliminar-container" class="btn-group" role="group" aria-label="..." align="center">
                             <button type="submit"
-                                    class="btn btn-floating small light-blue darken-3 "
+                                    class="btn btn-floating small light-blue darken-3 eliminarMesaBtn"
                                     id="eliminarMesa" name="eliminarMesa" style="margin-top: 20px; margin-bottom: 5px;"
                                     value=<%=mesa.getMesa()%>><i
                                     class="material-icons">delete</i>
