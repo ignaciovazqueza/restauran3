@@ -69,7 +69,7 @@
                 '<td align="center">Asistir mesa</td> ' +
                 '<td align="center"> ' +
                 '<div class="btn-group" role="group" aria-label="..." align="center"> ' +
-                '<button type="submit" class="btn btn-default light-blue darken-3" name="entregar" id="' + data + '" value="' + data + '"> Asistir </button> ' +
+                '<button type="submit" class="btn btn-default light-blue darken-3 entregarAsistenciaBtn" name="entregar" id="' + data + '" value="' + data + '"> Asistir </button> ' +
                 '</div> ' +
                 '</td> ' +
                 '</tr>');
@@ -81,7 +81,7 @@
                 var a = $('.link-1')[1];
                 a.parentElement.className = 'active';
 
-                $("div.btn-group button[name='entregar']").click(function (event) {
+                $("body").on('click', '.entregarAsistenciaBtn', function (event) {
                     event.preventDefault();
                     var nameVar = $(this).attr('id');
                     debugger;
@@ -168,7 +168,7 @@
                                     </td>
                                     <td align="center">
                                         <div class="btn-group" role="group" aria-label="..." align="center">
-                                            <button type="submit" class="btn btn-default light-blue darken-3"
+                                            <button type="submit" class="btn btn-default light-blue darken-3 entregarAsistenciaBtn"
                                                     name="entregar" id=<%=id%> value=<%=id%>>
                                                 Asistir
                                             </button>
