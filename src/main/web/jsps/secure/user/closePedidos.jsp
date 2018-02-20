@@ -79,6 +79,14 @@
                 $('#pedidos').remove();
                 $('#cerrarButton').remove();
                 $('#pedidosActuales').remove();
+                var espera = $('#pedidosEspera').length;
+                var entregados = $('#pedidosEntregados').length;
+                if (espera ==0 && entregados==0 ){
+                    $('#cols12').after('' +
+                            '<div class="panel panel-default" style="margin-left: 10px;margin-right: 10px;">'
+                               +' <div class="card-panel white"> <div class="card-content black-text">'
+                            +'<span class="card-title" style="font-size: 1em;">No hay pedidos.</span> </div> </div> </div>');
+                }
             } else {
                 $('#' + JSON.parse(event.data).id).remove();
             }
@@ -308,7 +316,7 @@
                         <span class="card-title" style="font-size: 1.5em;">Pedidos ya entregados</span>
                     </div>
                 </div>
-                <table align="center" class="table striped" width="80%"
+                <table id="pedidosEntregados" align="center" class="table striped" width="80%"
                        style="overflow-x:auto; text-align: center; margin-top: -24px;"
                        bgcolor="white">
                     <tr style="font-weight: bold;">

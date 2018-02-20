@@ -174,8 +174,12 @@
                     <td class="col s1">
                         <div id="eliminar-container" class="btn-group" role="group" aria-label="..." align="center">
                             <button type="submit"
+<<<<<<< Updated upstream
                                     class="btn btn-floating small light-blue darken-3 tooltipped eliminarMesaBtn"
                                     data-position="top" data-delay="50" data-tooltip="Eliminar"
+=======
+                                    class="btn btn-floating small light-blue darken-3 eliminarMesaBtn"
+>>>>>>> Stashed changes
                                     id="eliminarMesa" name="eliminarMesa" style="margin-top: 20px; margin-bottom: 5px;"
                                     value=<%=mesa.getMesa()%>><i
                                     class="material-icons">delete</i>
