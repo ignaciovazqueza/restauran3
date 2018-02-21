@@ -110,6 +110,9 @@
                             $('#'+responseText.idUp)[0].id = responseText.idDown;
                             $('#'+responseText.idDown)[0].id = responseText.idUp;
 
+                            $('#downMenu'+responseText.idDown)[0].value = responseText.idUp;
+                            $('#upMenu'+responseText.idUp)[0].value = responseText.idDown;
+
                             handleMoveButtons();
                         }
                     })
@@ -138,6 +141,10 @@
                             $('#'+responseText.idDown)[0].children[3].children[1].children[0].value = responseText.idUp;
                             $('#'+responseText.idUp)[0].id = responseText.idDown;
                             $('#'+responseText.idDown)[0].id = responseText.idUp;
+
+                            $('#downMenu'+responseText.idDown)[0].value = responseText.idUp;
+                            $('#upMenu'+responseText.idUp)[0].value = responseText.idDown;
+
 
                             handleMoveButtons()
                         }
@@ -417,7 +424,7 @@
                                         <div class="btn-group" role="group" aria-label="..." align="center">
                                             <button type="submit"
                                                     class="btn btn-floating small light-blue darken-3 tooltipped"
-                                                    name="upMenu" id="upMenu"
+                                                    name="upMenu" id="upMenu<%=menu.getIdArticulo()%>"
                                                     style="margin-top: 5px; margin-bottom: 5px;"
                                                     data-position="top" data-delay="50"
                                                     data-tooltip="Mover fila hacia arriba"
@@ -427,7 +434,7 @@
                                         <div class="btn-group" role="group" aria-label="..." align="center">
                                             <button type="submit"
                                                     class="btn btn-floating small light-blue darken-3 tooltipped"
-                                                    name="downMenu" id="downMenu" style="margin-bottom: 5px;"
+                                                    name="downMenu" id="downMenu<%=menu.getIdArticulo()%>" style="margin-bottom: 5px;"
                                                     data-position="bottom" data-delay="50"
                                                     data-tooltip="Mover fila hacia abajo"
                                                     value=<%=id%>><i

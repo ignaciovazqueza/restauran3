@@ -154,6 +154,16 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                         tx = session.beginTransaction();
                         session.delete(menu);
                         tx.commit();
+                    List<Menu> menusCat = session.createQuery("from Menu where categoria='" + cat + "'").list();
+                    menusCat.sort(Comparator.comparing(Menu::getIndex));
+                    int index = 1;
+                    for (Menu item: menusCat) {
+                        Transaction tx3 = session.beginTransaction();
+                        item.setIndex(index);
+                        index++;
+                        session.saveOrUpdate(item);
+                        tx3.commit();
+                    }
 
                         List<Menu> menus = (List<Menu>) session.createQuery("from Menu where categoria= '" + cat + "' ").list();
 
@@ -162,6 +172,8 @@ public class DisplayMenuServlet extends javax.servlet.http.HttpServlet {
                             Categoria categoria = (Categoria) session.createQuery("from Categoria where nombre= '" + cat + "' ").uniqueResult();
                             session.delete(categoria);
                             tx2.commit();
+
+
                         }
                     String status = "ok";
                     String newMenu = "{ \"nombre\": \"" + nombre + "\",\"categoria\": \"" + cat + "\", \"precio\": \"" + precio +
