@@ -112,7 +112,7 @@
 
                             $('#downMenu'+responseText.idDown)[0].value = responseText.idUp;
                             $('#upMenu'+responseText.idUp)[0].value = responseText.idDown;
-                            
+
                             handleMoveButtons();
                         }
                     })

@@ -88,7 +88,7 @@
                             +'<span class="card-title" style="font-size: 1em;">No hay pedidos.</span> </div> </div> </div>');
                 }
             } else {
-                $('#' + JSON.parse(event.data).id).remove();
+                $('#' + JSON.parse(event.id)).remove();
             }
         }
 
