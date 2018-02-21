@@ -11,6 +11,7 @@
     <% String username = request.getUserPrincipal().getName();%>
     <input type="hidden" value="<%=username%>" id="user">
     <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
+    <link rel="shortcut icon" href="restauran3/images/Restauran3-logo.png"/>
 
     <% InetAddress localHost = InetAddress.getLocalHost();
         String ip = localHost.getHostAddress();

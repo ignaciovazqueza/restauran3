@@ -7,6 +7,7 @@
 <html>
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Cuenta</title>
+    <link rel="shortcut icon" href="/restauran3/images/Restauran3-logo.png" />
 
     <script type="text/javascript">
         function window_onload() {

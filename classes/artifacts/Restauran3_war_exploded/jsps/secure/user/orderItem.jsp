@@ -9,6 +9,7 @@
 <head>
     <title><%=Constants.COMMON_TITLE_BASE%>Ordenar</title>
     <script type="text/javascript" src="/restauran3/js/util/ip.js"></script>
+    <link rel="shortcut icon" href="/restauran3/images/Restauran3-logo.png" />
 
     <% String username = request.getUserPrincipal().getName();
        InetAddress localHost = InetAddress.getLocalHost();
