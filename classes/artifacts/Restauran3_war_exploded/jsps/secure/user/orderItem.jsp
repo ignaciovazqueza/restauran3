@@ -72,7 +72,7 @@
 
 <jsp:include page="userHome.jsp"></jsp:include>
 
-<body onload="window_onload();">
+<body onload="window_onload();" style="height: 100%;">
 
 <div class="row">
     <div class="col s12">

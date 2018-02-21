@@ -92,7 +92,7 @@
 
 <jsp:include page="userHome.jsp"></jsp:include>
 
-<body onload="window_onload();">
+<body onload="window_onload();" style="height: 100%;">
 
 <% String estado = (String) request.getAttribute("estado");%>
 

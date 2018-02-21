@@ -36,7 +36,7 @@
     </script>
 </head>
 
-<body>
+<body style="height: 100%;">
 <div id="modal1" class="modal">
     <div class="modal-content">
         <h4>Restauran3</h4>
