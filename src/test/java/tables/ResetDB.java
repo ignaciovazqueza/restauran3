@@ -16,11 +16,16 @@ public class ResetDB {
 
     public static void main(String[] args) throws Exception {
         factory = HibernateUtil.getInstance().getSession().getSessionFactory();
-        addArticulo("papas",20,"principal",1);
-        addArticulo("agua",10,"bebida",3);
-        addArticulo("coca",15,"bebida",2);
-        addArticulo("sprite",15,"bebida",1);
-        addArticulo("milanesa",80,"principal",2);
+        addArticulo("Milanesa de carne",80,"principal",1);
+        addArticulo("Milanesa de pollo",80,"principal",2);
+        addArticulo("Papas fritas",20,"principal",3);
+        addArticulo("Agua",10,"bebida",1);
+        addArticulo("Coca-Cola",12,"bebida",2);
+        addArticulo("Sprite",12,"bebida",3);
+        addArticulo("Fanta",12,"bebida",4);
+        addArticulo("Helado de frutilla",25,"postre",1);
+        addArticulo("Helado de vainilla",25,"postre",2);
+        addArticulo("Flan con dulce de leche",25,"postre",3);
         addMesa("mesa1","No pide asistencia","1");
         addMesa("mesa2","No pide asistencia","2");
         addMesa("mesa3","No pide asistencia","3");

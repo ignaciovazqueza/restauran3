@@ -70,7 +70,7 @@
                 var a = $('.link-1')[2];
                 a.parentElement.className = 'active';
 
-                if ($('#nombre')[0].innerText == "Asistir mesa"){
+                if ($('#nombre')[0].innerText == "Asistencia en camino"){
                     $('#asistencia')[0].className += " disabled";
                 }
 
@@ -78,7 +78,7 @@
                     Materialize.toast('¡La asistencia está en camino!', 4000);
                     event.preventDefault();
                     $.post('../restauran3/askassistance', {}, function (responseText) {
-                        $('#nombre').html('Asistir mesa');
+                        $('#nombre').html('Asistencia en camino');
                     })
                 });
 

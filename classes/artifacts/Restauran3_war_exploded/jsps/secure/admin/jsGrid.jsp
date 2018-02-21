@@ -204,7 +204,7 @@
                                     +'<button type="submit"class="btn btn-floating small light-blue darken-3 tooltipped"id="editarMenu" name="editarMenu"'
                                     +'style="margin-top: 5px; margin-bottom: 5px;"data-position="top" data-delay="50" data-tooltip="Guardar"'
                                     +'value='+responseText.id+'> <i class="material-icons">save</i> </button></div> <div class="btn-group" role="group" aria-label="..." align="center">'
-                                    +'<button type="submit" class="btn btn-floating small light-blue tooltipped darken-3 " data-position="top" data-delay="50" data-tooltip="Eliminar"'
+                                    +'<button type="submit" class="btn btn-floating small light-blue darken-3 "'
                                     +'id="eliminarMenu" name="eliminarMenu" style="margin-bottom: 5px;"'
                                     +'value='+responseText.id+'><i class="material-icons">delete</i>'
                                     +'</button> </div> </td> <td class="col s1"> <div class="btn-group" role="group" aria-label="..." align="center">'
@@ -413,7 +413,7 @@
                                         </div>
                                         <div class="btn-group" role="group" aria-label="..." align="center">
                                             <button type="submit"
-                                                    class="btn btn-floating small light-blue tooltipped darken-3" data-position="top" data-delay="50" data-tooltip="Eliminar"
+                                                    class="btn btn-floating small light-blue darken-3"
                                                     id="eliminarMenu" name="eliminarMenu" style="margin-bottom: 5px;"
                                                     value=<%=id%>><i
                                                     class="material-icons">delete</i>

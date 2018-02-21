@@ -66,7 +66,7 @@
             $('#tbody').append(' ' +
                 '<tr id="' + data + '"> ' +
                 '<td align="center">' + data + '</td> ' +
-                '<td align="center">Asistir mesa</td> ' +
+                '<td align="center">Asistencia en camino</td> ' +
                 '<td align="center"> ' +
                 '<div class="btn-group" role="group" aria-label="..." align="center"> ' +
                 '<button type="submit" class="btn btn-default light-blue darken-3 entregarAsistenciaBtn" name="entregar" id="' + data + '" value="' + data + '"> Asistir </button> ' +

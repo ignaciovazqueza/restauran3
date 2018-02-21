@@ -54,7 +54,7 @@ public class DisplayAsisstancesServlet extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/error/401.jsp");
                 rd.forward(request,response);
             } else {
-                List<Mesa> mesas = session.createQuery("from Mesa where asistencia='Asistir mesa'").list();
+                List<Mesa> mesas = session.createQuery("from Mesa where asistencia='Asistencia en camino'").list();
                 request.setAttribute("mesas", mesas);
                 RequestDispatcher rd = request.getRequestDispatcher("/jsps/secure/admin/displayAssistances.jsp");
                 rd.forward(request, response);

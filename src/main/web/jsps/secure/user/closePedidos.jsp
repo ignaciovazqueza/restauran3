@@ -192,7 +192,7 @@
                             <span class="card-title" id="titleActuales" style="font-size: 1.5em;">Pedidos actuales</span>
                         </div>
                     </div>
-                    <table align="center" class="table striped" width="80%"
+                    <table align="center" class="table striped" width="100%"
                            style="overflow-x:auto; text-align: center; margin-top: -24px;"
                            bgcolor="white" id="pedidos">
                         <tr>

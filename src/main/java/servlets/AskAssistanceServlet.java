@@ -65,7 +65,7 @@ public class AskAssistanceServlet extends HttpServlet {
 
             Mesa mesa = (Mesa) session.createQuery("from Mesa where id='" + idMesa + "'").uniqueResult();
 
-            String asistir = "Asistir mesa";
+            String asistir = "Asistencia en camino";
             if (!mesa.getAsistencia().equals(asistir)) {
                 tx = session.beginTransaction();
                 mesa.setAsistencia(asistir);
